@@ -1,0 +1,70 @@
+import argparse
+import os
+from diffusers.utils import load_image
+from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
+
+
+def parsing_argument():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        choices=["sdxl-turbo"],
+        default="sdxl-turbo",
+        help="(str) model type, diffusers stable diffusion xl model name.",
+    )
+    parser.add_argument(
+        "--prompt",
+        type=str,
+        default="cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
+        help="(str) type, prompt for generate image",
+    )
+    parser.add_argument(
+        "--guidance_scale",
+        type=float,
+        default=0.0,
+        help="guidance_scale for generation",
+    )
+    parser.add_argument(
+        "--img_width",
+        type=int,
+        default=512,
+        help="input image width for generation",
+    )
+    parser.add_argument(
+        "--img_height",
+        type=int,
+        default=512,
+        help="input image height for generation",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parsing_argument()
+    model_id = f"stabilityai/{args.model_name}"
+    prompt = args.prompt
+    guidance_scale = args.guidance_scale
+
+    # Load compiled model
+    pipe = RBLNStableDiffusionXLImg2ImgPipeline.from_pretrained(
+        model_id=os.path.basename(model_id),
+        export=False,
+    )
+
+    # Prepare inputs
+    init_image = load_image(
+        "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/cat.png"
+    ).resize((args.img_height, args.img_width))
+
+    # Generate image
+    image = pipe(
+        prompt, image=init_image, num_inference_steps=2, guidance_scale=guidance_scale, strength=0.5
+    ).images[0]
+
+    # Save image result
+    image.save(f"{prompt}.png")
+
+
+if __name__ == "__main__":
+    main()

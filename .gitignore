@@ -1,0 +1,16 @@
+*.swp
+*.swo
+.pkl_memoize_py3
+addr_map
+*.graph
+*.params
+*.so
+*.meta
+debug.log
+relay_graph.json.gz
+*.rbln
+*.log
+*.jpg
+*.png
+*.bin
+__pycache__/

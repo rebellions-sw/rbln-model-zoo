@@ -1,0 +1,288 @@
+                       Software User License Agreement
+
+This User License Agreement (this "Agreement") is a binding agreement between
+[Rebellions Inc.], a Korean company with its office located at [102-801, 239,
+Jeongjail-ro, Bundang-gu, Seongnam-si, Gyeonggi-do, Republic of Korea], ("Licensor")
+and you, your employer, your employees, or other entity for whose benefit you act as
+applicable, as the licensee of the Software (“You” or "Licensee"). DO NOT download,
+install, access, copy, or use the entirety or any portion of the Software until
+You have read and agreed to the terms and conditions of this Agreement.
+
+Licensor provides the Software solely on the terms and conditions set forth in
+this Agreement and on the condition that Licensee accepts and complies with them.
+By downloading, installing, accessing, copying, or using the Software You
+(a) accept this Agreement and agree that licensee is legally bound by its terms;
+and (b) represent and warrant that: (i) You are of legal age to enter into a
+binding agreement; and (ii) if Licensee is a corporation, governmental organization,
+or other legal entity, You have the right, power, and authority to enter into this
+Agreement on behalf of Licensee and bind Licensee to its terms. If Licensee does
+not agree to the terms of this Agreement, Licensor will not and does not license
+the Software to Licensee and You must not download, install, access, copy, use or
+otherwise utilize the Software or Documentation.
+
+This Agreement expressly excludes any right, concerning any software that Licensee
+did not acquire lawfully or that is not a legitimate, authorized copy of Licensor's
+Software.
+
+  1. Definitions. For purposes of this Agreement, the following terms have the
+    following meanings:
+
+      "Documentation" means user manuals, technical manuals, and any other materials
+      provided by Licensor, in printed, electronic, or other form, that describe the
+      installation, operation, use, or technical specifications of the Software.
+
+      “Hardware” means cloud service provider’s proprietary device(s) supplied by
+      Licensor and used for cloud services and which use right is purchased by
+      Licensee for the purpose of its direct use or to provide subsequent services
+      to end-customers. 
+
+      "Intellectual Property Rights" means any and all registered and unregistered
+      rights granted, applied for, or otherwise now or hereafter in existence under
+      or related to any patent, copyright, trademark, trade secret, database
+      protection, or other intellectual property rights laws, and all similar or
+      equivalent rights or forms of protection, in any part of the world.
+
+      "Licensee" has the meaning set forth in the preamble.
+
+      "Licensor" has the meaning set forth in the preamble.
+
+      "PERSON" MEANS AN INDIVIDUAL, CORPORATION, PARTNERSHIP, JOINT VENTURE, LIMITED
+      LIABILITY COMPANY, GOVERNMENTAL AUTHORITY, UNINCORPORATED ORGANIZATION, TRUST,
+      ASSOCIATION, OR OTHER ENTITY.
+
+      "Software" means any one or more of the developer kits, libraries, runtimes
+      and drivers, together with any necessary updates and accompanying Documentation,
+      that are provided by Licensor in connection with the use and/or implementation
+      of one or more of Hardware as provided under this Agreement, excluding any
+      Third Party files, programs, or other materials.
+
+      "Term" has the meaning set forth in Section 11.
+
+      "Third Party" means any Person other than Licensee or Licensor.
+
+  2. License Grant and Scope. Subject to and conditioned upon Licensee's strict
+    compliance with all terms and conditions set forth in this Agreement, Licensor
+    hereby grants to Licensee a non-exclusive, non-transferable, non-sublicensable,
+    limited license during the Term to use the Software and Documentation, solely
+    as set forth in this Section 2 and subject to all conditions and limitations set
+    forth in Section 3 or elsewhere in this Agreement. This license grants Licensee to:
+
+      (a) Download, access, copy, and install in accordance with the Documentation
+      one (1) copy of the Software on one (1) computer owned or leased, and controlled
+      by,Licensee for the sole purpose of utilizing the Hardware. Each such computer
+      shall be for a single user authorized by Licensee, unless agreed otherwise. All
+      copies of the Software made by the Licensee:
+
+        (i) will be the exclusive property of the Licensor;
+
+        (ii) will be subject to the terms and conditions of this Agreement; and 
+
+        (iii) must include all trademark, copyright, patent, and other Intellectual
+        Property Rights notices contained in the original.
+
+      (b) Use and run the Software as properly installed in accordance with this
+      Agreement and the Documentation, solely as set forth in the Documentation and
+      solely for Licensee's internal business purposes. No source code of the Software
+      shall be made available or accessible to the Licensee except to the extent
+      explicitly permitted and necessary for Licensee’s use of the Software under
+      this Agreement.
+
+  3. Use Restrictions. Licensee shall not, and shall require its authorized users not
+    to, directly or indirectly:
+
+    (a) use (including make any copies of) the Software or Documentation beyond the
+    scope of the license granted under Section 2;
+
+    (b) use the Software separately from the Hardware except explicitly permitted
+    by the Licensor or independently agreed between Licensor and Licensee;
+
+    (c) provide any other Person, including any subcontractor, independent contractor,
+    affiliate, or service provider of Licensee, with access to or use of the Software
+    or Documentation;
+
+    (d) modify, translate, adapt, or otherwise create derivative works or improvements,
+    whether or not patentable, of the Software or Documentation or any part thereof;
+
+    (e) combine the Software or any part thereof with, or incorporate the Software or
+    any part thereof in, any other programs;
+
+    (f) reverse engineer, disassemble, decompile, decode, or otherwise attempt to
+    derive or gain access to the source code of the Software or any part thereof;
+
+    (g) remove, delete, alter, or obscure any trademarks or any copyright, trademark,
+    patent, or other intellectual property or proprietary rights notices provided on
+    or with the Software or Documentation, including any copy thereof;
+
+    (h) except as expressly set forth in Section 2(a), copy the Software or
+    Documentation, in whole or in part;
+
+    (i) rent, lease, lend, sell, sublicense, assign, distribute, publish, transfer,
+    or otherwise make available the Software, or any features or functionality of the
+    Software, to any unauthorized Third Party by any way for any reason;
+
+    (j) use the Software or Documentation in, or in association with, the design,
+    construction, maintenance, or operation of any hazardous environments or systems; 
+
+    (k) use the Software or Documentation in violation of any law, regulation, or rule; or
+
+    (l) use the Software or Documentation for purposes of competitive analysis of the
+    Software, the development of a competing software product or service, or any other
+    purpose that is to the Licensor's commercial disadvantage.
+
+  4. Responsibility for Use of Software. Licensee is responsible and liable for all uses
+    of the Software and Documentation through access thereto provided by Licensee, directly
+    or indirectly. Specifically, and without limiting the generality of the foregoing,
+    Licensee is responsible and liable for all actions and failures to take required
+    actions with respect to the Software and Documentation by any Person to whom Licensee
+    may provide access to or use of the Software and/or Documentation, whether such access
+    or use is permitted by or in violation of this Agreement.
+
+  5. Maintenance and Support Package. Licensee acknowledges that the scope of this Agreement
+    does not include any right for Licensee to receive maintenance, support, or mapping
+    services with regard to the Software. Licensor has full discretion to offer maintenance,
+    support, and/or mapping services for the Software on a separate subscription basis (the
+    “Support Subscription”). 
+
+  6. Intellectual Property Rights. Licensee acknowledges and agrees that the Software and
+    Documentation are provided under license, and not sold, to Licensee. Licensee does not
+    acquire any ownership interest in the Software or Documentation under this Agreement,
+    or any other rights thereto, other than to use the same in accordance with the license
+    granted and subject to all terms, conditions, and restrictions under this Agreement.
+    Licensor and its licensors and service providers reserve and shall retain their entire
+    right, title, and interest in and to the Software and all Intellectual Property Rights
+    arising out of or relating to the Software, except as expressly granted to the Licensee
+    in this Agreement. Licensee shall safeguard all Software (including all copies thereof)
+    from infringement, misappropriation, theft, misuse, or unauthorized access. 
+
+  7. Term and Termination.
+
+    (a) This Agreement and the license granted hereunder shall remain in effect until
+    terminated as set forth herein (the "Term").
+
+    (b) Licensor may terminate this Agreement, effective immediately, if its separate
+    agreement for use of the Hardware is terminated.
+
+    (c) Licensor may terminate this Agreement without cause and effective immediately
+    upon written notice to Licensee. 
+
+    (d) Licensor may terminate this Agreement, effective upon notice to Licensee, if 
+    Licensee fails to comply with any of the terms and conditions in this Agreement
+    during the Term.
+
+    (e) Upon expiration or termination of this Agreement, the license granted hereunder
+    shall also terminate, and Licensee shall cease using and destroy all copies of the
+    Software and Documentation. 
+
+    (f) Licensor may suspend the Software licensed hereunder or terminate this Agreement,
+    if the Licensee commences, participates or threatens to commence or participate in
+    any legal proceeding against Licensor.
+
+  8. Exclusion of Warranties. The Software is provided “as is” without any express or
+    implied warranty of any kind, including warranties of merchantability, non-infringement,
+    or fitness for a particular purpose. Licensor does not warrant or assume responsibility
+    for the accuracy or completeness of any information, text, graphics, links, or other
+    items within the Software. 
+
+  9. Limitation of Liability. TO THE FULLEST EXTENT PERMITTED UNDER APPLICABLE LAW:
+
+    (a) IN NO EVENT WILL LICENSOR OR ITS AFFILIATES, OR ANY OF ITS OR THEIR RESPECTIVE
+    LICENSORS OR SERVICE PROVIDERS, BE LIABLE TO LICENSEE OR ANY THIRD PARTY FOR ANY USE,
+    INTERRUPTION, DELAY, OR INABILITY TO USE THE SOFTWARE; LOST REVENUES OR PROFITS;
+    DELAYS, INTERRUPTION, OR LOSS OF SERVICES, BUSINESS, OR GOODWILL; LOSS OR CORRUPTION
+    OF DATA; LOSS RESULTING FROM SYSTEM OR SYSTEM SERVICE FAILURE, MALFUNCTION, OR
+    SHUTDOWN; FAILURE TO ACCURATELY TRANSFER, READ, OR TRANSMIT INFORMATION; FAILURE TO
+    UPDATE OR PROVIDE CORRECT INFORMATION; SYSTEM INCOMPATIBILITY OR PROVISION OF INCORRECT
+    COMPATIBILITY INFORMATION; OR BREACHES IN SYSTEM SECURITY; OR FOR ANY CONSEQUENTIAL,
+    INCIDENTAL, INDIRECT, EXEMPLARY, SPECIAL, OR PUNITIVE DAMAGES, WHETHER ARISING OUT
+    OF OR IN CONNECTION WITH THIS AGREEMENT, BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+    OR OTHERWISE, REGARDLESS OF WHETHER SUCH DAMAGES WERE FORESEEABLE AND WHETHER OR NOT THE
+    LICENSOR WAS ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+    (b) THE LIMITATIONS SET FORTH IN SECTION 9(a) SHALL APPLY EVEN IF THE LICENSEE'S
+    REMEDIES UNDER THIS AGREEMENT FAIL OF THEIR ESSENTIAL PURPOSE.
+
+  10. Open Source Statement. The Software may include open source software (“OSS”) licensed
+    pursuant to OSS license agreement(s) identified in the OSS comments in the applicable
+    source code file(s) or file header(s) provided with or otherwise associated with the
+    Software. Neither Licensee nor any OEM, ODM, customer, distributor or other end user
+    may subject any proprietary portion of the Software to any OSS license obligations
+    including, without limitation, combining or distributing the Software with OSS in a
+    manner that subjects Licensee, the Software or any portion thereof to any OSS license
+    obligation. Nothing in this Agreement limits any rights under, or grants rights that
+    supersede, the terms of any applicable OSS license.
+
+  11. Export Regulation. The Software and Documentation may be subject to export control
+    laws of relevant jurisdictions. The Licensee shall not, directly or indirectly, export,
+    re-export, or release the Software or Documentation to, or make the Software or
+    Documentation accessible from, any jurisdiction or country to which export, re-export,
+    or release is prohibited by law, rule, or regulation. The Licensee shall comply with
+    all applicable laws, regulations, and rules, and complete all required undertakings
+    (including obtaining any necessary export license or other governmental approval),
+    prior to exporting, re-exporting, releasing, or otherwise making the Software or
+    Documentation available outside the Republic of Korea.
+
+  12. Miscellaneous.
+
+    (a) This Agreement and any dispute arising out of or relating to it will be governed
+    by the laws of the Republic of Korea, without regard to conflict of laws principles.
+    The Parties exclude the application of the United Nations Convention on Contracts for
+    the International Sale of Goods (1980). The Seoul Central District Court will have
+    exclusive jurisdiction over any dispute arising out of or relating to this Agreement.
+    The Parties consent to personal jurisdiction and venue in the aforementioned court.
+    A Party that obtains a judgment against the other Party in the courts identified in
+    this section may enforce that judgment in any court that has jurisdiction over the
+    Parties.
+
+    (b) Licensor will not be responsible or liable to Licensee, or deemed in default or
+    breach hereunder by reason of any failure or delay in the performance of its obligations
+    hereunder where such failure or delay is due to strikes, labor disputes, civil
+    disturbances, riot, rebellion, invasion, epidemic, hostilities, war, terrorist attack,
+    embargo, natural disaster, acts of God, flood, fire, sabotage, fluctuations or
+    non-availability of electrical power, heat, light, air conditioning, or Licensee
+    equipment, loss and destruction of property, or any other circumstances or causes
+    beyond Licensor's reasonable control.
+
+    (c) This Agreement, together with all annexes, schedules, and exhibits attached hereto
+    and all other documents that are incorporated by reference herein, constitutes the sole
+    and entire agreement between Licensee and Licensor with respect to the subject matter
+    contained herein, and supersedes all prior and contemporaneous understandings,
+    agreements, representations, and warranties, both written and oral, with respect to
+    such subject matter. 
+
+    (d) Licensee shall not assign or otherwise transfer any of its rights, or delegate or
+    otherwise transfer any of its obligations or performance, under this Agreement, in
+    each case whether voluntarily, involuntarily, by operation of law, or otherwise,
+    without Licensor's prior written consent, which consent Licensor may give or withhold
+    in its sole discretion. For purposes of the preceding sentence, and without limiting
+    its generality, any merger, consolidation, or reorganization involving Licensee
+    (regardless of whether Licensee is a surviving or disappearing entity) will be deemed
+    to be a transfer of rights, obligations, or performance under this Agreement for which
+    Licensor's prior written consent is required. No delegation or other transfer will
+    relieve Licensee of any of its obligations or performance under this Agreement.
+    Any purported assignment, delegation, or transfer in violation of this Section is void.
+    Licensor may freely assign or otherwise transfer all or any of its rights, or delegate
+    or otherwise transfer all or any of its obligations or performance, under this Agreement
+    without Licensee's consent. This Agreement is binding upon and inures to the benefit
+    of the parties hereto and their respective permitted successors and assigns.
+
+    (e) This Agreement is for the sole benefit of the parties hereto and their respective
+    successors and permitted assigns and nothing herein, express or implied, is intended
+    to or shall confer on any other Person any legal or equitable right, benefit, or remedy
+    of any nature whatsoever under or by reason of this Agreement.
+
+    (f) No waiver by any party of any of the provisions hereof shall be effective unless
+    explicitly set forth in writing and signed by the party so waiving. Except as otherwise
+    set forth in this Agreement, no failure to exercise, or delay in exercising, any right,
+    remedy, power, or privilege arising from this Agreement shall operate or be construed
+    as a waiver thereof; nor shall any single or partial exercise of any right, remedy,
+    power, or privilege hereunder preclude any other or further exercise thereof or the
+    exercise of any other right, remedy, power, or privilege.
+
+    (g) If any term or provision of this Agreement is invalid, illegal, or unenforceable in
+    any jurisdiction, such invalidity, illegality, or unenforceability shall not affect
+    any other term or provision of this Agreement or invalidate or render unenforceable
+    such term or provision in any other jurisdiction.
+
+    (h) The headings in this Agreement are for reference only and do not affect the
+    interpretation of this Agreement.
+

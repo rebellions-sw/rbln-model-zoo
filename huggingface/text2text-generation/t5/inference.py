@@ -1,0 +1,55 @@
+import argparse
+import os
+from transformers import AutoTokenizer
+from optimum.rbln import RBLNT5ForConditionalGeneration
+
+
+def parsing_argument():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        choices=["t5-small", "t5-base", "t5-large", "t5-3b"],
+        default="t5-base",
+        help="(str) model type, Size of T5. [t5-small, t5-base, t5-large, t5-3b]",
+    )
+    parser.add_argument(
+        "--text",
+        type=str,
+        default="translate English to German: The house is wonderful.",
+        help="(str) type, text for generation",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parsing_argument()
+    model_id = args.model_name
+    text = args.text
+
+    # Load compiled model
+    model = RBLNT5ForConditionalGeneration.from_pretrained(
+        model_id=os.path.basename(model_id),
+        export=False,
+    )
+
+    # Prepare inputs
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name)
+    inputs = tokenizer(text, return_tensors="pt", padding=True)
+
+    # Generate tokens
+    output = model.generate(
+        **inputs,
+        max_length=256,
+    )
+
+    # Show text and result
+    print("--- Text ---")
+    print(text)
+    print("--- Result ---")
+    print(tokenizer.decode(output[0], skip_special_tokens=True))
+
+
+if __name__ == "__main__":
+    main()
