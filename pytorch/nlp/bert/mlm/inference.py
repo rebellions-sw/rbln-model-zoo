@@ -1,8 +1,7 @@
 import argparse
-from transformers import BertTokenizer, pipeline
-import torch
 
 import rebel  # RBLN Runtime
+from transformers import BertTokenizer
 
 
 def parsing_argument():
@@ -28,20 +27,16 @@ def main():
     text = "the color of rose is [MASK]."
     inputs = tokenizer(text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN)
 
-    # Prepare input tensors as numpy array
-    input_ids = inputs["input_ids"].numpy()
-    token_type_ids = inputs["token_type_ids"].numpy()
-    attention_mask = inputs["attention_mask"].numpy()
-
     # Load compiled model to RBLN runtime module
-    module = rebel.Runtime(f"bert-{args.model_name}.rbln")
+    module = rebel.Runtime(f"bert-{args.model_name}.rbln", tensor_type="pt")
 
     # Run inference
-    out = module.run(input_ids, attention_mask, token_type_ids)
+    logits = module(**inputs)
 
     # Decoding final logit to text
-    unmasker = pipeline("fill-mask", model=model_name)
-    print(unmasker.postprocess({"input_ids": inputs["input_ids"], "logits": torch.from_numpy(out)}))
+    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(as_tuple=True)[0]
+    predicted_token_id = logits[0, mask_token_index].argmax(axis=-1)
+    print(tokenizer.decode(predicted_token_id))
 
 
 if __name__ == "__main__":

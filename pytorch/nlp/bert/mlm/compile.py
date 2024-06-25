@@ -1,7 +1,7 @@
 import argparse
-import torch
-from transformers import BertForMaskedLM
+
 import rebel  # RBLN Compiler
+from transformers import BertForMaskedLM
 
 
 def parsing_argument():
@@ -28,9 +28,9 @@ def main():
 
     # Compile
     input_info = [
-        ("input_ids", [1, MAX_SEQ_LEN], torch.long),
-        ("attention_mask", [1, MAX_SEQ_LEN], torch.long),
-        ("token_type_ids", [1, MAX_SEQ_LEN], torch.long),
+        ("input_ids", [1, MAX_SEQ_LEN], "int64"),
+        ("attention_mask", [1, MAX_SEQ_LEN], "int64"),
+        ("token_type_ids", [1, MAX_SEQ_LEN], "int64"),
     ]
     compiled_model = rebel.compile_from_torch(model, input_info)
 

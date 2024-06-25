@@ -1,7 +1,7 @@
 import argparse
-from transformers import BertTokenizer
 
 import rebel  # RBLN Runtime
+from transformers import BertTokenizer
 
 
 def parsing_argument():
@@ -33,16 +33,11 @@ def main():
         question, text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN
     )
 
-    # Prepare input tensors as numpy array
-    input_ids = inputs["input_ids"].numpy()
-    token_type_ids = inputs["token_type_ids"].numpy()
-    attention_mask = inputs["attention_mask"].numpy()
-
     # Load compiled model to RBLN runtime module
-    module = rebel.Runtime(f"bert-{args.model_name}.rbln")
+    module = rebel.Runtime(f"bert-{args.model_name}.rbln", tensor_type="pt")
 
     # Run inference
-    out = module.run(input_ids, attention_mask, token_type_ids)
+    out = module.run(**inputs)
 
     # Decoding final logit to text
     answer_start_index = out[0].argmax()
