@@ -8,7 +8,7 @@ This repository provides a collection of machine learning model examples for [AT
 
 You can find the complete list of models on our [homepage](https://rebellions.ai/developers/model-zoo) and in the [online documentation](https://docs.rbln.ai/misc/pytorch_modelzoo.html).
 
-## Developer resources
+## Developer Resources
 Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed information including:
 
 - Tutorials
