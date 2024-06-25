@@ -18,7 +18,7 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
     - [HuggingFace diffusers: SDXL-turbo](https://docs.rbln.ai/software/optimum/tutorial/sdxl_turbo.html)
 - APIs
     - [Compile & Runtime](https://docs.rbln.ai/software/api/python_api.html)
-    - [HuggingFace Model Support (optimum-rbln)](https://docs.rbln.ai/software/optimum/model_api.html)
+    - [HuggingFace Model API (optimum-rbln)](https://docs.rbln.ai/software/optimum/model_api.html)
 - [Supported Models](https://docs.rbln.ai/misc/pytorch_modelzoo.html)
 - [Supported Operations](https://docs.rbln.ai/misc/supported_ops_pytorch.html)
 - [Model Serving Guide using Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)
