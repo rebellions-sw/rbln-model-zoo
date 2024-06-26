@@ -15,8 +15,6 @@
     - `Speech Processing`:
         - `Speech Recognition`: Wav2Vec2, Whisper-Tiny/Small/Base/Large
         - `Audio Classification`: Audio-Spectogram-Transformer
-        - `Speech Seperation`: ~ConvTasNet~
+        - `Speech Seperation`: ConvTasNet
     - `Generative AI`:
         - `Image Generation`: StableDiffusionV1.5, Controlnet, StableDiffusionXL-Base-1.0, SDXL-Turbo
-    - `Etc.`:
-        - `Time-series forecasting`: ~Time-Series-Transformer~
