@@ -1,6 +1,6 @@
 # Change Log
 
-## June, 28th 2024 (v0.3.10)
+## July, 2th 2024 (v0.3.10)
 - Added the following models:
     - `Computer Vision`:
         - `Image Classification`: EfficientNet-b0/1/2/3/4/5/6/7, EfficientNetV2-b0/b1/b2/b3/small/medium/large, WideResNet50_2/101_2, MnasNet0_5/0_75/1_0/1_3, NasNetMobile/Large, MobileNet, MobileNetV2, MobileNetV3-small/large, ResNet18/34/50/101/152, ResNetV2-50/101/152, AlexNet, VGG11/13/16/19, VGG_BN_11/13/16/19, SqueezeNet1_0/1_1, GoogLeNet, InceptionV3, ShuffleNetV2_x0_5/x1_0/x1_5/x2_0, DenseNet121/161/169/201, InceptionResNetV2, Xception, ResNetRS50/101/152/200/270/350/420, ResNext50_32x4d/101_32x8d/101_64x4d, ConvNext-tiny/small/base/large/xlarge, RegNetY-200MF/400MF/600MF/800MF/1.6GF/3.2GF/4GF/6.4GF/8GF/12GF/16GF/32GF/128GF, RegNetX-200MF/400MF/600MF/800MF/1.6GF/3.2GF/4GF/6.4GF/8GF/12GF/16GF/32GF, 
@@ -10,8 +10,9 @@
         - `Video Classification`: S3D, R3D_18, MC3_18, R(2+1)D_18
         - `Depth Estimation`: UNet-DenseNet201
     - `Natural Language Processing`:
-        - `Large Langague Model`: LLama3-8b, Llama2-7b/13b, Solar-10.7b, EEVE-Korean-10.8b, T5-small/base/large/3b, BART-base/large, GPT2-base/medium/large/xlarge
-        - `Question & Answering/Masked Language Model`: BERT-base/large
+        - `Large Language Model`: LLama3-8b, Llama2-7b/13b, Solar-10.7b, EEVE-Korean-10.8b, T5-small/base/large/3b, BART-base/large, GPT2-base/medium/large/xlarge
+        - `Question & Answering`: BERT-base/large
+        - `Masked Language Model`: BERT-base/large
     - `Speech Processing`:
         - `Speech Recognition`: Wav2Vec2, Whisper-Tiny/Small/Base/Large
         - `Audio Classification`: Audio-Spectogram-Transformer
