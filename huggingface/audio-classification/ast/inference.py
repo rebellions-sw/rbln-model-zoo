@@ -27,7 +27,7 @@ def main():
     feature_extractor = AutoFeatureExtractor.from_pretrained(model_id)
 
     # Prepare inputs
-    ds = load_dataset("hf-internal-testing/librispeech_asr_demo", "clean", split="validation")
+    ds = load_dataset("hf-internal-testing/librispeech_asr_demo", "clean", split="validation", trust_remote_code=True)
     sample = ds[0]["audio"]
     input_values = feature_extractor(sample["array"], return_tensors="pt").input_values
 
