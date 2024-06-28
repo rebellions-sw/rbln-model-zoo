@@ -28,5 +28,5 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
 For detailed information on updates and changes, please refer to the [release notes](CHANGELOG.md).
 
 ## Getting Help
-If you encounter any issues with the examples provided, please open an issue using the GitHub Issues feature. Our team will assist you as soon as possible.
+If you encounter any problem with the examples provided, please open an issue using the GitHub Issues. Our team will assist you as soon as possible.
 
