@@ -6,11 +6,30 @@ This repository provides a collection of machine learning model examples for [AT
 - Speech Processing
 - Computer Vision
 
-You can find the complete list of models on our [homepage](https://rebellions.ai/developers/model-zoo) and in the [online documentation](https://docs.rbln.ai/misc/pytorch_modelzoo.html).
-
 All deep learning examples in the RBLN Model Zoo include two files: `compile.py` and `inference.py`.
 - `compile.py`: compile the model and save the compiled results to local storage
 - `inference.py`: load the saved compiled results and perform inference
+
+## Install Prerequisite
+- HuggingFace
+  
+    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`.
+    ```bash
+    pip3 install -i https://pypi.rbln.ai/simple optimum-rbln
+    pip3 install -r huggingface/requirements.txt
+    ```
+
+- PyTorch
+    ```bash
+    pip3 install -r pytorch/requirements.txt 
+    ```
+
+- TensorFlow
+    ```bash
+    pip3 install -r tensorflow/requirements.txt
+    ```
+## Model List
+You can find the complete list of models on our [homepage](https://rebellions.ai/developers/model-zoo) and in the [online documentation](https://docs.rbln.ai/misc/pytorch_modelzoo.html). 
 
 ## Developer Resources
 Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed information including:
