@@ -24,6 +24,7 @@ def main():
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,
+        rbln_image_size=224,
     )
 
     # Save compiled results to disk

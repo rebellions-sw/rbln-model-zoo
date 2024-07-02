@@ -6,6 +6,7 @@ matplotlib==3.7.1
 mir-eval==0.7
 networkx==3.1
 numpy==1.23.5
+onnx==1.13.1
 onnxruntime==1.14.1
 pandas==2.0.2
 pillow>=10.2.0
