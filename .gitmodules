@@ -1,0 +1,24 @@
+[submodule "pytorch/vision/face_alignment/3ddfa/3DDFA_V2"]
+	path = pytorch/vision/face_alignment/3ddfa/3DDFA_V2
+	url = https://github.com/cleardusk/3DDFA_V2
+[submodule "pytorch/vision/detection/yolox/YOLOX"]
+	path = pytorch/vision/detection/yolox/YOLOX
+	url = https://github.com/Megvii-BaseDetection/YOLOX
+[submodule "pytorch/vision/detection/yolov5/yolov5"]
+	path = pytorch/vision/detection/yolov5/yolov5
+	url = https://github.com/ultralytics/yolov5.git
+[submodule "pytorch/vision/detection/yolov7/yolov7"]
+	path = pytorch/vision/detection/yolov7/yolov7
+	url = https://github.com/WongKinYiu/yolov7.git
+[submodule "pytorch/vision/detection/yolov6/YOLOv6"]
+	path = pytorch/vision/detection/yolov6/YOLOv6
+	url = https://github.com/meituan/YOLOv6.git
+[submodule "pytorch/vision/detection/yolov8/ultralytics"]
+	path = pytorch/vision/detection/yolov8/ultralytics
+	url = https://github.com/ultralytics/ultralytics.git
+[submodule "pytorch/vision/detection/yolov3/yolov3"]
+	path = pytorch/vision/detection/yolov3/yolov3
+	url = https://github.com/ultralytics/yolov3.git
+[submodule "pytorch/vision/detection/yolov4/yolov4"]
+	path = pytorch/vision/detection/yolov4/yolov4
+	url = https://github.com/WongKinYiu/PyTorch_YOLOv4.git

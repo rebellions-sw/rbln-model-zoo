@@ -1,0 +1,9 @@
+*.swp
+*.swo
+.pkl_memoize_py3
+*.rbln
+*.log
+*.jpg
+*.png
+*.bin
+__pycache__/
