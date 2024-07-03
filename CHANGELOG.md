@@ -1,9 +1,9 @@
 # Change Log
 
-## July, 2th 2024 (v0.3.11)
+## July, 3th 2024 (v0.4.0)
 - Compatible version:
     - `rebel-compiler`: v0.5.1
-    - `optimum-rbln`: v0.1.3
+    - `optimum-rbln`: v0.1.4
 - Added the following models:
     - `Computer Vision`:
         - `Image Classification`: EfficientNet-b0/1/2/3/4/5/6/7, EfficientNetV2-b0/b1/b2/b3/small/medium/large, WideResNet50_2/101_2, MnasNet0_5/0_75/1_0/1_3, NasNetMobile/Large, MobileNet, MobileNetV2, MobileNetV3-small/large, ResNet18/34/50/101/152, ResNetV2-50/101/152, AlexNet, VGG11/13/16/19, VGG_BN_11/13/16/19, SqueezeNet1_0/1_1, GoogLeNet, InceptionV3, ShuffleNetV2_x0_5/x1_0/x1_5/x2_0, DenseNet121/161/169/201, InceptionResNetV2, Xception, ResNetRS50/101/152/200/270/350/420, ResNext50_32x4d/101_32x8d/101_64x4d, ConvNext-tiny/small/base/large/xlarge, RegNetY-200MF/400MF/600MF/800MF/1.6GF/3.2GF/4GF/6.4GF/8GF/12GF/16GF/32GF/128GF, RegNetX-200MF/400MF/600MF/800MF/1.6GF/3.2GF/4GF/6.4GF/8GF/12GF/16GF/32GF, 
