@@ -1,8 +1,8 @@
 # Change Log
 
-## July, 3th 2024 (v0.4.0)
+## July, 10th 2024 (v0.4.0)
 - Compatible version:
-    - `rebel-compiler`: v0.5.1
+    - `rebel-compiler`: v0.5.2
     - `optimum-rbln`: v0.1.4
 - Added the following models:
     - `Computer Vision`:
