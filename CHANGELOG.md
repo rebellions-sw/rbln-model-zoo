@@ -2,8 +2,8 @@
 
 ## July, 25th 2024 (v0.4.1)
 - Compatible version:
-    - `rebel-compiler`: v0.5.6
-    - `optimum-rbln`: v0.1.5
+    - `rebel-compiler`: v0.5.7
+    - `optimum-rbln`: v0.1.6
 - Added a new model:
     - `Computer Vision`:
         - DPT-large
