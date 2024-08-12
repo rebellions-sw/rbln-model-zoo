@@ -1,24 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNWav2Vec2ForCTC
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["wav2vec2-base-960h"],
-        default="wav2vec2-base-960h",
-        help="(str) wav2vec model name, [wav2vec2-base-960h]",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"facebook/{args.model_name}"
+    model_id = "facebook/wav2vec2-base-960h"
 
     # Compile and export
     model = RBLNWav2Vec2ForCTC.from_pretrained(

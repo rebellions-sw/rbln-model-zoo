@@ -11,13 +11,6 @@ from optimum.rbln import RBLNStableDiffusionControlNetImg2ImgPipeline
 def parsing_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-v1-5"],
-        default="stable-diffusion-v1-5",
-        help="(str) model type, diffusers stable diffusion model name.",
-    )
-    parser.add_argument(
         "--prompt",
         type=str,
         default="lego batman and robin",
@@ -28,7 +21,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"runwayml/{args.model_name}"
+    model_id = "runwayml/stable-diffusion-v1-5"
     prompt = args.prompt
 
     # Load compiled model

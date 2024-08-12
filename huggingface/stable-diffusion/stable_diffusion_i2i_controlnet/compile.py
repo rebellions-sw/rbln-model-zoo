@@ -7,13 +7,6 @@ from diffusers import ControlNetModel
 def parsing_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-v1-5"],
-        default="stable-diffusion-v1-5",
-        help="(str) model type, diffusers stable diffusion model name.",
-    )
-    parser.add_argument(
         "--img_width",
         type=int,
         default=768,
@@ -30,7 +23,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"runwayml/{args.model_name}"
+    model_id = "runwayml/stable-diffusion-v1-5"
 
     controlnet = ControlNetModel.from_pretrained("lllyasviel/control_v11f1p_sd15_depth")
 

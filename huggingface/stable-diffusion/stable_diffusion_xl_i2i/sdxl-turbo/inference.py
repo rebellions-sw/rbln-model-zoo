@@ -7,23 +7,10 @@ from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
 def parsing_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["sdxl-turbo"],
-        default="sdxl-turbo",
-        help="(str) model type, diffusers stable diffusion xl model name.",
-    )
-    parser.add_argument(
         "--prompt",
         type=str,
         default="cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
         help="(str) type, prompt for generate image",
-    )
-    parser.add_argument(
-        "--guidance_scale",
-        type=float,
-        default=0.0,
-        help="guidance_scale for generation",
     )
     parser.add_argument(
         "--img_width",
@@ -42,9 +29,8 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"stabilityai/{args.model_name}"
+    model_id = "stabilityai/sdxl-turbo"
     prompt = args.prompt
-    guidance_scale = args.guidance_scale
 
     # Load compiled model
     pipe = RBLNStableDiffusionXLImg2ImgPipeline.from_pretrained(
@@ -59,7 +45,7 @@ def main():
 
     # Generate image
     image = pipe(
-        prompt, image=init_image, num_inference_steps=2, guidance_scale=guidance_scale, strength=0.5
+        prompt, image=init_image, num_inference_steps=2, guidance_scale=0.0, strength=0.5
     ).images[0]
 
     # Save image result

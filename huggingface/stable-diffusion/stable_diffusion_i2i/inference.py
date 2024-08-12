@@ -1,20 +1,14 @@
 import argparse
 import os
 from io import BytesIO
+
 import requests
-from PIL import Image
 from optimum.rbln import RBLNStableDiffusionImg2ImgPipeline
+from PIL import Image
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-v1-5"],
-        default="stable-diffusion-v1-5",
-        help="(str) model type, diffusers stable diffusion model name.",
-    )
     parser.add_argument(
         "--prompt",
         type=str,
@@ -38,7 +32,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"runwayml/{args.model_name}"
+    model_id = "runwayml/stable-diffusion-v1-5"
     prompt = args.prompt
 
     # Load compiled model

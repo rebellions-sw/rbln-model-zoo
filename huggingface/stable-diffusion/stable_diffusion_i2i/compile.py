@@ -1,17 +1,11 @@
 import argparse
 import os
+
 from optimum.rbln import RBLNStableDiffusionImg2ImgPipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-v1-5"],
-        default="stable-diffusion-v1-5",
-        help="(str) model type, diffusers stable diffusion model name.",
-    )
     parser.add_argument(
         "--img_height",
         type=int,
@@ -29,7 +23,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"runwayml/{args.model_name}"
+    model_id = "runwayml/stable-diffusion-v1-5"
 
     # Compile and export
     pipe = RBLNStableDiffusionImg2ImgPipeline.from_pretrained(

@@ -1,28 +1,13 @@
 import os
+
 import torch
-import argparse
-from optimum.rbln import RBLNWav2Vec2ForCTC
-
-from transformers import Wav2Vec2Processor
 from datasets import load_dataset
-
-
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["wav2vec2-base-960h"],
-        default="wav2vec2-base-960h",
-        help="(str) wav2vec model name, [wav2vec2-base-960h]",
-    )
-    return parser.parse_args()
+from optimum.rbln import RBLNWav2Vec2ForCTC
+from transformers import Wav2Vec2Processor
 
 
 def main():
-    args = parsing_argument()
-    model_id = f"facebook/{args.model_name}"
+    model_id = "facebook/wav2vec2-base-960h"
 
     processor = Wav2Vec2Processor.from_pretrained(model_id)
 

@@ -1,28 +1,13 @@
 import os
+
 import torch
-import argparse
-from optimum.rbln import RBLNASTForAudioClassification
-
-from transformers import AutoFeatureExtractor
 from datasets import load_dataset
-
-
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["ast-finetuned-audioset-10-10-0.4593"],
-        default="ast-finetuned-audioset-10-10-0.4593",
-        help="(str) ast model name [ast-finetuned-audioset-10-10-0.4593]",
-    )
-    return parser.parse_args()
+from optimum.rbln import RBLNASTForAudioClassification
+from transformers import AutoFeatureExtractor
 
 
 def main():
-    args = parsing_argument()
-    model_id = f"MIT/{args.model_name}"
+    model_id = "MIT/ast-finetuned-audioset-10-10-0.4593"
 
     feature_extractor = AutoFeatureExtractor.from_pretrained(model_id)
 
