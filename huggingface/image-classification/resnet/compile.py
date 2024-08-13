@@ -1,23 +1,10 @@
-import argparse
 import os
+
 from optimum.rbln import RBLNResNetForImageClassification
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["resnet-50"],
-        default="resnet-50",
-        help="(str) model type, image classification model name.",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"microsoft/{args.model_name}"
+    model_id = "microsoft/resnet-50"
 
     # Compile and export
     model = RBLNResNetForImageClassification.from_pretrained(

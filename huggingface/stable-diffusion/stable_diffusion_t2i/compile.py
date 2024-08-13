@@ -1,23 +1,10 @@
-import argparse
 import os
+
 from optimum.rbln import RBLNStableDiffusionPipeline
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-v1-5"],
-        default="stable-diffusion-v1-5",
-        help="(str) model type, diffusers stable diffusion model name.",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"runwayml/{args.model_name}"
+    model_id = "runwayml/stable-diffusion-v1-5"
 
     # Compile and export
     pipe = RBLNStableDiffusionPipeline.from_pretrained(

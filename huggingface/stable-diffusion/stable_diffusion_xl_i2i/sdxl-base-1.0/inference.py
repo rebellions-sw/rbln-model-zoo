@@ -1,18 +1,12 @@
 import argparse
 import os
+
 from diffusers.utils import load_image
 from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-xl-base-1.0"],
-        default="stable-diffusion-xl-base-1.0",
-        help="(str) model type, diffusers stable diffusion xl model name.",
-    )
     parser.add_argument(
         "--prompt",
         type=str,
@@ -30,7 +24,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"stabilityai/{args.model_name}"
+    model_id = "stabilityai/stable-diffusion-xl-base-1.0"
     prompt = args.prompt
     guidance_scale = args.guidance_scale
 

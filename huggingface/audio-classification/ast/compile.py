@@ -1,24 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNASTForAudioClassification
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["ast-finetuned-audioset-10-10-0.4593"],
-        default="ast-finetuned-audioset-10-10-0.4593",
-        help="(str) ast model name [ast-finetuned-audioset-10-10-0.4593]",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"MIT/{args.model_name}"
+    model_id = "MIT/ast-finetuned-audioset-10-10-0.4593"
 
     # Compile and export
     model = RBLNASTForAudioClassification.from_pretrained(

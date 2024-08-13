@@ -1,17 +1,11 @@
 import argparse
 import os
+
 from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["stable-diffusion-xl-base-1.0"],
-        default="stable-diffusion-xl-base-1.0",
-        help="(str) model type, diffusers stable diffusion xl base 1.0 model name.",
-    )
     parser.add_argument(
         "--guidance_scale",
         type=float,
@@ -35,7 +29,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"stabilityai/{args.model_name}"
+    model_id = "stabilityai/stable-diffusion-xl-base-1.0"
     guidance_scale = args.guidance_scale
 
     # Compile and export
