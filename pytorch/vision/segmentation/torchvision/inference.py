@@ -1,11 +1,10 @@
 import argparse
-import torch
-import numpy as np
-from torchvision import transforms
-from PIL import Image
 import urllib.request
 
+import torch
 import rebel
+from torchvision import transforms
+from PIL import Image
 
 
 def parsing_argument():
@@ -45,16 +44,13 @@ def main():
         )
         input_data = preprocess(resize_image).unsqueeze(0)
 
-    module = rebel.Runtime(f"./{args.model_name}.rbln")
-    input_data = input_data.numpy()
-    out = module.run(input_data.astype(np.float32))[0]
+    module = rebel.Runtime(f"./{args.model_name}.rbln", tensor_type="pt")
+    out = module(input_data)[0]
     palette = torch.tensor([2**25 - 1, 2**15 - 1, 2**21 - 1])
     colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
     colors = (colors % 255).numpy().astype("uint8")
 
-    save_img = Image.fromarray(torch.Tensor(out).argmax(0).byte().cpu().numpy()).resize(
-        resize_image.size
-    )
+    save_img = Image.fromarray(out.argmax(0).byte().numpy()).resize(img.size, resample=0)
     save_img.putpalette(colors)
     save_img.save("REBEL.png")
 
