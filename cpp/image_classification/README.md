@@ -1,0 +1,2 @@
+# Image Classification Using C/C++ binding APIs
+For detailed information, please refer to [Image Classification for C/C++ binding APIs](https://docs.rbln.ai/software/api/language_binding/c/tutorial/image_classification.html).
