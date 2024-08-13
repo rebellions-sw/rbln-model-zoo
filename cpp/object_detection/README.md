@@ -1,0 +1,2 @@
+# Object Detection Using C/C++ binding APIs
+For detailed information, please refer to [Object Detection for C/C++ binding APIs](https://docs.rbln.ai/software/api/language_binding/c/tutorial/object_detection.html)

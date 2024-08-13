@@ -28,6 +28,11 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
     ```bash
     pip3 install -r tensorflow/requirements.txt
     ```
+
+- C/C++ Binding
+
+  The C/C++ API can be installed via the APT repository. You would be better to refer [C/C++ binding Installation Guide](https://docs.rbln.ai/software/api/language_binding/c/installation.html)
+
 ## Model List
 You can find the complete list of models on our [homepage](https://rebellions.ai/developers/model-zoo) and in the [online documentation](https://docs.rbln.ai/misc/pytorch_modelzoo.html). 
 
@@ -39,9 +44,12 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
     - [TensorFlow: BERT-base](https://docs.rbln.ai/tutorial/basic/tensorflow_bert.html)
     - [HuggingFace transformers: LLama2-7b](https://docs.rbln.ai/software/optimum/tutorial/llama_7b.html)
     - [HuggingFace diffusers: SDXL-turbo](https://docs.rbln.ai/software/optimum/tutorial/sdxl_turbo.html)
+    - [C/C++ binding: ResNet50](https://docs.rbln.ai/software/api/language_binding/c/tutorial/image_classification.html)
+    - [C/C++ binding: Yolov8m](https://docs.rbln.ai/software/api/language_binding/c/tutorial/object_detection.html)
 - APIs
-    - [Compile & Runtime](https://docs.rbln.ai/software/api/python_api.html)
+    - [Python Compile & Runtime](https://docs.rbln.ai/software/api/python_api.html)
     - [HuggingFace Model API (optimum-rbln)](https://docs.rbln.ai/software/optimum/model_api.html)
+    - [C/C++ Binding API](https://docs.rbln.ai/software/api/language_binding/c/api.html)
 - [Supported Models](https://docs.rbln.ai/misc/pytorch_modelzoo.html)
 - [Supported Operations](https://docs.rbln.ai/misc/supported_ops_pytorch.html)
 - [Model Serving Guide using Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)
