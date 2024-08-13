@@ -9,3 +9,4 @@ optimum-rbln
 protobuf<4
 sentencepiece>=0.2.0
 soundfile>=0.12.1
+FlagEmbedding==1.2.10 # bge-m3
