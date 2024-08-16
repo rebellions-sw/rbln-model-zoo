@@ -32,7 +32,7 @@ def main():
         backend="rbln",
         # Disable dynamic shape support, as the RBLN backend currently does not support it
         dynamic=False,
-        options={"cache_dir": f"./{os.path.basename(model_name)}"},
+        options={"cache_dir": f"./rbln_{os.path.basename(model_name)}"},
     )
 
     # Prepare input text sequence for masked language modeling
