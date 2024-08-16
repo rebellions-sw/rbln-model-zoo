@@ -1,5 +1,18 @@
 # Change Log
 
+## August, 16th 2024 (v0.5.0)
+- Compatible version:
+    - `rebel-compiler`: v0.5.8
+    - `optimum-rbln`: v0.1.8
+- We are excited to announce support for pytorch2.0 dynamic feature, i.e. torch.compile(). Sample code can be found in `rbln-model-zoo/pytorch_dynamo`.
+- Added a new model:
+    - `Natural Language Processing`:
+        - Mi:dm-7b
+        - BGE-M3
+        - BGE-Reranker-v2-m3
+        - SecureBERT
+        - RoBERTa
+
 ## July, 25th 2024 (v0.4.1)
 - Compatible version:
     - `rebel-compiler`: v0.5.7
