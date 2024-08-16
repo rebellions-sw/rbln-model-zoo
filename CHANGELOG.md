@@ -1,6 +1,6 @@
 # Change Log
 
-## August, 14th 2024 (v0.5.0)
+## August, 16th 2024 (v0.5.0)
 - Compatible version:
     - `rebel-compiler`: v0.5.8
     - `optimum-rbln`: v0.1.8
