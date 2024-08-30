@@ -25,4 +25,4 @@ FlagEmbedding==1.2.10 # bge-m3
 easydict==1.13 # motionbert
 ipdb==0.13.13 # motionbert
 smplx==0.1.28 # motionbert
-imageio_ffmpeg==0.5.1 # motionbert
+imageio_ffmpeg==0.4.9 # motionbert
