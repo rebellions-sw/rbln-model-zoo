@@ -40,4 +40,3 @@
 [submodule "pytorch_dynamo/vision/detection/yolov4/yolov4"]
 	path = pytorch_dynamo/vision/detection/yolov4/yolov4
 	url = https://github.com/WongKinYiu/PyTorch_YOLOv4.git
-  
