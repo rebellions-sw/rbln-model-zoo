@@ -1,5 +1,19 @@
 # Change Log
 
+## August, 30th 2024 (v0.5.1)
+- Compatible version:
+    - `rebel-compiler`: v0.5.9
+    - `optimum-rbln`: v0.1.9
+- Added a new model:
+    - `Natural Language Processing`:
+        - Gemma-2B/7B
+        - Mistral-7B
+        - DistilBERT
+    - `Computer Vision`
+        - MotionBERT
+        - pytorch_dynamo
+            - YOLOv3/4/5/6/X
+
 ## August, 16th 2024 (v0.5.0)
 - Compatible version:
     - `rebel-compiler`: v0.5.8
