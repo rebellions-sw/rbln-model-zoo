@@ -25,9 +25,6 @@ def main():
     model = attempt_load(model_name + ".pt")
     model.eval()
 
-    # for pre-tracing for torch.jit.trace
-    model(torch.zeros(1, 3, 640, 640))
-
     # Compile torch model for ATOM
     input_info = [
         ("input_np", [1, 3, 640, 640], torch.float32),
