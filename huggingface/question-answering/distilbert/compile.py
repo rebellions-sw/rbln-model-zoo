@@ -10,6 +10,9 @@ def parsing_argument():
         "--model_name",
         type=str,
         default="distilbert-base-uncased-distilled-squad",
+        choices=[
+            "distilbert-base-uncased-distilled-squad",
+        ],
         help="(str) type of distilbert",
     )
     return parser.parse_args()
