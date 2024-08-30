@@ -29,7 +29,7 @@ def parsing_argument():
         type=str,
         default="base",
         choices=["base", "lite"],
-        help="(str) type, motionbert 3dpose model_name.",
+        help="(str) type, motionBERT 3D pose model name.",
     )
     return parser.parse_args()
 
