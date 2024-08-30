@@ -22,3 +22,7 @@ onnxruntime==1.14.1 # 3ddfa
 loguru==0.6.0 # yolox
 tabulate==0.9.0 # yolox
 FlagEmbedding==1.2.10 # bge-m3
+easydict==1.13 # motionbert
+ipdb==0.13.13 # motionbert
+smplx==0.1.28 # motionbert
+imageio_ffmpeg==0.5.1 # motionbert

@@ -22,3 +22,6 @@
 [submodule "pytorch/vision/detection/yolov4/yolov4"]
 	path = pytorch/vision/detection/yolov4/yolov4
 	url = https://github.com/WongKinYiu/PyTorch_YOLOv4.git
+[submodule "pytorch/vision/pose_estimation/motionbert/MotionBERT"]
+	path = pytorch/vision/pose_estimation/motionbert/MotionBERT
+	url = https://github.com/Walter0807/MotionBERT.git
