@@ -6,6 +6,7 @@ from typing import List, Tuple
 
 import cv2
 import numpy as np
+import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 
 sys.path.insert(0, os.path.join(sys.path[0], "YOLOX"))
