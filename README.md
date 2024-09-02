@@ -1,5 +1,5 @@
 # RBLN Model Zoo
-This repository provides a collection of machine learning model examples for [ATOM](https://rebellions.ai/rebellions-product/atom-2), Rebellions' neural procesing unit (NPU). We are continously enhancing the rbln-model-zoo by adding more models in the following categories:
+This repository provides a collection of machine learning model examples for [ATOM](https://rebellions.ai/rebellions-product/atom-2), Rebellions' neural processing unit (NPU). We are continuously enhancing the rbln-model-zoo by adding more models in the following categories:
 
 - Natural Language Processing
 - Generative AI
@@ -10,10 +10,10 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
 - `compile.py`: compile the model and save the compiled results to local storage
 - `inference.py`: load the saved compiled results and perform inference
 
-## Install Prerequisite
+## Install Prerequisites
 - HuggingFace
   
-    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`.
+    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`.
     ```bash
     pip3 install -i https://pypi.rbln.ai/simple optimum-rbln
     pip3 install -r huggingface/requirements.txt
@@ -32,7 +32,7 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
 - Language Binding
     - C/C++
 
-        - The C/C++ API can be installed via the APT repository. Please refer [C/C++ binding Installation Guide](https://docs.rbln.ai/software/api/language_binding/c/installation.html) for more details.
+        - The C/C++ API can be installed via the APT repository. Please refer to [C/C++ binding Installation Guide](https://docs.rbln.ai/software/api/language_binding/c/installation.html) for more details.
 
 ## Model List
 You can find the complete list of models on our [homepage](https://rebellions.ai/developers/model-zoo) and in the [online documentation](https://docs.rbln.ai/misc/pytorch_modelzoo.html). 
@@ -61,5 +61,4 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
 For detailed information on updates and changes, please refer to the [release notes](CHANGELOG.md).
 
 ## Getting Help
-If you encounter any problem with the examples provided, please open an issue using the GitHub Issues. Our team will assist you as soon as possible.
-
+If you encounter any problem with the examples provided, please open an issue on GitHub. Our team will assist you as soon as possible.
