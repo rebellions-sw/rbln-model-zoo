@@ -5,10 +5,23 @@ import argparse
 from transformers import AutoTokenizer
 from optimum.rbln import RBLNXLMRobertaForSequenceClassification
 
+MAX_SEQ_LEN_CFG = {
+    "v2-m3": 8192,
+    "large": 512,
+    "base": 512,
+}
+
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
+    parser.add_argument(
+        "--model_name",
+        type=str,
+        choices=["v2-m3", "large", "base"],
+        default="v2-m3",
+        help="(str) model type, Size of bge-reranker. [v2-m3, large, base]",
+    )
     parser.add_argument(
         "--query",
         type=str,
@@ -27,7 +40,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "BAAI/bge-reranker-v2-m3"
+    model_id = f"BAAI/bge-reranker-{args.model_name}"
 
     # Load compiled model
     model = RBLNXLMRobertaForSequenceClassification.from_pretrained(
@@ -38,7 +51,11 @@ def main():
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     inputs = tokenizer(
-        args.query, args.message, padding="max_length", return_tensors="pt", max_length=8192
+        args.query,
+        args.message,
+        padding="max_length",
+        return_tensors="pt",
+        max_length=MAX_SEQ_LEN_CFG[args.model_name],
     )
 
     # run model
