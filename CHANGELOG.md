@@ -1,16 +1,31 @@
 # Change Log
 
+## September, 27th 2024 (v0.5.2)
+- Compatible version:
+    - `rebel-compiler`: v0.5.10
+    - `optimum-rbln`: v0.1.10
+- Added new models:
+    - `Multi Modal`:
+        - Llava-Next
+    - `Natural Language Processing`:
+        - E5-Base-4k
+        - KoBART
+        - BGE-Reranker-Base/Large
+    - `Computer Vision`
+        - MotionBERT Action Recognition
+- Updated Whisper models to support generating token timestamps and long-form transcription
+
 ## August, 30th 2024 (v0.5.1)
 - Compatible version:
     - `rebel-compiler`: v0.5.9
     - `optimum-rbln`: v0.1.9
-- Added a new model:
+- Added new models:
     - `Natural Language Processing`:
         - Gemma-2B/7B
         - Mistral-7B
         - DistilBERT
     - `Computer Vision`
-        - MotionBERT
+        - MotionBERT Pose Estimation
         - pytorch_dynamo
             - YOLOv3/4/5/6/X
 
@@ -19,7 +34,7 @@
     - `rebel-compiler`: v0.5.8
     - `optimum-rbln`: v0.1.8
 - We are excited to announce support for pytorch2.0 dynamic feature, i.e. torch.compile(). Sample code can be found in `rbln-model-zoo/pytorch_dynamo`.
-- Added a new model:
+- Added new models:
     - `Natural Language Processing`:
         - Mi:dm-7b
         - BGE-M3
