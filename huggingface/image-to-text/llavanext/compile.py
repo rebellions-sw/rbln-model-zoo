@@ -15,7 +15,7 @@ def main():
             }
         },
     )
-    model.save_pretarined(os.path.basename(model_id))
+    model.save_pretrained(os.path.basename(model_id))
 
 
 if __name__ == "__main__":
