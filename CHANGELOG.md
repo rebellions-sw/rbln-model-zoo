@@ -3,7 +3,7 @@
 ## September, 27th 2024 (v0.5.2)
 - Compatible version:
     - `rebel-compiler`: v0.5.10
-    - `optimum-rbln`: v0.1.10
+    - `optimum-rbln`: v0.1.11
 - Added new models:
     - `Multi Modal`:
         - Llava-Next
