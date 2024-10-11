@@ -17,7 +17,7 @@ def parsing_argument():
         "--tensor_parallel_size",
         type=int,
         default=4,
-        help="(int) set tensor parallel size in mistral model, default: 8",
+        help="(int) set tensor parallel size in mistral model, default: 4",
     )
     return parser.parse_args()
 
