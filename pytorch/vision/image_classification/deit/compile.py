@@ -1,5 +1,7 @@
 import argparse
 import torch
+import timm
+
 import rebel  # RBLN Compiler
 
 model_map = {
@@ -37,7 +39,7 @@ def main():
     input_size = 384 if "384" in model_name else 224
 
     # Instantiate TorchVision model
-    model = torch.hub.load("facebookresearch/deit:main", model_map[model_name], pretrained=True)
+    model = timm.create_model(f'{model_map[model_name]}.fb_in1k', pretrained=True)
     model.eval()
 
     # Compile torch model for ATOM
