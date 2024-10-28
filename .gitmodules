@@ -43,3 +43,6 @@
 [submodule "pytorch/vision/action_recognition/motionbert/MotionBERT"]
 	path = pytorch/vision/action_recognition/motionbert/MotionBERT
 	url = https://github.com/Walter0807/MotionBERT.git
+[submodule "pytorch_dynamo/vision/segmentation/sam2/sam2"]
+	path = pytorch_dynamo/vision/segmentation/sam2/sam2
+	url = https://github.com/facebookresearch/sam2.git
