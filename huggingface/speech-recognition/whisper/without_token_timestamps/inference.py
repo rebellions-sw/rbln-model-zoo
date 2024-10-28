@@ -12,9 +12,9 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["tiny", "small", "base", "medium", "large-v3"],
+        choices=["tiny", "small", "base", "medium", "large-v3", "large-v3-turbo"],
         default="base",
-        help="(str) model type, Size of Whisper [tiny, small, base, medium, large-v3]",
+        help="(str) model type, [tiny, small, base, medium, large-v3, large-v3-turbo]",
     )
     return parser.parse_args()
 
