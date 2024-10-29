@@ -43,7 +43,7 @@ def main():
     )
 
     # Generate with .generate()
-    outputs = model.generate(**input)
+    outputs = model.generate(**input, return_timestamps=True)
     generated_ids = outputs
     transcriptions = processor.batch_decode(
         generated_ids, skip_special_tokens=True, decode_with_timestamps=True
