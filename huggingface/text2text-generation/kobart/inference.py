@@ -27,7 +27,7 @@ def main():
     output_sequence = model.generate(
         input_ids=torch.tensor([inputs.input_ids]),
         attention_mask=torch.tensor([inputs.attention_mask]),
-        max_length=model.dec_max_seq_len,
+        max_length=1024,
         **generation_kwargs,
     )
 
