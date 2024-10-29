@@ -45,7 +45,7 @@ def main():
     output_sequence = model.generate(
         input_ids=inputs["input_ids"],
         attention_mask=inputs["attention_mask"],
-        max_length=model.dec_max_seq_len,
+        max_length=1024,
         **generation_kwargs,
     )
 
