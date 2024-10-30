@@ -1,5 +1,20 @@
 # Change Log
 
+## October, 30th 2024 (v0.5.3)
+- Compatible version:
+    - `rebel-compiler`: v0.5.12
+    - `optimum-rbln`: v0.1.12
+- Added new models:
+    - `Natural Language Processing`:
+        - Qwen2-7b
+        - EXAONE-3.0-7.8b
+        - Salamandra-7b
+        - Phi-2
+        - Whisper-large-v3-turbo
+    - `Computer Vision`
+        - ViT-large
+        - SAM2.1_hiera_large 
+
 ## September, 27th 2024 (v0.5.2)
 - Compatible version:
     - `rebel-compiler`: v0.5.10
