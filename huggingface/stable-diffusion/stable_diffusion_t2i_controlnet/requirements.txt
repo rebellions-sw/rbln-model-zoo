@@ -2,3 +2,4 @@
 numpy==1.23.5
 opencv-python>=4.9.0.80
 optimum-rbln
+opencv-python-headless==4.10.0.84
