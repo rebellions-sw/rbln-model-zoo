@@ -1,0 +1,2 @@
+--extra-index-url https://pypi.rbln.ai/simple/
+optimum-rbln

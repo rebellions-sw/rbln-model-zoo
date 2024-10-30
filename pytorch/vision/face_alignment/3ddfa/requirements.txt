@@ -1,0 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+Cython>=3.0.9
+matplotlib==3.7.1
+numpy==1.24
+onnx==1.13.1
+onnxruntime==1.14.1
+scipy>=1.10.1
+torch==2.2.1+cpu
+torchvision==0.17.1+cpu
+opencv-python-headless==4.10.0.84
+pyyaml==6.0.1

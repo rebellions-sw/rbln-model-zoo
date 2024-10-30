@@ -1,0 +1,9 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+fvcore==0.1.5.post20221221
+matplotlib==3.7.1
+numpy==1.24
+omegaconf==2.3.0
+pycocotools>=2.0.7
+torch==2.2.1+cpu
+torchvision==0.17.1+cpu
+opencv-python-headless==4.10.0.84
