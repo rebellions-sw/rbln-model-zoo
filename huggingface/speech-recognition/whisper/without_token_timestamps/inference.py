@@ -12,9 +12,9 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["tiny", "small", "base", "medium", "large-v3"],
+        choices=["tiny", "small", "base", "medium", "large-v3", "large-v3-turbo"],
         default="base",
-        help="(str) model type, Size of Whisper [tiny, small, base, medium, large-v3]",
+        help="(str) model type, [tiny, small, base, medium, large-v3, large-v3-turbo]",
     )
     return parser.parse_args()
 
@@ -43,7 +43,7 @@ def main():
     )
 
     # Generate with .generate()
-    outputs = model.generate(**input)
+    outputs = model.generate(**input, return_timestamps=True)
     generated_ids = outputs
     transcriptions = processor.batch_decode(
         generated_ids, skip_special_tokens=True, decode_with_timestamps=True
