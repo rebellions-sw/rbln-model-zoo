@@ -1,0 +1,4 @@
+--extra-index-url https://pypi.rbln.ai/simple/
+numpy==1.23.5
+opencv-python>=4.9.0.80
+optimum-rbln

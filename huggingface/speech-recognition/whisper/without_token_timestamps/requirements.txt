@@ -1,0 +1,4 @@
+--extra-index-url https://pypi.rbln.ai/simple/
+datasets>=2.19.1
+optimum-rbln
+librosa>=0.10.1
