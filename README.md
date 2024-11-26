@@ -11,22 +11,37 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
 - `inference.py`: load the saved compiled results and perform inference
 
 ## Install Prerequisites
-- HuggingFace
+- General Requirements: Rebellions Compiler
+
+    The `rebel-compiler` Python package is required for all workflows involing RBLN NPUs. Please install it before processing. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `rebel-compiler`.
+    ```bash
+    pip3 install -i https://pypi.rbln.ai/simple rebel-compiler
+    ```
+
+- HuggingFace Models
   
-    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`.
+    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`. To install prereuisites for HuggingFace models, navigate to the model's directory and use its requirements.txt:
     ```bash
     pip3 install -i https://pypi.rbln.ai/simple optimum-rbln
-    pip3 install -r huggingface/requirements.txt
+    pip3 install -r <model_directory>/requirements.txt
+    ```
+    For instance:
+    ```bash
+    pip3 install -r huggingface/bert/reqruiements.txt
     ```
 
 - PyTorch
+
+    Each PyTorch model now includes its own `requirements.txt`. Install the prerequisites for your specific model by navigtating to the relevant directory:
     ```bash
-    pip3 install -r pytorch/requirements.txt 
+    pip3 install -r pytorch/<model_directory>/requirements.txt 
     ```
 
 - TensorFlow
+
+    Similarly, TensorFlow models provide a `requirements.txt` in their respective directories. Install prerequisites as follows:
     ```bash
-    pip3 install -r tensorflow/requirements.txt
+    pip3 install -r tensorflow/<model_directory>/requirements.txt
     ```
 
 - Language Binding
