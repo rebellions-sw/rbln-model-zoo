@@ -1,8 +1,0 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-numpy==1.24
-pydicom==2.4.4
-shapely==2.0.0
-pycocotools>=2.0.7
-torch==2.2.1+cpu
-torchvision==0.17.1+cpu
-opencv-python-headless==4.10.0.84
