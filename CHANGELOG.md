@@ -1,5 +1,23 @@
 # Change Log
 
+## November, 27th 2024 (v0.5.4)
+- Compatible version:
+    - `rebel-compiler`: v0.6.1
+    - `optimum-rbln`: v0.1.13
+- Added new models:
+    - `Natural Language Processing`:
+        - Qwen2.5-7b
+        - Qwen2.5-14b
+        - LLama3-8b + LoRA
+    - `Generative AI`
+        - StableDiffusion + LCM LoRA
+        - StableDiffusionXL + LCM LoRA + Pixel LoRA
+- Dependency updates:
+    - PyTorch: udpated to version `v2.5.1`
+    - TensorFlow: updated to version `v2.18.0`
+- Model deprecation:
+    - 3DDFA  
+
 ## October, 30th 2024 (v0.5.3)
 - Compatible version:
     - `rebel-compiler`: v0.5.12
