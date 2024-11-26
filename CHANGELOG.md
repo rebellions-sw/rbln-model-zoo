@@ -15,6 +15,7 @@
 - Dependency updates:
     - PyTorch: udpated to version `v2.5.1`
     - TensorFlow: updated to version `v2.18.0`
+        - TensorFlow `v2.18.0` employs Keras 3.0. To ensure compatibility with existing models using Keras 2, we have incorporated the `tf_keras` package into the existing TensorFlow codebase. This allows seamless integration and maintinas backward compatibility with the legacy models 
 - Model deprecation:
     - 3DDFA  
 
