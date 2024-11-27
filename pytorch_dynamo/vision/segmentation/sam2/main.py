@@ -7,12 +7,11 @@ from typing import Union
 import sys
 import os
 import cv2
-
-import subprocess
+import requests
 
 if torch.__version__ >= "2.5.0":
     torch._dynamo.config.inline_inbuilt_nn_modules = False
-    
+
 sys.path.insert(0, os.path.join(sys.path[0], "sam2"))
 
 from sam2.build_sam import build_sam2
@@ -28,14 +27,14 @@ CFG_CONFIG = {
 }
 
 
-def get_args_parser() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Inference script for sam2 model",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    )
+def parsing_argument():
+    parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model_name",
         type=str,
+        choices=[
+            "sam2.1_hiera_large",
+        ],
         default="sam2.1_hiera_large",
         help="Model name",
     )
@@ -46,49 +45,38 @@ def get_args_parser() -> argparse.Namespace:
         default=1,
         help="Batch size.",
     )
-    args, _ = parser.parse_known_args()
-    return args
+    return parser.parse_args()
 
 
 def run_download_script():
-    # Download the model checkpoint script
     print("Downloading model checkpoint script...")
     try:
-        subprocess.run(
-            [
-                "curl",
-                "-O",
-                "https://raw.githubusercontent.com/facebookresearch/sam2/main/checkpoints/download_ckpts.sh",
-            ],
-            check=True,
-            text=True,
-            capture_output=True,
-        )
+        url = "https://raw.githubusercontent.com/facebookresearch/sam2/main/checkpoints/download_ckpts.sh"
+        script_path = "download_ckpts.sh"
+        with open(script_path, "wb") as file:
+            file.write(requests.get(url).content)
 
         # Run the downloaded script
-        result = subprocess.run(
-            ["bash", "download_ckpts.sh"],
-            check=True,
-            text=True,
-            capture_output=True,
-        )
-        print("Script output:", result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("Error occurred while running the checkpoint script:", e.stderr)
+        os.system(f"bash {script_path}")
+
+        print("File downloaded successfully.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading file: {e}")
 
 
 def download_file(url, output_path):
     print(f"Downloading file from {url} to {output_path}...")
     try:
-        result = subprocess.run(
-            ["curl", "-o", output_path, url],
-            check=True,
-            text=True,
-            capture_output=True,
-        )
-        print("File downloaded successfully.", result.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"Error downloading file: {e.stderr}")
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+
+        with open(output_path, "wb") as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                file.write(chunk)
+
+        print("File downloaded successfully.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading file: {e}")
 
 
 class WrapperSAM2ImagePredictor(SAM2ImagePredictor):
@@ -106,7 +94,7 @@ class WrapperSAM2ImagePredictor(SAM2ImagePredictor):
 
         return feats[-1], feats[:-1]
 
-    def set_image_wrapper(self, image_list, set_image):
+    def set_image_preprocess(self, image_list):
         self.reset_predictor()
         self._orig_hw = []
         for image in image_list:
@@ -115,8 +103,9 @@ class WrapperSAM2ImagePredictor(SAM2ImagePredictor):
         img_batch = [self._transforms(img) for img in image_list]
         img_batch = torch.stack(img_batch, dim=0)
 
-        feats = set_image(img_batch)
+        return img_batch
 
+    def set_image_postprocess(self, image_list, feats):
         self._features = {"image_embed": feats[0], "high_res_feats": feats[1]}
         self._is_image_set = True
 
@@ -138,9 +127,8 @@ def show_mask(mask, ax, random_color=False, borders=True):
     ax.axis("off")
 
 
-# Initialize phase
 def initialize(predictor, batch_size):
-    set_image = torch.compile(
+    module = torch.compile(
         predictor.set_image,
         backend="rbln",
         options={"cache_dir": "./.cache"},
@@ -148,23 +136,9 @@ def initialize(predictor, batch_size):
     )
 
     # warmup the predictor to pre-load the cached model
-    set_image(torch.ones(batch_size, 3, 1024, 1024))
+    module(torch.ones(batch_size, 3, 1024, 1024))
 
-    return set_image, predictor
-
-
-# Run phase
-def run(set_image, predictor, image_list, pts_batch, labels_batch):
-    predictor.set_image_wrapper(image_list, set_image)
-
-    if len(image_list) == 1:
-        masks_batch, scores_batch, logits_batch = predictor.predict(pts_batch[0], labels_batch[0])
-    else:
-        masks_batch, scores_batch, logits_batch = predictor.predict_batch(
-            pts_batch, labels_batch, box_batch=None, multimask_output=True
-        )
-
-    return masks_batch, scores_batch, logits_batch
+    return module, predictor
 
 
 def save_segmented_image(
@@ -203,8 +177,8 @@ def save_segmented_image(
 
 def main():
     # Set up arguments
-    opts = get_args_parser()
-    cfg = CFG_CONFIG[opts.model_name]
+    args = parsing_argument()
+    cfg = CFG_CONFIG[args.model_name]
 
     if not os.path.isfile(cfg["checkpoint"]):
         print("Checkpoint not found. Downloading model checkpoint script...")
@@ -226,25 +200,32 @@ def main():
             os.path.join(images_dir, "trunk.jpg"),
         )
 
+    # Initialize model
     model = build_sam2(cfg["config_file"], cfg["checkpoint"], device="cpu")
     predictor = WrapperSAM2ImagePredictor(model)
-    set_image, predictor = initialize(predictor, opts.batch_size)
+    module, predictor = initialize(predictor, args.batch_size)
 
     # Load images and points
     image_batch = [np.array(Image.open("images/groceries.jpg").convert("RGB"))]
     pts_batch = [np.array([[[400, 300]], [[630, 300]]])]
     labels_batch = [np.array([[1], [1]])]
 
-    # Load second image and points based on opts.batch_size
-    for _ in range(opts.batch_size - 1):
+    # Load second image and points based on args.batch_size
+    for _ in range(args.batch_size - 1):
         image_batch.append(np.array(Image.open("images/trunk.jpg").convert("RGB")))
         pts_batch.append(np.array([[[500, 375]], [[650, 750]]]))
         labels_batch.append(np.array([[1], [1]]))
 
     # Run phase
-    masks_batch, scores_batch, logits_batch = run(
-        set_image, predictor, image_batch, pts_batch, labels_batch
-    )
+    feats = module(predictor.set_image_preprocess(image_batch))
+    predictor.set_image_postprocess(image_batch, feats)
+
+    if len(image_batch) == 1:
+        masks_batch, scores_batch, logits_batch = predictor.predict(pts_batch[0], labels_batch[0])
+    else:
+        masks_batch, scores_batch, logits_batch = predictor.predict_batch(
+            pts_batch, labels_batch, box_batch=None, multimask_output=True
+        )
 
     # Save segmented images
     save_segmented_image(image_batch, pts_batch, masks_batch, labels_batch, scores_batch)
