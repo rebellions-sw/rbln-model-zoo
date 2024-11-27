@@ -2,3 +2,4 @@
 huggingface-hub>=0.23.0
 optimum-rbln
 torch==2.2.1
+numpy<2.0.0

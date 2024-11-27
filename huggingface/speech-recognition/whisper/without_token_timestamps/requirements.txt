@@ -2,3 +2,4 @@
 datasets>=2.19.1
 optimum-rbln
 librosa>=0.10.1
+numpy<2.0.0

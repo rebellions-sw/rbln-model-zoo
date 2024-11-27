@@ -2,3 +2,4 @@
 torch==2.2.1+cpu
 transformers==4.40.2
 FlagEmbedding==1.2.10
+numpy<2.0.0

@@ -2,3 +2,4 @@
 timm>=0.9.16
 torch==2.2.1+cpu
 torchvision==0.17.1+cpu
+numpy<2.0.0
