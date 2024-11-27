@@ -10,3 +10,4 @@ imageio_ffmpeg==0.4.9
 torch==2.2.1+cpu
 pyyaml==6.0.1
 imageio==2.34.1
+opencv-python-headless==4.10.0.84

@@ -6,3 +6,4 @@ torch==2.2.1
 torchvision==0.17.1
 opencv-python-headless==4.10.0.84
 pyyaml==6.0.1
+requests
