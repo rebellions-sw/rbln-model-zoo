@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from transformers import BertTokenizer, pipeline
+from transformers import pipeline
 from optimum.rbln import RBLNBertForQuestionAnswering
 
 
@@ -38,9 +38,6 @@ def main():
         else "deepset/bert-large-uncased-whole-word-masking-squad2"
     )
 
-    # Prepare inputs
-    tokenizer = BertTokenizer.from_pretrained(model_id)
-
     # Load compiled model
     model = RBLNBertForQuestionAnswering.from_pretrained(
         model_id=os.path.basename(model_id),
@@ -51,7 +48,7 @@ def main():
     pipe = pipeline(
         "question-answering",
         model=model,
-        tokenizer=tokenizer,
+        tokenizer=model_id,
         padding="max_length",
         max_seq_len=512,  # default "max_position_embedding"
     )

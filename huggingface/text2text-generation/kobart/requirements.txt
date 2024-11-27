@@ -1,3 +1,2 @@
---extra-index-url https://pypi.rbln.ai/simple/ https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.rbln.ai/simple/
 optimum-rbln
-torch==2.2.1

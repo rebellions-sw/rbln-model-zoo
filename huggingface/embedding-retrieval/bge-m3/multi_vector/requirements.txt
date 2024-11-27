@@ -1,5 +1,4 @@
---extra-index-url https://pypi.rbln.ai/simple/ https://download.pytorch.org/whl/cpu
+--extra-index-url https://pypi.rbln.ai/simple/
 huggingface-hub>=0.23.0
-numpy==1.23.5
 optimum-rbln
-torch==2.2.1
+

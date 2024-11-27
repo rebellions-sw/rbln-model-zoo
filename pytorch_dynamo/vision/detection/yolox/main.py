@@ -9,6 +9,9 @@ import numpy as np
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
+
 sys.path.insert(0, os.path.join(sys.path[0], "YOLOX"))
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES

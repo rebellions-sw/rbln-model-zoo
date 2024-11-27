@@ -6,6 +6,9 @@ import torch
 import torchvision.transforms as transforms
 from torchvision.io.image import read_image
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
+    
 model_map = {
     "tiny": "deit_tiny_patch16_224",
     "small": "deit_small_patch16_224",

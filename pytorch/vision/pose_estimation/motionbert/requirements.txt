@@ -1,12 +1,11 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 easydict==1.13
 ipdb==0.13.13
-matplotlib==3.7.1
-numpy==1.24
-pandas==2.0.2
+matplotlib>=3.8.0
 scipy>=1.10.1
 smplx==0.1.28
 imageio_ffmpeg==0.4.9
-torch==2.2.1+cpu
+torch<=2.5.1
 pyyaml==6.0.1
 imageio==2.34.1
+opencv-python-headless==4.10.0.84

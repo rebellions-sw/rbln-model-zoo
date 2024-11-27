@@ -1,6 +1,6 @@
 import argparse
 import tensorflow as tf
-import tensorflow.keras.applications as app
+import tf_keras.applications as app
 import rebel  # RBLN Compiler
 
 input_size_map = {
