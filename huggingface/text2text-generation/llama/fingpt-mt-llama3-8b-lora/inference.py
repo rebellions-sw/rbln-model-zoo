@@ -8,7 +8,10 @@ def main():
     model_id = "meta-llama/Meta-Llama-3-8B"
     lora_id = "FinGPT/fingpt-mt_llama3-8b_lora"
     prompt = """Instruction: What is the sentiment of this news? Please choose an answer from {negative/neutral/positive}
-Input: FINANCING OF ASPOCOMP 'S GROWTH Aspocomp is aggressively pursuing its growth strategy by increasingly focusing on technologically more demanding HDI printed circuit boards PCBs .
+Input: Tech Startup ASDF AI Secures $50M Series B Funding
+Emerging artificial intelligence company ASDF AI has successfully raised $50 million in Series B funding, led by venture capital firm ZXCV Ventures. 
+The startup, known for its innovative natural language processing solutions, plans to expand its workforce and accelerate product development. 
+CEO John Doe expressed optimism about the company's growth trajectory in the competitive AI market.
 Answer: """  # noqa: E501
 
     # Load compiled model
