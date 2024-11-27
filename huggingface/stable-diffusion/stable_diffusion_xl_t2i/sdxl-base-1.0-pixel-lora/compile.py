@@ -35,9 +35,11 @@ def main():
 
     # Below is the traditional GPU-based method of loading LoRAs (NOT supported in RBLN SDK)
     # Dynamic loading approach cannot be used with RBLN as LoRAs must be fused during compilation
-    # pipe.load_lora_weights(lcm_lora_id, adapter_name="lora")
-    # pipe.load_lora_weights("./pixel-art-xl.safetensors", adapter_name="pixel")
-    # pipe.set_adapters(["lora", "pixel"], adapter_weights=[1.0, 1.2])
+    """
+    pipe.load_lora_weights(lcm_lora_id, adapter_name="lora")
+    pipe.load_lora_weights("./pixel-art-xl.safetensors", adapter_name="pixel")
+    pipe.set_adapters(["lora", "pixel"], adapter_weights=[1.0, 1.2])
+    """
 
     # Save the compiled model with fused LoRA weights to a local directory
     pipe.save_pretrained(f"{os.path.basename(model_id)}-pixel-lora")
