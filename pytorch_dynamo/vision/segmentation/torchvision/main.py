@@ -7,6 +7,8 @@ import torchvision
 from torchvision import transforms
 from PIL import Image
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
 
 model_weights_map = {
     "fcn_resnet50": "FCN_ResNet50_Weights",

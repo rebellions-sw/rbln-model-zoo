@@ -10,6 +10,9 @@ import cv2
 
 import subprocess
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
+    
 sys.path.insert(0, os.path.join(sys.path[0], "sam2"))
 
 from sam2.build_sam import build_sam2

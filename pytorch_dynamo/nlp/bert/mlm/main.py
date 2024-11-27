@@ -5,6 +5,9 @@ import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend
 import torch
 from transformers import BertForMaskedLM, BertTokenizer
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
+
 
 def parsing_argument():
     parser = argparse.ArgumentParser()

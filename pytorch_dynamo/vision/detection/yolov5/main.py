@@ -11,6 +11,9 @@ import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 import yaml
 
+if torch.__version__ >= "2.5.0":
+    torch._dynamo.config.inline_inbuilt_nn_modules = False
+
 sys.path.insert(0, os.path.join(sys.path[0], "yolov5"))
 from yolov5.utils.augmentations import letterbox
 from yolov5.utils.general import non_max_suppression as nms
