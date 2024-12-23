@@ -1,19 +1,13 @@
-import os
 import argparse
+import os
 
-from transformers import pipeline
 from optimum.rbln import RBLNDistilBertForQuestionAnswering
+from transformers import pipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        default="distilbert-base-uncased-distilled-squad",
-        help="(str) type of distilbert",
-    )
     parser.add_argument(
         "--question",
         type=str,
@@ -31,7 +25,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"distilbert/{args.model_name}"
+    model_id = "distilbert/distilbert-base-uncased-distilled-squad"
 
     # Load compiled model
     model = RBLNDistilBertForQuestionAnswering.from_pretrained(

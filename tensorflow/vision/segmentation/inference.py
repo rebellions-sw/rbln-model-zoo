@@ -1,10 +1,10 @@
-import tensorflow as tf
-import numpy as np
-
-import rebel
-
 import urllib.request
+
+import numpy as np
+import rebel
 from PIL import Image
+
+import tensorflow as tf
 
 
 def preprocess(input_image, input_size):

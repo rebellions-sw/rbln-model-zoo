@@ -1,8 +1,9 @@
 import argparse
-from transformers import BertTokenizer
-import tensorflow as tf
 
 import rebel  # RBLN Runtime
+from transformers import BertTokenizer
+
+import tensorflow as tf
 
 
 def parsing_argument():

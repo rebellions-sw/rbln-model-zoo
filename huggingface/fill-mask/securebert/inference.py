@@ -1,8 +1,9 @@
-import os
-import torch
 import argparse
-from transformers import RobertaTokenizerFast
+import os
+
+import torch
 from optimum.rbln import RBLNRobertaForMaskedLM
+from transformers import RobertaTokenizerFast
 
 
 def parsing_argument():

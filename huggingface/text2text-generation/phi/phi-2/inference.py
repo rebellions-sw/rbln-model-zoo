@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNPhiForCausalLM
 from transformers import AutoTokenizer

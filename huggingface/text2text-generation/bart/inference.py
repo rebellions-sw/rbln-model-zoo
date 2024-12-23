@@ -1,7 +1,8 @@
-import os
 import argparse
-from transformers import BartTokenizer
+import os
+
 from optimum.rbln import RBLNBartForConditionalGeneration
+from transformers import BartTokenizer
 
 
 def parsing_argument():

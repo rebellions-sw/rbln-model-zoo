@@ -1,7 +1,8 @@
 import argparse
+
+import rebel  # RBLN Compiler
 import torch
 import torchvision
-import rebel  # RBLN Compiler
 
 
 def parsing_argument():

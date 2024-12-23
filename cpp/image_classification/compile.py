@@ -1,17 +1,21 @@
 from argparse import ArgumentParser
 
-from torchvision import models
 import rebel
-import torch
+from torchvision import models
 
 parser = ArgumentParser()
-parser.add_argument("-m", "--model-name", choices=[
-    "resnet18",
-    "resnet34",
-    "resnet50",
-    "resnet101",
-    "resnet152",
-], help="Model name")
+parser.add_argument(
+    "-m",
+    "--model-name",
+    choices=[
+        "resnet18",
+        "resnet34",
+        "resnet50",
+        "resnet101",
+        "resnet152",
+    ],
+    help="Model name",
+)
 args = parser.parse_args()
 
 weights = models.get_model_weights(args.model_name).DEFAULT

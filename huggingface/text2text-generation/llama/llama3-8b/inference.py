@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNLlamaForCausalLM
 from transformers import AutoTokenizer
@@ -8,13 +8,6 @@ from transformers import AutoTokenizer
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["Meta-Llama-3-8B-Instruct"],
-        default="Meta-Llama-3-8B-Instruct",
-        help="(str) model type, llama3-8b model name.",
-    )
     parser.add_argument(
         "--text",
         type=str,
@@ -26,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"meta-llama/{args.model_name}"
+    model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
 
     # Load compiled model
     model = RBLNLlamaForCausalLM.from_pretrained(

@@ -20,14 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import os
 import argparse
+import os
 from collections import defaultdict
 
 import torch
 from huggingface_hub import snapshot_download
-from transformers import AutoTokenizer
 from optimum.rbln import RBLNXLMRobertaModel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

@@ -23,9 +23,8 @@
 import argparse
 from collections import defaultdict
 
-from transformers import AutoTokenizer
-
 import rebel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

@@ -24,7 +24,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "runwayml/stable-diffusion-v1-5"
+    model_id = "benjamin-paine/stable-diffusion-v1-5"
 
     controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny")
 

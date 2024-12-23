@@ -1,7 +1,9 @@
 import argparse
-import tensorflow as tf
-import tf_keras.applications as app
+
 import rebel  # RBLN Compiler
+import tf_keras.applications as app
+
+import tensorflow as tf
 
 input_size_map = {
     "EfficientNetB1": 240,

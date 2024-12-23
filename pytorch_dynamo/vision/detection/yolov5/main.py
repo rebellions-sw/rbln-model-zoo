@@ -16,8 +16,7 @@ if torch.__version__ >= "2.5.0":
 
 sys.path.insert(0, os.path.join(sys.path[0], "yolov5"))
 from yolov5.utils.augmentations import letterbox
-from yolov5.utils.general import non_max_suppression as nms
-from yolov5.utils.general import scale_boxes
+from yolov5.utils.general import non_max_suppression as nms, scale_boxes
 from yolov5.utils.plots import Annotator, colors
 
 

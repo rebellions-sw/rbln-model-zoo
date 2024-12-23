@@ -1,9 +1,8 @@
-import os
 import argparse
+import os
 
-
-from transformers import AutoTokenizer
 from optimum.rbln import RBLNXLMRobertaForSequenceClassification
+from transformers import AutoTokenizer
 
 MAX_SEQ_LEN_CFG = {
     "v2-m3": 8192,

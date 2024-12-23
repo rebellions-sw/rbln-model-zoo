@@ -4,9 +4,9 @@ import urllib.request
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend
 import torch
 import torchaudio
-from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
-from mir_eval import separation
 from metric import sdri
+from mir_eval import separation
+from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
 
 if torch.__version__ >= "2.5.0":
     torch._dynamo.config.inline_inbuilt_nn_modules = False

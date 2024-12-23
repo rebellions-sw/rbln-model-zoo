@@ -12,7 +12,12 @@ def main():
     processor = Wav2Vec2Processor.from_pretrained(model_id)
 
     # Prepare inputs
-    ds = load_dataset("patrickvonplaten/librispeech_asr_dummy", "clean", split="validation", trust_remote_code=True)
+    ds = load_dataset(
+        "patrickvonplaten/librispeech_asr_dummy",
+        "clean",
+        split="validation",
+        trust_remote_code=True,
+    )
     sample = ds[0]["audio"]
     input_values = processor(
         sample["array"],

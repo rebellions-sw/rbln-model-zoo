@@ -1,5 +1,6 @@
 import argparse
 import os
+
 from optimum.rbln import RBLNGPT2LMHeadModel
 from transformers import GPT2Tokenizer
 

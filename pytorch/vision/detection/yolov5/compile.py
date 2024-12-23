@@ -1,6 +1,7 @@
 import argparse
-import torch
+
 import rebel
+import torch
 
 
 def parsing_argument():

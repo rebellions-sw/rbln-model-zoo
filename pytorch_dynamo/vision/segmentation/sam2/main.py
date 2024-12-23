@@ -1,23 +1,23 @@
 import argparse
+import os
+import sys
+from typing import Union
+
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
+import requests
 import torch
 from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
-from typing import Union
-import sys
-import os
-import cv2
-import requests
 
 if torch.__version__ >= "2.5.0":
     torch._dynamo.config.inline_inbuilt_nn_modules = False
 
 sys.path.insert(0, os.path.join(sys.path[0], "sam2"))
 
+import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend
 from sam2.build_sam import build_sam2
 from sam2.sam2_image_predictor import SAM2ImagePredictor
-
-import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend
 
 CFG_CONFIG = {
     "sam2.1_hiera_large": {

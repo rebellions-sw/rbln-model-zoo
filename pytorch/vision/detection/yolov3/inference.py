@@ -1,17 +1,17 @@
+import argparse
 import os
 import sys
-import argparse
-import numpy as np
-import cv2
-import torch
-import yaml
 import urllib.request
 
+import cv2
+import numpy as np
 import rebel
+import torch
+import yaml
 
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
 from yolov3.utils.augmentations import letterbox
-from yolov3.utils.general import scale_boxes, non_max_suppression as nms
+from yolov3.utils.general import non_max_suppression as nms, scale_boxes
 from yolov3.utils.plots import Annotator, colors
 
 

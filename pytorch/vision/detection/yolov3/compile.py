@@ -1,8 +1,9 @@
 import argparse
-import torch
-import rebel
 import os
 import sys
+
+import rebel
+import torch
 
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
 from yolov3.models.experimental import attempt_load
@@ -22,6 +23,12 @@ def parsing_argument():
 def main():
     args = parsing_argument()
     model_name = args.model_name
+
+    weight = model_name + ".pt"
+    torch.hub.download_url_to_file(
+        f"https://github.com/ultralytics/yolov5/releases/download/v7.0/{weight}", weight
+    )
+
     model = attempt_load(model_name + ".pt")
     model.eval()
 

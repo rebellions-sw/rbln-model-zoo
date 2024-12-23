@@ -1,9 +1,7 @@
 import argparse
 
-
-from transformers import AutoTokenizer
-
 import rebel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

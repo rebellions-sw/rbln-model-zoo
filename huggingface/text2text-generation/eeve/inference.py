@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNLlamaForCausalLM
 from transformers import AutoTokenizer
@@ -9,16 +9,9 @@ def parsing_argument():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["EEVE-Korean-Instruct-10.8B-v1.0"],
-        default="EEVE-Korean-Instruct-10.8B-v1.0",
-        help="(str) model type, eeve model name.",
-    )
-    parser.add_argument(
         "--text",
         type=str,
-        default="한국의 수도는 어디인가요? 아래 선택지 중 골라주세요.\n\n(A) 경성\n(B) 부산\n(C) 평양\n(D) 서울\n(E) 전주",
+        default="한국의 수도는 어디인가요? 아래 선택지 중 골라주세요.\n\n(A) 경성\n(B) 부산\n(C) 평양\n(D) 서울\n(E) 전주",  # noqa: E501
         help="(str) type, text for generation",
     )
     return parser.parse_args()
@@ -26,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"yanolja/{args.model_name}"
+    model_id = "yanolja/EEVE-Korean-Instruct-10.8B-v1.0"
 
     # Load compiled model
     model = RBLNLlamaForCausalLM.from_pretrained(
@@ -36,7 +29,7 @@ def main():
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
-    prompt_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\nHuman: {prompt}\nAssistant:\n"
+    prompt_template = "A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions.\nHuman: {prompt}\nAssistant:\n"  # noqa: E501
     inputs = tokenizer(
         prompt_template.format(prompt=args.text),
         return_tensors="pt",

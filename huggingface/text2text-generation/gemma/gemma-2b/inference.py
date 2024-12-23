@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNGemmaForCausalLM
 from transformers import AutoTokenizer
@@ -7,14 +7,6 @@ from transformers import AutoTokenizer
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["gemma-2b-it"],
-        default="gemma-2b-it",
-        help="(str) model type, gemma-2b model name.",
-    )
     parser.add_argument(
         "--text",
         type=str,
@@ -26,7 +18,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"google/{args.model_name}"
+    model_id = "google/gemma-2b-it"
 
     # Load compiled model
     model = RBLNGemmaForCausalLM.from_pretrained(

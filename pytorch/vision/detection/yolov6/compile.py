@@ -1,8 +1,9 @@
 import argparse
-import torch
-import rebel
 import os
 import sys
+
+import rebel
+import torch
 
 sys.path.append(os.path.join(sys.path[0], "YOLOv6"))
 

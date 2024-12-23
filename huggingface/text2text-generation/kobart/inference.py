@@ -1,7 +1,8 @@
 import os
+
 import torch
-from transformers import PreTrainedTokenizerFast
 from optimum.rbln import RBLNBartForConditionalGeneration
+from transformers import PreTrainedTokenizerFast
 
 
 def main():

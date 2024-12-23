@@ -1,11 +1,10 @@
-import os
 import argparse
+import os
 
 import torch
 import torch.nn.functional as F
-
-from transformers import AutoTokenizer
 from optimum.rbln import RBLNBertModel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

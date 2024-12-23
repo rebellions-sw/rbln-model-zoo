@@ -1,7 +1,6 @@
 import argparse
 import urllib.request
 
-
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 import torchvision

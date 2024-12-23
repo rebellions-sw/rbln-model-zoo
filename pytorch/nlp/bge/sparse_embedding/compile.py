@@ -1,7 +1,6 @@
-import torch
-
-from FlagEmbedding.BGE_M3.modeling import BGEM3ForInference
 import rebel  # RBLN Compiler
+import torch
+from FlagEmbedding.BGE_M3.modeling import BGEM3ForInference
 
 
 class RBLNBGEM3SparseEmbeddingWrapper(torch.nn.Module):

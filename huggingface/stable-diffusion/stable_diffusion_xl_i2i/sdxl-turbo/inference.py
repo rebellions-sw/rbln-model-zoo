@@ -1,15 +1,17 @@
 import argparse
 import os
+
 from diffusers.utils import load_image
 from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
+
     parser.add_argument(
         "--prompt",
         type=str,
-        default="cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, adorable, Pixar, Disney, 8k",
+        default="cat wizard, gandalf, lord of the rings, detailed, fantasy, cute, Pixar, Disney",
         help="(str) type, prompt for generate image",
     )
     parser.add_argument(

@@ -1,8 +1,8 @@
 import argparse
-import torch
-import timm
 
 import rebel  # RBLN Compiler
+import timm
+import torch
 
 model_map = {
     "tiny": "deit_tiny_patch16_224",

@@ -4,8 +4,8 @@ import urllib.request
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend
 import torch
 import torchvision
-from torchvision import transforms
 from PIL import Image
+from torchvision import transforms
 
 if torch.__version__ >= "2.5.0":
     torch._dynamo.config.inline_inbuilt_nn_modules = False

@@ -1,26 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNDistilBertForQuestionAnswering
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        default="distilbert-base-uncased-distilled-squad",
-        choices=[
-            "distilbert-base-uncased-distilled-squad",
-        ],
-        help="(str) type of distilbert",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"distilbert/{args.model_name}"
+    model_id = "distilbert/distilbert-base-uncased-distilled-squad"
 
     # Compile and export
     model = RBLNDistilBertForQuestionAnswering.from_pretrained(

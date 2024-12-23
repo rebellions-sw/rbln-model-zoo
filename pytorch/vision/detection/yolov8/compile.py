@@ -1,7 +1,7 @@
 import argparse
-import torch
-import rebel
 
+import rebel
+import torch
 from ultralytics import YOLO
 
 

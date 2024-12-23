@@ -4,7 +4,7 @@ from optimum.rbln import RBLNStableDiffusionPipeline
 
 
 def main():
-    model_id = "runwayml/stable-diffusion-v1-5"
+    model_id = "benjamin-paine/stable-diffusion-v1-5"
 
     # Compile and export
     pipe = RBLNStableDiffusionPipeline.from_pretrained(

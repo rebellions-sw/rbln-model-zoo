@@ -1,9 +1,9 @@
 import argparse
 
-from transformers import TFBertForQuestionAnswering
-import tensorflow as tf
-
 import rebel  # RBLN Compiler
+from transformers import TFBertForQuestionAnswering
+
+import tensorflow as tf
 
 
 def parsing_argument():

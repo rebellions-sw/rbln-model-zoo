@@ -1,6 +1,7 @@
-from huggingface_hub import from_pretrained_keras
-import tensorflow as tf
 import rebel
+from huggingface_hub import from_pretrained_keras
+
+import tensorflow as tf
 
 
 def main():

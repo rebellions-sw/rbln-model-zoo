@@ -24,14 +24,15 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import torch
-import torchaudio
-from mir_eval import separation
-from metric import sdri
-import rebel
-
 import tarfile
 import urllib.request
+
+import rebel
+import torch
+import torchaudio
+from metric import sdri
+from mir_eval import separation
+
 
 # ref: https://github.com/pytorch/audio/blob/7f6209b44a1b838e9f33fdd382a3c4ae14e8297f/examples/source_separation/lightning_train.py#L25
 def sisdri_metric(

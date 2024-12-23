@@ -1,5 +1,6 @@
-import os
 import argparse
+import os
+
 from optimum.rbln import RBLNBertForQuestionAnswering
 
 

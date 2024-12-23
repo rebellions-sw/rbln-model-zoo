@@ -1,10 +1,10 @@
 import argparse
+import urllib.request
+
+import rebel  # RBLN Runtime
 import torch
 import torchvision.transforms as transforms
 from torchvision.io.image import read_image
-
-import rebel  # RBLN Runtime
-import urllib.request
 
 _CHANNEL_MEANS = [123.68, 116.28, 103.53]
 _CHANNEL_STDS = [58.395, 57.120, 57.385]
