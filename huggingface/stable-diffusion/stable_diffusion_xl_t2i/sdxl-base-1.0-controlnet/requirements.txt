@@ -1,4 +1,4 @@
 --extra-index-url https://pypi.rbln.ai/simple/
 optimum-rbln
-protobuf>=4.25.5
-sentencepiece>=0.2.0
+opencv-python>=4.9.0.80
+opencv-python-headless==4.10.0.84

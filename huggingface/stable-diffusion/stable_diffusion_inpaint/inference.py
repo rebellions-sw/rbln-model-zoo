@@ -19,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "runwayml/stable-diffusion-inpainting"
+    model_id = "stable-diffusion-v1-5/stable-diffusion-inpainting"
     prompt = args.prompt
 
     # Load compiled model

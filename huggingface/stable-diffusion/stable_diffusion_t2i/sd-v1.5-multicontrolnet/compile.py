@@ -1,0 +1,50 @@
+import argparse
+import os
+
+from diffusers import ControlNetModel, UniPCMultistepScheduler
+from optimum.rbln import RBLNStableDiffusionControlNetPipeline
+
+
+def parsing_argument():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--img_width",
+        type=int,
+        default=512,
+        help="input image width for generation",
+    )
+    parser.add_argument(
+        "--img_height",
+        type=int,
+        default=512,
+        help="input image height for generation",
+    )
+    return parser.parse_args()
+
+
+def main():
+    args = parsing_argument()
+    model_id = "benjamin-paine/stable-diffusion-v1-5"
+    controlnet_model_ids = ["lllyasviel/sd-controlnet-openpose", "lllyasviel/sd-controlnet-canny"]
+
+    controlnets = []
+    for cmi in controlnet_model_ids:
+        controlnet = ControlNetModel.from_pretrained(cmi)
+        controlnets.append(controlnet)
+
+    # Compile and export
+    pipe = RBLNStableDiffusionControlNetPipeline.from_pretrained(
+        model_id,
+        export=True,  # export a PyTorch model to RBLN model with optimum
+        controlnet=controlnets,
+        rbln_img_width=args.img_width,
+        rbln_img_height=args.img_height,
+        scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
+    )
+
+    # Save compiled results to disk
+    pipe.save_pretrained(os.path.basename(model_id))
+
+
+if __name__ == "__main__":
+    main()

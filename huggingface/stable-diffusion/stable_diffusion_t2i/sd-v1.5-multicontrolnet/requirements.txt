@@ -1,0 +1,5 @@
+--extra-index-url https://pypi.rbln.ai/simple/
+optimum-rbln
+opencv-python>=4.9.0.80
+opencv-python-headless==4.10.0.84
+controlnet-aux>=0.0.7

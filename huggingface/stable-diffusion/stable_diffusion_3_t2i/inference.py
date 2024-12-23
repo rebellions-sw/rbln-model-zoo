@@ -26,11 +26,11 @@ def main():
         model_id=os.path.basename(model_id),
         export=False,
         rbln_config={
-            "transformer": {"device": 0},
-            "text_encoder_3": {"device": 1},
-            "text_encoder": {"device": 2},
-            "text_encoder_2": {"device": 2},
-            "vae": {"device": 2},
+            "text_encoder": {"device": 1},
+            "text_encoder_2": {"device": 1},
+            "text_encoder_3": {"device": 0},
+            "transformer": {"device": 1},
+            "vae": {"device": 1},
         },
     )
 

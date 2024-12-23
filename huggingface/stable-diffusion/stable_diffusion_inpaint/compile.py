@@ -4,7 +4,7 @@ from optimum.rbln import RBLNStableDiffusionInpaintPipeline
 
 
 def main():
-    model_id = "runwayml/stable-diffusion-inpainting"
+    model_id = "stable-diffusion-v1-5/stable-diffusion-inpainting"
 
     # Compile and export
     pipe = RBLNStableDiffusionInpaintPipeline.from_pretrained(
