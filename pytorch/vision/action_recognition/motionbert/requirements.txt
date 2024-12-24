@@ -6,4 +6,4 @@ matplotlib>=3.8.0
 scipy>=1.10.1
 smplx==0.1.28
 torch<=2.5.1
-pyyaml==6.0.1
+pyyaml>=6.0.1
