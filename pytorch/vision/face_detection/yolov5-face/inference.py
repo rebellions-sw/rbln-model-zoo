@@ -108,7 +108,7 @@ def main():
     model_name = args.model_name
 
     # Prepare input image
-    img = cv2.imread("yolov5-face/data/images/test.jpg")
+    img = cv2.imread(sys.path[0] + "/yolov5-face/data/images/test.jpg")
     batch = preprocess(img)
 
     # Load compiled model to RBLN runtime module
