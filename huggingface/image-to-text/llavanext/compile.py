@@ -10,7 +10,7 @@ def main():
         export=True,
         rbln_config={
             "language_model": {
-                "tensor_parallel_size": 8,
+                "tensor_parallel_size": 4,
                 "use_inputs_embeds": True,
             }
         },
