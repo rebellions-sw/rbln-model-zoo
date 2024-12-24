@@ -46,6 +46,3 @@
 [submodule "pytorch/vision/face_detection/yolov5-face/yolov5-face"]
 	path = pytorch/vision/face_detection/yolov5-face/yolov5-face
 	url = https://github.com/deepcam-cn/yolov5-face.git
-[submodule "pytorch/vision/segmentation/detectron2/detectron2"]
-	path = pytorch/vision/segmentation/detectron2/detectron2
-	url = https://github.com/facebookresearch/detectron2.git
