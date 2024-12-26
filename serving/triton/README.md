@@ -14,5 +14,5 @@ You can check the `output` directory, which contains all the necessary preparati
 
 # References
 - [PyTorch TorchVision ResNet50](https://docs.rbln.ai/tutorial/basic/pytorch_resnet50.html)
-- [Rebellions Model Zooo ResNet50](https://github.com/rebellions-sw/rbln-model-zoo/blob/main/huggingface/image-classification/resnet/compile.py)
-- [Nvidia Triton Inference Server](https://docs.rbln.ai/ko/software/model_serving/tritonserver.html)
+- [Rebellions Model Zoo ResNet50](https://github.com/rebellions-sw/rbln-model-zoo/blob/main/huggingface/image-classification/resnet/compile.py)
+- [Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)

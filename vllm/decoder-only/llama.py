@@ -57,7 +57,7 @@ def parse_args():
         "--model_dir",
         dest="model_dir",
         action="store",
-        help='Model directory path(ex."rbln-Meta-Llama-3-8B-Instruct")',
+        help='Model directory path(ex."Meta-Llama-3-8B-Instruct")',
     )
     parser.add_argument(
         "-l",
@@ -68,7 +68,7 @@ def parse_args():
         help="Max sequence length(ex.8192)",
     )
     parser.add_argument(
-        "-b", "--batch-size", dest="batch_size", type=int, action="store", help="Batch size(ex.4)"
+        "-b", "--batch-size", dest="batch_size", type=int, action="store", help="Batch size(ex.1)"
     )
     if len(sys.argv) < 7:
         parser.print_help()
