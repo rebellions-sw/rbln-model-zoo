@@ -1,19 +1,18 @@
+import argparse
 import os
 import sys
-import argparse
-import numpy as np
+import urllib.request
+
 import cv2
+import numpy as np
 import torch
 import yaml
 
-import urllib.request
-
 sys.path.append(os.path.join(sys.path[0], "ultralytics"))
-from ultralytics.data.augment import LetterBox
-from ultralytics.yolo.utils.ops import scale_boxes, non_max_suppression as nms
-from ultralytics.yolo.utils.plotting import Annotator
-
 import rebel
+from ultralytics.data.augment import LetterBox
+from ultralytics.yolo.utils.ops import non_max_suppression as nms, scale_boxes
+from ultralytics.yolo.utils.plotting import Annotator
 
 
 def preprocess(image):

@@ -1,30 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNLlamaForCausalLM
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["SOLAR-10.7B-Instruct-v1.0"],
-        default="SOLAR-10.7B-Instruct-v1.0",
-        help="(str) model type, solar model name.",
-    )
-    parser.add_argument(
-        "--tensor_parallel_size",
-        type=int,
-        default=8,
-        help="(int) set tensor parallel size in solar model, default: 8",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"upstage/{args.model_name}"
+    model_id = "upstage/SOLAR-10.7B-Instruct-v1.0"
 
     # Compile and export
     model = RBLNLlamaForCausalLM.from_pretrained(
@@ -32,7 +12,7 @@ def main():
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,
         rbln_max_seq_len=4096,  # default "max_position_embeddings"
-        rbln_tensor_parallel_size=args.tensor_parallel_size,
+        rbln_tensor_parallel_size=8,
     )
 
     # Save compiled results to disk

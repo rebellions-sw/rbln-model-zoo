@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNLlamaForCausalLM
 from transformers import AutoTokenizer
@@ -8,13 +8,6 @@ from transformers import AutoTokenizer
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["SOLAR-10.7B-Instruct-v1.0"],
-        default="SOLAR-10.7B-Instruct-v1.0",
-        help="(str) model type, solar model name.",
-    )
     parser.add_argument(
         "--text",
         type=str,
@@ -26,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"upstage/{args.model_name}"
+    model_id = "upstage/SOLAR-10.7B-Instruct-v1.0"
 
     # Load compiled model
     model = RBLNLlamaForCausalLM.from_pretrained(

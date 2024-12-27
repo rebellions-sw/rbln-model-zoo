@@ -1,19 +1,18 @@
+import argparse
 import os
 import sys
-import argparse
-import numpy as np
+import urllib.request
+
 import cv2
+import numpy as np
+import rebel
 import torch
 import yaml
 
-import urllib.request
-
-import rebel
-
 sys.path.append(os.path.join(sys.path[0], "YOLOv6"))
+from YOLOv6.yolov6.core.inferer import Inferer
 from YOLOv6.yolov6.data.data_augment import letterbox
 from YOLOv6.yolov6.utils.nms import non_max_suppression as nms
-from YOLOv6.yolov6.core.inferer import Inferer
 
 
 def preprocess(image):

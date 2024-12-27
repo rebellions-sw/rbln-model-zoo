@@ -1,8 +1,7 @@
-from transformers import AutoTokenizer
-from FlagEmbedding.BGE_M3.modeling import BGEM3ForInference
-from wrapper import RBLNBGEM3ComputeScoreWrapper
-
 import rebel  # RBLN Compiler
+from FlagEmbedding.BGE_M3.modeling import BGEM3ForInference
+from transformers import AutoTokenizer
+from wrapper import RBLNBGEM3ComputeScoreWrapper
 
 
 def main():

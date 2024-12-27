@@ -1,15 +1,14 @@
+import argparse
 import os
 import sys
-import argparse
-from torch.utils.data import DataLoader
-import rebel
-
 import urllib.request
 
-sys.path.append(os.path.join(sys.path[0], "MotionBERT"))
-from lib.utils.tools import get_config
-from lib.data.dataset_action import NTURGBD
+import rebel
+from torch.utils.data import DataLoader
 
+sys.path.append(os.path.join(sys.path[0], "MotionBERT"))
+from lib.data.dataset_action import NTURGBD
+from lib.utils.tools import get_config
 
 CONFIG = {
     "xsub": "/MotionBERT/configs/action/MB_train_NTU60_xsub.yaml",

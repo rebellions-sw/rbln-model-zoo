@@ -1,13 +1,11 @@
-
 import argparse
-import tf_keras.applications as app
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.imagenet_utils import decode_predictions
-import numpy as np
-
-import rebel  # RBLN Runtime
 import urllib.request
 
+import numpy as np
+import rebel  # RBLN Runtime
+import tf_keras.applications as app
+from tensorflow.keras.applications.imagenet_utils import decode_predictions
+from tensorflow.keras.preprocessing import image
 
 input_size_map = {
     "EfficientNetB1": 240,

@@ -1,8 +1,8 @@
-import os
 import argparse
+import os
 
-from transformers import pipeline
 from optimum.rbln import RBLNBertForQuestionAnswering
+from transformers import pipeline
 
 
 def parsing_argument():

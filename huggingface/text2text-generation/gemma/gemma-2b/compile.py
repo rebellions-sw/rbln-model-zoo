@@ -1,24 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNGemmaForCausalLM
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["gemma-2b-it"],
-        default="gemma-2b-it",
-        help="(str) model type, gemma-2b model name.",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"google/{args.model_name}"
+    model_id = "google/gemma-2b-it"
 
     # Compile and export
     model = RBLNGemmaForCausalLM.from_pretrained(

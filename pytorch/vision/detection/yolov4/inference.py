@@ -1,12 +1,13 @@
 import argparse
-import torch
-import numpy as np
-import cv2
-import random
 import os
+import random
 import sys
-import rebel
 import urllib.request
+
+import cv2
+import numpy as np
+import rebel
+import torch
 
 sys.path.append(os.path.join(sys.path[0], "yolov4"))
 

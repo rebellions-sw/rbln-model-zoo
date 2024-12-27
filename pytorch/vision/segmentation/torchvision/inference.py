@@ -1,10 +1,10 @@
 import argparse
 import urllib.request
 
-import torch
 import rebel
-from torchvision import transforms
+import torch
 from PIL import Image
+from torchvision import transforms
 
 
 def parsing_argument():

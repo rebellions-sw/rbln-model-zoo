@@ -1,10 +1,9 @@
-import os
 import argparse
+import os
 
 import torch
-
-from transformers import AutoTokenizer
 from optimum.rbln import RBLNXLMRobertaModel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

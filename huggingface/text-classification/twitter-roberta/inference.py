@@ -1,11 +1,12 @@
-import os
 import argparse
 import csv
+import os
 import urllib.request
-import torch
+
 import numpy as np
-from transformers import RobertaTokenizerFast
+import torch
 from optimum.rbln import RBLNRobertaForSequenceClassification
+from transformers import RobertaTokenizerFast
 
 
 def parsing_argument():

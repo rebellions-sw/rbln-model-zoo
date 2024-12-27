@@ -1,19 +1,13 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNMidmLMHeadModel
-from transformers import AutoTokenizer, AutoConfig
+from transformers import AutoConfig, AutoTokenizer
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        default="midm-bitext-S-7B-inst-v1",
-        help="(str) model type",
-    )
     parser.add_argument(
         "--text",
         type=str,
@@ -25,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"KT-AI/{args.model_name}"
+    model_id = "KT-AI/midm-bitext-S-7B-inst-v1"
 
     # Load compiled model
     config = AutoConfig.from_pretrained(os.path.basename(model_id), trust_remote_code=True)

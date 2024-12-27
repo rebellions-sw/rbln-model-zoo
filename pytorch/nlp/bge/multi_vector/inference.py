@@ -21,11 +21,10 @@
 # SOFTWARE.
 
 import argparse
-import torch
-
-from transformers import AutoTokenizer
 
 import rebel
+import torch
+from transformers import AutoTokenizer
 
 
 def parsing_argument():

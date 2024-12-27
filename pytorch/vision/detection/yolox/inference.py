@@ -1,14 +1,13 @@
+import argparse
 import os
 import sys
-import argparse
-import cv2
-import torch
-import numpy as np
+import urllib.request
 from typing import List, Tuple
 
-import urllib.request
-
+import cv2
+import numpy as np
 import rebel  # RBLN Runtime
+import torch
 
 sys.path.append(os.path.join(sys.path[0], "YOLOX"))
 from yolox.data.data_augment import ValTransform

@@ -1,14 +1,14 @@
+import argparse
 import os
 import sys
-import argparse
-import torch
-import rebel
-
 import urllib.request
 
+import rebel
+import torch
+
 sys.path.append(os.path.join(sys.path[0], "MotionBERT"))
-from lib.utils.tools import get_config
 from lib.utils.learning import load_backbone
+from lib.utils.tools import get_config
 
 CONFIG = {
     "base": "/MotionBERT/configs/pose3d/MB_ft_h36m.yaml",

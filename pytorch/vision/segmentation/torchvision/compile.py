@@ -1,7 +1,8 @@
 import argparse
+
+import rebel
 import torch
 import torchvision
-import rebel
 
 model_weights_map = {
     "fcn_resnet50": "FCN_ResNet50_Weights",

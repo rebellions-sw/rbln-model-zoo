@@ -1,12 +1,12 @@
-import tensorflow as tf
-import numpy as np
+import urllib.request
 
+import cv2
+import imageio
+import matplotlib.pyplot as plt
+import numpy as np
 import rebel
 
-import urllib.request
-import cv2
-import matplotlib.pyplot as plt
-import imageio
+import tensorflow as tf
 
 tf.random.set_seed(123)
 

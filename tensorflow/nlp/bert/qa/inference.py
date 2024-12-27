@@ -1,7 +1,7 @@
 import argparse
 
-from transformers import BertTokenizer
 import rebel  # RBLN Runtime
+from transformers import BertTokenizer
 
 
 def parsing_argument():

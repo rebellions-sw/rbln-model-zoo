@@ -1,11 +1,10 @@
-import numpy as np
-import torch  # for Preprocessing
 import urllib
 
-from PIL import Image
-import torch.nn.functional as F
-
+import numpy as np
 import rebel  # RBLN Runtime
+import torch  # for Preprocessing
+import torch.nn.functional as F
+from PIL import Image
 
 
 def preprocess(mask_values, pil_img, scale, is_mask):

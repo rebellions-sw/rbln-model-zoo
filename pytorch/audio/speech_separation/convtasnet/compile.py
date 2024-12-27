@@ -1,11 +1,10 @@
+import tarfile
+import urllib
+
+import rebel
 import torch
 import torchaudio
 from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
-
-import urllib
-import tarfile
-
-import rebel
 
 
 def main():
@@ -23,7 +22,7 @@ def main():
     mixture = mixture.reshape(1, 1, -1)
 
     input_info = [
-        ("input_np", list(mixture.shape), torch.float32), # maximum frame length
+        ("input_np", list(mixture.shape), torch.float32),  # maximum frame length
     ]
 
     compiled_model = rebel.compile_from_torch(model, input_info)

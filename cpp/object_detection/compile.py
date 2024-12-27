@@ -1,17 +1,22 @@
 from argparse import ArgumentParser
 
-from ultralytics import YOLO
 import rebel
 import torch
+from ultralytics import YOLO
 
 parser = ArgumentParser()
-parser.add_argument("-m", "--model-name", choices=[
-    "yolov8n",
-    "yolov8s",
-    "yolov8m",
-    "yolov8l",
-    "yolov8x",
-], help="YOLO model name")
+parser.add_argument(
+    "-m",
+    "--model-name",
+    choices=[
+        "yolov8n",
+        "yolov8s",
+        "yolov8m",
+        "yolov8l",
+        "yolov8x",
+    ],
+    help="YOLO model name",
+)
 args = parser.parse_args()
 
 yolo = YOLO(f"{args.model_name}.pt")

@@ -16,7 +16,7 @@ def parsing_argument():
         "--guidance_scale",
         type=float,
         default=5.0,
-        help="guidance_scale for sdxl-turbo",
+        help="guidance_scale for sdxl-base",
     )
     return parser.parse_args()
 

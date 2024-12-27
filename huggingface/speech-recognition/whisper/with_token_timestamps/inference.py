@@ -1,10 +1,10 @@
-import os
 import argparse
-from optimum.rbln import RBLNWhisperForConditionalGeneration
+import os
 
-from transformers import AutoProcessor, pipeline
-from datasets import load_dataset
 import torch
+from datasets import load_dataset
+from optimum.rbln import RBLNWhisperForConditionalGeneration
+from transformers import AutoProcessor, pipeline
 
 
 def parsing_argument():

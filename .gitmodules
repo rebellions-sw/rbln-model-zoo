@@ -43,3 +43,6 @@
 [submodule "pytorch_dynamo/vision/segmentation/sam2/sam2"]
 	path = pytorch_dynamo/vision/segmentation/sam2/sam2
 	url = https://github.com/facebookresearch/sam2.git
+[submodule "pytorch/vision/face_detection/yolov5-face/yolov5-face"]
+	path = pytorch/vision/face_detection/yolov5-face/yolov5-face
+	url = https://github.com/deepcam-cn/yolov5-face.git

@@ -1,20 +1,19 @@
+import argparse
 import os
 import sys
-import imageio
-import argparse
-from torch.utils.data import DataLoader
-import torch
-import rebel
-
-import numpy as np
 import urllib.request
 
+import imageio
+import numpy as np
+import rebel
+import torch
+from torch.utils.data import DataLoader
+
 sys.path.append(os.path.join(sys.path[0], "MotionBERT"))
+from lib.data.dataset_wild import WildDetDataset
 from lib.utils.tools import get_config
 from lib.utils.utils_data import flip_data
-from lib.data.dataset_wild import WildDetDataset
 from lib.utils.vismo import render_and_save
-
 
 CONFIG = {
     "base": "/MotionBERT/configs/pose3d/MB_ft_h36m.yaml",

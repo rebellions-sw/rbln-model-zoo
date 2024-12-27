@@ -17,8 +17,7 @@ if torch.__version__ >= "2.5.0":
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
 from yolov3.models.experimental import attempt_load
 from yolov3.utils.augmentations import letterbox
-from yolov3.utils.general import non_max_suppression as nms
-from yolov3.utils.general import scale_boxes
+from yolov3.utils.general import non_max_suppression as nms, scale_boxes
 from yolov3.utils.plots import Annotator, colors
 
 

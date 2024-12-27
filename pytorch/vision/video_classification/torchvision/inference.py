@@ -1,11 +1,11 @@
 import argparse
+import urllib
+
+import numpy as np
+import rebel  # RBLN Runtime
 import torch
 import torchvision
 from torchvision.io.video import read_video
-import numpy as np
-import urllib
-
-import rebel  # RBLN Runtime
 
 
 def parsing_argument():

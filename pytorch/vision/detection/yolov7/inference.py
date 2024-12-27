@@ -1,20 +1,19 @@
-import os
-import sys
 import argparse
-import numpy as np
-import cv2
-import torch
+import os
 import random
-import yaml
-
+import sys
 import urllib.request
 
+import cv2
+import numpy as np
 import rebel
+import torch
+import yaml
 
 sys.path.append(os.path.join(sys.path[0], "yolov7"))
 from yolov7.utils.datasets import letterbox
+from yolov7.utils.general import non_max_suppression as nms, scale_coords
 from yolov7.utils.plots import plot_one_box
-from yolov7.utils.general import scale_coords, non_max_suppression as nms
 
 
 def preprocess(image):

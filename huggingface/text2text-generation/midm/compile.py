@@ -1,24 +1,11 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNMidmLMHeadModel
 from transformers import AutoConfig
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        default="midm-bitext-S-7B-inst-v1",
-        help="(str) model type, llama3-8b model name.",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"KT-AI/{args.model_name}"
+    model_id = "KT-AI/midm-bitext-S-7B-inst-v1"
 
     # Compile and export
     config = AutoConfig.from_pretrained(model_id, trust_remote_code=True)

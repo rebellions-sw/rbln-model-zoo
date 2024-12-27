@@ -1,5 +1,33 @@
 # Change Log
 
+## December, 27th 2024 (v0.5.5)
+- Compatible version:
+    - `rebel-compiler`: v0.6.2
+    - `optimum-rbln`: v0.1.15
+- Added new models:
+    - `Natural Language Processing`:
+        - EXAONE-3.5-2.4b
+        - EXAONE-3.5-7.8b
+    - `Generative AI`
+        - Stable Diffusion
+            - Inpainting
+        - Stable Diffusion XL
+            - Inpainting
+            - Text to Image + ControlNet
+            - Image to Image + ControlNet
+        - Stable Diffusion V3
+            - Text to Image
+            - Image to Image
+            - Inpainting
+    - `Computer Vision`
+        - YOLOv5-Face
+    - `vLLM`
+        - Llama3
+        - BART
+        - Llava-Next
+- Improved the formatting of all model code for better readability and maintainability
+- Added supplementary guides for the model serving tutorials, [Tutorial > Advanced > LLM Serving > LLM Serving with Continous Batching](https://docs.rbln.ai/tutorial/advanced/llm_serving_vllm.html) and [Software > Model Serving > Nvidia Triton Infernece Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)
+
 ## November, 27th 2024 (v0.5.4)
 - Compatible version:
     - `rebel-compiler`: v0.6.1

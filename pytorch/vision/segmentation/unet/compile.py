@@ -1,5 +1,5 @@
-import torch
 import rebel  # RBLN Compiler
+import torch
 
 
 def main():

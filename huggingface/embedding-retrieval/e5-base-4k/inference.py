@@ -1,11 +1,10 @@
-import os
 import argparse
+import os
 
 import torch
 import torch.nn.functional as F
-
-from transformers import AutoTokenizer
 from optimum.rbln import RBLNBertModel
+from transformers import AutoTokenizer
 
 
 def parsing_argument():
@@ -37,7 +36,6 @@ def average_pool(last_hidden_states: torch.Tensor, attention_mask: torch.Tensor)
 def get_position_ids(
     input_ids: torch.Tensor, max_original_positions: int = 512, encode_max_length: int = 4096
 ) -> torch.Tensor:
-
     position_ids = list(range(input_ids.size(1)))
     factor = max(encode_max_length // max_original_positions, 1)
     if input_ids.size(1) <= max_original_positions:

@@ -1,20 +1,18 @@
+import argparse
 import os
 import sys
-import argparse
-import numpy as np
+import urllib.request
+
 import cv2
+import numpy as np
+import rebel
 import torch
 import yaml
 
-
-import urllib.request
-
-import rebel
-
 sys.path.append(os.path.join(sys.path[0], "yolov5"))
 from yolov5.utils.augmentations import letterbox
+from yolov5.utils.general import non_max_suppression as nms, scale_boxes
 from yolov5.utils.plots import Annotator, colors
-from yolov5.utils.general import scale_boxes, non_max_suppression as nms
 
 
 def preprocess(image):

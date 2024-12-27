@@ -1,30 +1,10 @@
 import os
-import argparse
+
 from optimum.rbln import RBLNGemmaForCausalLM
 
 
-def parsing_argument():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["gemma-7b-it"],
-        default="gemma-7b-it",
-        help="(str) model type, gemma-7b model name.",
-    )
-    parser.add_argument(
-        "--tensor_parallel_size",
-        type=int,
-        default=4,
-        help="(int) set tensor parallel size in gemma-7b model, default: 4",
-    )
-    return parser.parse_args()
-
-
 def main():
-    args = parsing_argument()
-    model_id = f"google/{args.model_name}"
+    model_id = "google/gemma-7b-it"
 
     # Compile and export
     model = RBLNGemmaForCausalLM.from_pretrained(
@@ -32,7 +12,7 @@ def main():
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,
         rbln_max_seq_len=8192,  # default "max_position_embeddings"
-        rbln_tensor_parallel_size=args.tensor_parallel_size,
+        rbln_tensor_parallel_size=4,
     )
 
     # Save compiled results to disk

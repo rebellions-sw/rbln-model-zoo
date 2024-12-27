@@ -1,11 +1,12 @@
 import argparse
 import os
+
 import numpy as np
 import torch
 from diffusers import UniPCMultistepScheduler
 from diffusers.utils import load_image
+from optimum.rbln import RBLNDPTForDepthEstimation, RBLNStableDiffusionControlNetImg2ImgPipeline
 from transformers import pipeline
-from optimum.rbln import RBLNStableDiffusionControlNetImg2ImgPipeline
 
 
 def parsing_argument():
@@ -21,15 +22,16 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "runwayml/stable-diffusion-v1-5"
+    model_id = "benjamin-paine/stable-diffusion-v1-5"
     prompt = args.prompt
 
-    # Load compiled model
+    # Load compiled models
     pipe = RBLNStableDiffusionControlNetImg2ImgPipeline.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
         scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
     )
+    dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="dpt-large", export=False)
 
     # Prepare inputs
     image = load_image(
@@ -45,7 +47,7 @@ def main():
         depth_map = detected_map.permute(2, 0, 1)
         return depth_map
 
-    depth_estimator = pipeline("depth-estimation")
+    depth_estimator = pipeline("depth-estimation", model=dpt, image_processor="Intel/dpt-large")
     depth_map = get_depth_map(image, depth_estimator).unsqueeze(0)
 
     # Generate image

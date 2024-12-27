@@ -1,5 +1,5 @@
-import os
 import argparse
+import os
 
 from optimum.rbln import RBLNMistralForCausalLM
 from transformers import AutoTokenizer
@@ -8,13 +8,6 @@ from transformers import AutoTokenizer
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--model_name",
-        type=str,
-        choices=["Mistral-7B-Instruct-v0.3"],
-        default="Mistral-7B-Instruct-v0.3",
-        help="(str) model type, mistral model name.",
-    )
     parser.add_argument(
         "--text",
         type=str,
@@ -26,7 +19,7 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = f"mistralai/{args.model_name}"
+    model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
     # Load compiled model
     model = RBLNMistralForCausalLM.from_pretrained(

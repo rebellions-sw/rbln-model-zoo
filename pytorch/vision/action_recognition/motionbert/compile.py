@@ -1,15 +1,15 @@
+import argparse
 import os
 import sys
-import argparse
-import torch
-import rebel
-
 import urllib.request
 
+import rebel
+import torch
+
 sys.path.append(os.path.join(sys.path[0], "MotionBERT"))
-from lib.utils.tools import get_config
-from lib.utils.learning import load_backbone
 from lib.model.model_action import ActionNet
+from lib.utils.learning import load_backbone
+from lib.utils.tools import get_config
 
 CONFIG = {
     "xsub": "/MotionBERT/configs/action/MB_train_NTU60_xsub.yaml",

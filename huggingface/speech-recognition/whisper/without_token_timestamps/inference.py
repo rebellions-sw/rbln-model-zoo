@@ -1,9 +1,9 @@
-import os
 import argparse
-from optimum.rbln import RBLNWhisperForConditionalGeneration
+import os
 
-from transformers import AutoProcessor
 from datasets import load_dataset
+from optimum.rbln import RBLNWhisperForConditionalGeneration
+from transformers import AutoProcessor
 
 
 def parsing_argument():

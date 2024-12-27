@@ -1,21 +1,22 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNStableDiffusionImg2ImgPipeline
+from diffusers import AutoencoderKL, ControlNetModel
+from optimum.rbln import RBLNStableDiffusionXLControlNetPipeline
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--img_height",
+        "--img_width",
         type=int,
-        default=512,
+        default=1024,
         help="input image width for generation",
     )
     parser.add_argument(
-        "--img_width",
+        "--img_height",
         type=int,
-        default=768,
+        default=1024,
         help="input image height for generation",
     )
     return parser.parse_args()
@@ -23,12 +24,17 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "runwayml/stable-diffusion-v1-5"
+    model_id = "stabilityai/stable-diffusion-xl-base-1.0"
+
+    controlnet = ControlNetModel.from_pretrained("diffusers/controlnet-canny-sdxl-1.0")
+    vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix")
 
     # Compile and export
-    pipe = RBLNStableDiffusionImg2ImgPipeline.from_pretrained(
+    pipe = RBLNStableDiffusionXLControlNetPipeline.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
+        controlnet=controlnet,
+        vae=vae,
         rbln_img_width=args.img_width,
         rbln_img_height=args.img_height,
     )

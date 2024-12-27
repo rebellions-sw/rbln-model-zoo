@@ -15,8 +15,7 @@ if torch.__version__ >= "2.5.0":
 sys.path.insert(0, os.path.join(sys.path[0], "YOLOX"))
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
-from yolox.utils import postprocess as postprocessor
-from yolox.utils import vis
+from yolox.utils import postprocess as postprocessor, vis
 
 
 def preprocess(img: np.array, test_size: List = [640, 640]) -> Tuple[torch.tensor, dict]:

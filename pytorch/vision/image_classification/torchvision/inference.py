@@ -1,10 +1,10 @@
 import argparse
+import urllib.request
+
+import rebel  # RBLN Runtime
 import torch
 import torchvision
 from torchvision.io.image import read_image
-
-import rebel  # RBLN Runtime
-import urllib.request
 
 
 def parsing_argument():
