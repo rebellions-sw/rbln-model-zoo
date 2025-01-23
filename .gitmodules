@@ -1,6 +1,6 @@
 [submodule "pytorch/vision/detection/yolox/YOLOX"]
-    path = pytorch/vision/detection/yolox/YOLOX
-    url = https://github.com/Megvii-BaseDetection/YOLOX
+	path = pytorch/vision/detection/yolox/YOLOX
+	url = https://github.com/Megvii-BaseDetection/YOLOX
 [submodule "pytorch/vision/detection/yolov5/yolov5"]
 	path = pytorch/vision/detection/yolov5/yolov5
 	url = https://github.com/ultralytics/yolov5.git
