@@ -1,6 +1,6 @@
 [submodule "pytorch/vision/detection/yolox/YOLOX"]
-	path = pytorch/vision/detection/yolox/YOLOX
-	url = https://github.com/Megvii-BaseDetection/YOLOX
+  path = pytorch/vision/detection/yolox/YOLOX
+  url = https://github.com/Megvii-BaseDetection/YOLOX
 [submodule "pytorch/vision/detection/yolov5/yolov5"]
 	path = pytorch/vision/detection/yolov5/yolov5
 	url = https://github.com/ultralytics/yolov5.git
@@ -46,3 +46,12 @@
 [submodule "pytorch/vision/face_detection/yolov5-face/yolov5-face"]
 	path = pytorch/vision/face_detection/yolov5-face/yolov5-face
 	url = https://github.com/deepcam-cn/yolov5-face.git
+[submodule "pytorch/vision/detection/yolov10/ultralytics"]
+	path = pytorch/vision/detection/yolov10/ultralytics
+	url = https://github.com/ultralytics/ultralytics.git
+[submodule "pytorch/vision/detection/yolov3/ultralytics"]
+	path = pytorch/vision/detection/yolov3/ultralytics
+	url = https://github.com/ultralytics/ultralytics.git
+[submodule "pytorch_dynamo/vision/detection/yolov3/ultralytics"]
+	path = pytorch_dynamo/vision/detection/yolov3/ultralytics
+	url = https://github.com/ultralytics/ultralytics.git
