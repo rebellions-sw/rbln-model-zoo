@@ -1,5 +1,18 @@
 # Change Log
 
+## Feburary, 4th 2025 (v0.5.6)
+- Compatible version:
+    - `rebel-compiler`: v0.7.1
+    - `optimum-rbln`: v0.2.0
+- Added new models:
+    - `Natural Language Processing`:
+        - Llama3.1-8B/70B
+        - Llama3.2-3B
+        - Llama3.3-70B
+        - KONI-Llama3.1-8B
+    - `Computer Vision`
+        - YOLOv10-n/s/m/b/l/x
+
 ## December, 27th 2024 (v0.5.5)
 - Compatible version:
     - `rebel-compiler`: v0.6.2
