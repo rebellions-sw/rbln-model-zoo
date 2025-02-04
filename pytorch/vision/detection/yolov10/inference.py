@@ -1,3 +1,4 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
 import argparse
 import os
 import sys
@@ -25,8 +26,23 @@ def preprocess(image):
     return preprocess_input
 
 
+# https://github.com/ultralytics/ultralytics/blob/6dcc4a0610bf445212253fb51b24e29429a2bcc3/ultralytics/nn/modules/head.py#L133
+def postprocess_in_detect(preds: torch.Tensor, max_det: int = 300, nc: int = 80):
+    batch_size, anchors, _ = preds.shape  # i.e. shape(16,8400,84)
+    boxes, scores = preds.split([4, nc], dim=-1)
+    index = scores.amax(dim=-1).topk(min(max_det, anchors))[1].unsqueeze(-1)
+    boxes = boxes.gather(dim=1, index=index.repeat(1, 1, 4))
+    scores = scores.gather(dim=1, index=index.repeat(1, 1, nc))
+    scores, index = scores.flatten(1).topk(min(max_det, anchors))
+    i = torch.arange(batch_size)[..., None]  # batch indices
+    return torch.cat(
+        [boxes[i, index // nc], scores[..., None], (index % nc)[..., None].float()], dim=-1
+    )
+
+
 def postprocess(outputs, input_image, origin_image):
-    pred = nms(torch.from_numpy(outputs), 0.25, 0.45, None, False, max_det=1000)[0]
+    pred = postprocess_in_detect(torch.from_numpy(outputs).permute(0, 2, 1))
+    pred = nms(pred, 0.25, 0.45, None, False, max_det=1000)[0]
     pred[:, :4] = scale_boxes(input_image.shape[2:], pred[:, :4], origin_image.shape)
     annotator = Annotator(origin_image, line_width=3)
     yaml_path = (
@@ -48,8 +64,8 @@ def parsing_argument():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--model_name",
-        default="yolov8s",
-        choices=["yolov8s", "yolov8n", "yolov8m", "yolov8l", "yolov8x"],
+        default="yolov10s",
+        choices=["yolov10s", "yolov10n", "yolov10b", "yolov10m", "yolov10l", "yolov10x"],
         help="available model variations",
     )
     return parser.parse_args()
@@ -70,10 +86,10 @@ def main():
     # Load compiled model to RBLN runtime module
     module = rebel.Runtime(f"{model_name}.rbln")
 
-    rebel_result = module.run(batch)
+    rbln_result = module.run(batch)
 
-    rebel_post_output = postprocess(rebel_result[0], batch, img)
-    cv2.imwrite(f"people_{model_name}.jpg", rebel_post_output)
+    rbln_post_output = postprocess(rbln_result[0], batch, img)
+    cv2.imwrite(f"people_{model_name}.jpg", rbln_post_output)
 
 
 if __name__ == "__main__":

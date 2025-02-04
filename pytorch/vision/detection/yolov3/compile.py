@@ -6,6 +6,7 @@ import rebel
 import torch
 
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
+sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from yolov3.models.experimental import attempt_load
 
 

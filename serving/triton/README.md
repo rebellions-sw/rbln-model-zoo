@@ -1,4 +1,4 @@
-# Triton
+# Triton inference server(resnet50)
 Supplementary guide for the tutorial on serving models with the Triton Inference Server.
 
 # Files
@@ -15,4 +15,4 @@ You can check the `output` directory, which contains all the necessary preparati
 # References
 - [PyTorch TorchVision ResNet50](https://docs.rbln.ai/tutorial/basic/pytorch_resnet50.html)
 - [Rebellions Model Zoo ResNet50](https://github.com/rebellions-sw/rbln-model-zoo/blob/main/huggingface/image-classification/resnet/compile.py)
-- [Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)
+- [Rebellions Document - Resnet50(Triton Inference Server)](https://docs.rbln.ai/software/model_serving/nvidia_triton_inference_server/tutorial/resnet50.html)

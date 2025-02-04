@@ -1,7 +1,11 @@
 import argparse
+import os
+import sys
 
 import rebel
 import torch
+
+sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from ultralytics import YOLO
 
 

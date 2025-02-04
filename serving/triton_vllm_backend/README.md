@@ -1,4 +1,4 @@
-# Triton Inference Server with vLLM enabled
+# Llama2-7B with Continous Batching 
 Supplementary guide for the tutorial on serving LLMs with the Triton Inference Server.
 
 # Files
@@ -13,4 +13,4 @@ Supplementary guide for the tutorial on serving LLMs with the Triton Inference S
 You can check the `output` directory, which contains all the necessary preparations for running the tutorial.
 
 # References
-[Triton Inference Server with vLLM enabled](https://docs.rbln.ai/tutorial/advanced/llm_serving_vllm.html#triton-inference-server-with-vllm-enabled)
+[Llama2-7B with Continous Batching](https://docs.rbln.ai/software/model_serving/nvidia_triton_inference_server/tutorial/llama2-7B_continous_batching.html)

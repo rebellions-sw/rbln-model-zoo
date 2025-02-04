@@ -15,6 +15,7 @@ if torch.__version__ >= "2.5.0":
     torch._dynamo.config.inline_inbuilt_nn_modules = False
 
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
+sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from yolov3.models.experimental import attempt_load
 from yolov3.utils.augmentations import letterbox
 from yolov3.utils.general import non_max_suppression as nms, scale_boxes
