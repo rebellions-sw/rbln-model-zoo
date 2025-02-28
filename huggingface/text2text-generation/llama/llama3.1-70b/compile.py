@@ -14,7 +14,7 @@ def main():
         rbln_max_seq_len=131_072,  # default "max_position_embeddings"
         rbln_tensor_parallel_size=16,
         rbln_attn_impl="flash_attn",
-        rbln_kvcache_partition_len=8_192,  # Length of KV cache partitions for flash attention
+        rbln_kvcache_partition_len=16_384,  # Length of KV cache partitions for flash attention
     )
 
     # Save compiled results to disk

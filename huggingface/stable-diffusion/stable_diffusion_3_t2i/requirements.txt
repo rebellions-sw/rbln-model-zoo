@@ -1,4 +1,3 @@
---extra-index-url https://pypi.rbln.ai/simple/
 optimum-rbln
 protobuf>=4.25.5
 sentencepiece>=0.2.0
