@@ -20,9 +20,8 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
 
 - HuggingFace Models
   
-    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`. To install prereuisites for HuggingFace models, navigate to the model's directory and use its requirements.txt:
+    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. To install prereuisites for HuggingFace models, navigate to the model's directory and use its requirements.txt:
     ```bash
-    pip3 install optimum-rbln
     pip3 install -r <model_directory>/requirements.txt
     ```
     For instance:
