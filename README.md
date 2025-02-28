@@ -20,9 +20,8 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
 
 - HuggingFace Models
   
-    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. You need an [RBLN portal account](https://docs.rbln.ai/getting_started/installation_guide.html#installation-guide) to install `optimum-rbln`. To install prereuisites for HuggingFace models, navigate to the model's directory and use its requirements.txt:
+    [Optimum RBLN](https://docs.rbln.ai/software/optimum/optimum_rbln.html) serves as a bridge connecting the HuggingFace `transformers`/`diffusers` libraries to RBLN NPUs. It offers a set of tools that enable easy model compilation and inference for both single and multi-NPU (Rebellions Scalable Design) configurations, across a range of downstream tasks. To install prereuisites for HuggingFace models, navigate to the model's directory and use its requirements.txt:
     ```bash
-    pip3 install -i https://pypi.rbln.ai/simple optimum-rbln
     pip3 install -r <model_directory>/requirements.txt
     ```
     For instance:
@@ -56,8 +55,8 @@ You can find the complete list of models on our [homepage](https://rebellions.ai
 Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed information including:
 
 - Tutorials
-    - [PyTorch: ResNet50](https://docs.rbln.ai/tutorial/basic/pytorch_resnet50.html)
-    - [TensorFlow: BERT-base](https://docs.rbln.ai/tutorial/basic/tensorflow_bert.html)
+    - [PyTorch: ResNet50](https://docs.rbln.ai/software/api/python/tutorial/basic/pytorch_resnet50.html)
+    - [TensorFlow: BERT-base](https://docs.rbln.ai/software/api/python/tutorial/basic/tensorflow_bert.html)
     - [HuggingFace transformers: LLama2-7b](https://docs.rbln.ai/software/optimum/tutorial/llama_7b.html)
     - [HuggingFace diffusers: SDXL-turbo](https://docs.rbln.ai/software/optimum/tutorial/sdxl_turbo.html)
     - [C/C++ binding: ResNet50](https://docs.rbln.ai/software/api/language_binding/c/tutorial/image_classification.html)
@@ -68,9 +67,9 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
     - [C/C++ Binding API](https://docs.rbln.ai/software/api/language_binding/c/api.html)
 - [Supported Models](https://docs.rbln.ai/misc/pytorch_modelzoo.html)
 - [Supported Operations](https://docs.rbln.ai/misc/supported_ops_pytorch.html)
-- [Model Serving Guide using Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/tritonserver.html)
-- [vLLM Support](https://docs.rbln.ai/tutorial/advanced/llm_serving.html#continuous-batching-support-with-vllm-rbln)
-- [Tools](https://docs.rbln.ai/software/tools.html)
+- [Model Serving Guide using Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/nvidia_triton_inference_server/installation.html)
+- [vLLM Support](https://docs.rbln.ai/software/model_serving/vllm_support/vllm-rbln.html)
+- [Device Management](https://docs.rbln.ai/software/system_management/device_management.html)
 
 ## Release Notes
 For detailed information on updates and changes, please refer to the [release notes](CHANGELOG.md).

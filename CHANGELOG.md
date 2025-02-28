@@ -1,5 +1,26 @@
 # Change Log
 
+## Feburary, 28th 2025 (v0.5.7)
+- Compatible version:
+    - `rebel-compiler`: v0.7.2
+    - `optimum-rbln`: v0.7.2
+- Added new models:
+    - `Natural Language Processing`:
+        - DeepSeek-R1-Distill-Llama-8B
+        - DeepSeek-R1-Distill-Llama-70B
+        - DeepSeek-R1-Distill-Qwen-1.5B
+        - DeepSeek-R1-Distill-Qwen-7B
+        - DeepSeek-R1-Distill-Qwen-14B
+        - DeepSeek-R1-Distill-Qwen-32B
+        - Ko-Reranker
+        - KR-SBERT
+        - LaBSE
+    - `Generative AI`
+        - Kandinsky v2.2 - Inpainting
+- Added supplementary guides for the model serving tutorial
+    -  [Software > Model Serving > Nvidia Triton Infernece Server](https://docs.rbln.ai/software/model_serving/torchserve/torchserve.html)
+- Updated to support the latest transformers (v4.48.3) and diffusers (v0.31.0)  
+
 ## Feburary, 4th 2025 (v0.5.6)
 - Compatible version:
     - `rebel-compiler`: v0.7.1
