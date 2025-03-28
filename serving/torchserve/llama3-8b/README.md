@@ -13,4 +13,4 @@ Supplementary guide for the tutorial on serving LLMs with the TorchServe
 You can check the `output` directory, which contains all the necessary preparations for running the tutorial.
 
 # References
-[Llama3-8B with Continous Batching](https://docs.rbln.ai/software/model_serving/torchserve/tutorial/llama3-8B_continuous_batching.html)
+[Llama3-8B](https://docs.rbln.ai/software/model_serving/torchserve/tutorial/llama3-8B.html)

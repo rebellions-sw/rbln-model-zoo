@@ -26,7 +26,7 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
     ```
     For instance:
     ```bash
-    pip3 install -r huggingface/question-answering/bert/requirements.txt
+    pip3 install -r huggingface/transformers/question-answering/bert/requirements.txt
     ```
 
 - PyTorch
@@ -69,6 +69,7 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
 - [Supported Operations](https://docs.rbln.ai/misc/supported_ops_pytorch.html)
 - [Model Serving Guide using Nvidia Triton Inference Server](https://docs.rbln.ai/software/model_serving/nvidia_triton_inference_server/installation.html)
 - [vLLM Support](https://docs.rbln.ai/software/model_serving/vllm_support/vllm-rbln.html)
+- [TorchServe](https://docs.rbln.ai/software/model_serving/torchserve/torchserve.html)
 - [Device Management](https://docs.rbln.ai/software/system_management/device_management.html)
 
 ## Release Notes

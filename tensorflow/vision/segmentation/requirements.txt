@@ -1,5 +1,5 @@
 huggingface-hub>=0.23.0
 numpy<2.0.0
-tensorflow-cpu>=2.18.0
+tensorflow-cpu==2.18.0
 pillow>=10.2.0
-tf_keras>=2.18.0
+tf_keras==2.18.0

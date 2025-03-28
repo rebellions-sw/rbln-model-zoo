@@ -33,7 +33,7 @@ class Resnet50Handler(BaseHandler):
                 f"[RBLN ERROR] File not found at the specified model_path({model_path})."
             )
 
-        self.module = rebel.Runtime(model_path)
+        self.module = rebel.Runtime(model_path, tensor_type="pt")
         self.weights = ResNet50_Weights.DEFAULT
         self.initialized = True
 
@@ -58,7 +58,7 @@ class Resnet50Handler(BaseHandler):
         batch = prep(image).unsqueeze(0)
         preprocessed_data = batch.numpy()
 
-        return preprocessed_data
+        return torch.from_numpy(preprocessed_data)
 
     def inference(self, model_input):
         """
@@ -77,7 +77,7 @@ class Resnet50Handler(BaseHandler):
         :param inference_output: list of inference output
         :return: list of predict results
         """
-        score, class_id = torch.topk(torch.tensor(inference_output), 1, dim=1)
+        score, class_id = torch.topk(inference_output, 1, dim=1)
         category_name = self.weights.meta["categories"][class_id]
         return category_name
 

@@ -75,7 +75,7 @@ int main(int argc, char **argv) {
 
   // Create model and runtime
   RBLNModel *mod = rbln_create_model(model_path.c_str());
-  RBLNRuntime *rt = rbln_create_async_runtime(mod, "default", 0);
+  RBLNRuntime *rt = rbln_create_async_runtime(mod, "default", 0, 0);
 
   // Alloc output buffer
   auto buf_size = rbln_get_layout_nbytes(rbln_get_output_layout(rt, 0));

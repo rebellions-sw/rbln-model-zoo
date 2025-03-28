@@ -1,2 +1,0 @@
-minWorkers: 1
-maxWorkers: 1             # Set the number of worker to create a single model instance
