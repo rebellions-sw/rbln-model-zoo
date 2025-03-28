@@ -6,7 +6,7 @@
     - `optimum-rbln`: v0.7.3.post2
 - Added new models:
     - `Natural Language Processing`:
-        - EXXAONE-3.5-32B
+        - EXAONE-3.5-32B
         - BGE-Small-en-v1.5
         - BGE-Base-en-v1.5
         - BGE-Large-en-v1.5
