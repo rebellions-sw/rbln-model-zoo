@@ -1,5 +1,22 @@
 # Change Log
 
+## March, 28th 2025 (v0.5.8)
+- Compatible version:
+    - `rebel-compiler`: v0.7.3
+    - `optimum-rbln`: v0.7.3.post2
+- Added new models:
+    - `Natural Language Processing`:
+        - EXXAONE-3.5-32B
+        - BGE-Small-en-v1.5
+        - BGE-Base-en-v1.5
+        - BGE-Large-en-v1.5
+    - `Generative AI`
+        - Kandinsky v2.2
+            - Text2Image
+            - Image2Image 
+- Updated to restructure the directories for the HuggingFace models, differentiating between the diffusers and transformers models
+- Changed the default input image size from 512 to 768 for knadinsky v2.2 Inpaint examples
+
 ## Feburary, 28th 2025 (v0.5.7)
 - Compatible version:
     - `rebel-compiler`: v0.7.2
