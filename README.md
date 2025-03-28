@@ -26,7 +26,7 @@ All deep learning examples in the RBLN Model Zoo include two files: `compile.py`
     ```
     For instance:
     ```bash
-    pip3 install -r huggingface/question-answering/bert/requirements.txt
+    pip3 install -r huggingface/transformers/question-answering/bert/requirements.txt
     ```
 
 - PyTorch
