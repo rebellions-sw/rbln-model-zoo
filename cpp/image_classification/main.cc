@@ -60,7 +60,7 @@ int main(int argc, char **argv) {
 
   // Run model
   RBLNModel *mod = rbln_create_model(model_path.c_str());
-  RBLNRuntime *rt = rbln_create_runtime(mod, "default", 0);
+  RBLNRuntime *rt = rbln_create_runtime(mod, "default", 0, 0);
   rbln_set_input(rt, 0, blob.data);
   rbln_run(rt);
 

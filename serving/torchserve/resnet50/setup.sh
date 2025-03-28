@@ -12,12 +12,11 @@ echo "= Step 1. Directory check & preparation                          ="
 echo "=================================================================="
 
 MATERIAL_PATH="../material"
-MODEL_CONFIG="model_config.yaml"
+MODEL_CONFIG="config.properties"
 MODEL_HANDLER="resnet50_handler.py"
 
 directories=(
   "rbln_models"
-  "model_config"
   "model_handler"
   "model_store"
 )
@@ -30,10 +29,10 @@ for dir in "${directories[@]}"; do
     fi
 done
 
-if [ ! -f ./model_config/${MODEL_CONFIG} ]; then
-  cp -v ${MATERIAL_PATH}/${MODEL_CONFIG} ./model_config/
+if [ ! -f ./${MODEL_CONFIG} ]; then
+  cp -v ${MATERIAL_PATH}/${MODEL_CONFIG} ./
 else
-  echo "./model_config/${MODEL_CONFIG} is already exists."
+  echo "./${MODEL_CONFIG} is already exists."
 fi
 
 if [ ! -f ./model_handler/${MODEL_HANDLER} ]; then
@@ -83,7 +82,6 @@ if [ ! -f ${ARCHIVE_RESULT_PATH} ]; then
     --version 1.0 \
     --serialized-file ./rbln_models/${MODEL_NAME}/${MODEL_FILE} \
     --handler ./model_handler/resnet50_handler.py \
-    --config-file ./model_config/model_config.yaml \
     --export-path ./model_store/
 
   if [ ! -f ${ARCHIVE_RESULT_PATH} ]; then

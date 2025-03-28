@@ -45,7 +45,7 @@ class YOLOv8_Handler(BaseHandler):
                 f"[RBLN ERROR] File not found at the specified model_path({model_path})."
             )
 
-        self.module = rebel.Runtime(model_path)
+        self.module = rebel.Runtime(model_path, tensor_type="pt")
         self.initialized = True
 
     def preprocess(self, data):
@@ -64,12 +64,12 @@ class YOLOv8_Handler(BaseHandler):
 
             preprocessed_data = LetterBox(new_shape=(640, 640))(image=image)
             preprocessed_data = preprocessed_data.transpose((2, 0, 1))[::-1]
-            preprocessed_data = np.ascontiguousarray(preprocessed_data, dtype=np.float32)
             preprocessed_data = preprocessed_data[None]
+            preprocessed_data = np.ascontiguousarray(preprocessed_data, dtype=np.float32)
             preprocessed_data /= 255
             self.input_image = preprocessed_data
 
-        return preprocessed_data
+        return torch.from_numpy(preprocessed_data)
 
     def inference(self, model_input):
         """
@@ -90,7 +90,7 @@ class YOLOv8_Handler(BaseHandler):
         # Take output from network and post-process to desired format
         postprocess_output = inference_output
 
-        pred = nms(torch.from_numpy(postprocess_output), 0.25, 0.45, None, False, max_det=1000)[0]
+        pred = nms(postprocess_output, 0.25, 0.45, None, False, max_det=1000)[0]
         pred[:, :4] = scale_boxes(self.input_image.shape[2:], pred[:, :4], self.input_image.shape)
         yaml_path = "./coco128.yaml"
 

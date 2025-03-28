@@ -135,9 +135,6 @@ def initialize(predictor, batch_size):
         dynamic=False,
     )
 
-    # warmup the predictor to pre-load the cached model
-    module(torch.ones(batch_size, 3, 1024, 1024))
-
     return module, predictor
 
 
