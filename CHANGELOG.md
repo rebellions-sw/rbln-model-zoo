@@ -1,5 +1,21 @@
 # Change Log
 
+## April, 30th 2025 (v0.5.9)
+- Compatible version:
+    - `rebel-compiler`: v0.7.4
+    - `optimum-rbln`: v0.7.4
+- Added new models:
+    - `Natural Language Processing`:
+        - Idefics3-8B-Llama3
+        - Qwen2.5-VL-7B
+        - T5-11B
+        - Sentence-T5-XXL
+        - TimeSeriesTransformer
+- Dependency updates
+    - PyTorch updated to version v2.6.0 
+    - Transformers updated to version v4.50.3
+- Renamed the direcotry from `embedding retrieval` to `sentence similarity`
+
 ## March, 28th 2025 (v0.5.8)
 - Compatible version:
     - `rebel-compiler`: v0.7.3
