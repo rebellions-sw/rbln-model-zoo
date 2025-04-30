@@ -1,7 +1,7 @@
 huggingface-hub>=0.23.0
 imageio==2.34.1
 opencv-python>=4.9.0.80
-tensorflow-cpu==2.18.0
+tensorflow==2.18.0
 matplotlib>=3.8.0
 numpy<2.0.0
 tf_keras==2.18.0

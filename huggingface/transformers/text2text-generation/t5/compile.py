@@ -3,6 +3,14 @@ import os
 
 from optimum.rbln import RBLNT5ForConditionalGeneration
 
+DEFAULT_TP_SIZE = {
+    "t5-small": 1,
+    "t5-base": 1,
+    "t5-large": 1,
+    "t5-3b": 1,
+    "t5-11b": 4,
+}
+
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
@@ -10,9 +18,9 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["t5-small", "t5-base", "t5-large", "t5-3b"],
+        choices=["t5-small", "t5-base", "t5-large", "t5-3b", "t5-11b"],
         default="t5-base",
-        help="(str) model type, Size of T5. [t5-small, t5-base, t5-large, t5-3b]",
+        help="(str) model type, Size of T5. [t5-small, t5-base, t5-large, t5-3b, t5-11b]",
     )
     return parser.parse_args()
 
@@ -26,6 +34,7 @@ def main():
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,
+        rbln_tensor_parallel_size=DEFAULT_TP_SIZE[args.model_name],
     )
 
     # Save compiled results to disk

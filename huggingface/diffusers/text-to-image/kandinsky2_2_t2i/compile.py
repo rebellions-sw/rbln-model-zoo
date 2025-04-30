@@ -19,6 +19,7 @@ def main():
         rbln_config={
             "img_height": 768,
             "img_width": 768,
+            "unet": {"batch_size": 2},
         },
     )
 

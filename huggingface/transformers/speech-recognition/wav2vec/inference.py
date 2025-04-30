@@ -34,7 +34,7 @@ def main():
     )
 
     # Generate transcription
-    output = model(input_values)
+    output = model(input_values, return_dict=True)
     predicted_ids = torch.argmax(output.logits, dim=-1)
     transcription = processor.decode(predicted_ids[0])
 

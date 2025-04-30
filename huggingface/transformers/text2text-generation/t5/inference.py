@@ -11,9 +11,9 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["t5-small", "t5-base", "t5-large", "t5-3b"],
+        choices=["t5-small", "t5-base", "t5-large", "t5-3b", "t5-11b"],
         default="t5-base",
-        help="(str) model type, Size of T5. [t5-small, t5-base, t5-large, t5-3b]",
+        help="(str) model type, Size of T5. [t5-small, t5-base, t5-large, t5-3b, t5-11b]",
     )
     parser.add_argument(
         "--text",

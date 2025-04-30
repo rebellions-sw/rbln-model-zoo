@@ -39,7 +39,7 @@ def main():
     masked_pos = [mask.item() for mask in masked_position]
     words = []
 
-    output = model(inputs.input_ids, inputs.attention_mask)
+    output = model(inputs.input_ids, inputs.attention_mask)[0]
 
     last_hidden_state = output[0].squeeze()
 

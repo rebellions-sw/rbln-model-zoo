@@ -37,6 +37,11 @@ def main():
         vae=vae,
         rbln_img_width=args.img_width,
         rbln_img_height=args.img_height,
+        rbln_config={
+            "img_width": args.img_width,
+            "img_height": args.img_height,
+            "unet": {"batch_size": 2},
+        },
     )
     dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="Intel/dpt-hybrid-midas", export=True)
 

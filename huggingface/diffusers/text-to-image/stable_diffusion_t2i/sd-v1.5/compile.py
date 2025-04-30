@@ -10,6 +10,7 @@ def main():
     pipe = RBLNStableDiffusionPipeline.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
+        rbln_config={"unet": {"batch_size": 2}},
     )
 
     # Save compiled results to disk
