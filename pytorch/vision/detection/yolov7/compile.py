@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+from functools import partial
+from unittest.mock import patch
 
 import rebel
 import torch
@@ -32,8 +34,11 @@ def main():
         ".",
         map_location=torch.device("cpu"),
     )
-    model = attempt_load(model_name + ".pt", map_location=torch.device("cpu"))
-    model.eval()
+
+    # Override torch.load to set weights_only=False (default is True in PyTorch 2.6).
+    with patch("torch.load", partial(torch.load, weights_only=False)):
+        model = attempt_load(model_name + ".pt", map_location=torch.device("cpu"))
+        model.eval()
 
     # Compile torch model for ATOM
     input_info = [

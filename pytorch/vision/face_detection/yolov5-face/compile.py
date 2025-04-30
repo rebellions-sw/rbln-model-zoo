@@ -1,6 +1,8 @@
 import argparse
 import os
 import sys
+from functools import partial
+from unittest.mock import patch
 
 import gdown
 import rebel
@@ -34,7 +36,10 @@ def main():
 
     # Get official pretrained weight from google drive
     gdown.download(url=pt_file_urls[model_name], output=f"{model_name}.pt", fuzzy=True)
-    model = attempt_load(f"{model_name}.pt", map_location="cpu")
+
+    # Override torch.load to set weights_only=False (default is True in PyTorch 2.6).
+    with patch("torch.load", partial(torch.load, weights_only=False)):
+        model = attempt_load(f"{model_name}.pt", map_location="cpu")
 
     # Preprocess model for rbln
     delattr(model.model[-1], "anchor_grid")

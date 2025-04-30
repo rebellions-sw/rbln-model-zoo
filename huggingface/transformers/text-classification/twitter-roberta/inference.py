@@ -63,7 +63,7 @@ def main():
     )
 
     # Run the model
-    output = model(inputs.input_ids, inputs.attention_mask)
+    output = model(inputs.input_ids, inputs.attention_mask)[0]
 
     # Show text and result
     print("--- text ---")

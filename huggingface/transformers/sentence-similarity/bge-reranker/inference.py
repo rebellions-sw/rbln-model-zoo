@@ -1,53 +1,67 @@
 import argparse
 import os
 
-import torch
-from optimum.rbln import RBLNXLMRobertaModel
+from optimum.rbln import RBLNXLMRobertaForSequenceClassification
 from transformers import AutoTokenizer
+
+MAX_SEQ_LEN_CFG = {
+    "v2-m3": 8192,
+    "large": 512,
+    "base": 512,
+}
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
+        "--model_name",
+        type=str,
+        choices=["v2-m3", "large", "base"],
+        default="v2-m3",
+        help="(str) model type, Size of bge-reranker. [v2-m3, large, base]",
+    )
+    parser.add_argument(
         "--query",
         type=str,
         default="what is panda?",
-        help="(str) type, input query context",
+        help="(str) type, query context for score",
     )
     parser.add_argument(
         "--message",
         type=str,
         default="The giant panda (Ailuropoda melanoleuca), "
         "sometimes called a panda bear or simply panda, is a bear species endemic to China.",
-        help="(str) type, input messege context",
+        help="(str) type, messege context for score",
     )
     return parser.parse_args()
 
 
 def main():
     args = parsing_argument()
-    model_id = "BAAI/bge-m3"
+    model_id = f"BAAI/bge-reranker-{args.model_name}"
 
     # Load compiled model
-    model = RBLNXLMRobertaModel.from_pretrained(
+    model = RBLNXLMRobertaForSequenceClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
-    input_q = tokenizer(args.query, padding="max_length", return_tensors="pt", max_length=8192)
-    input_m = tokenizer(args.message, padding="max_length", return_tensors="pt", max_length=8192)
+    inputs = tokenizer(
+        args.query,
+        args.message,
+        padding="max_length",
+        return_tensors="pt",
+        max_length=MAX_SEQ_LEN_CFG[args.model_name],
+    )
 
     # run model
-    q_output = model(input_q.input_ids, input_q.attention_mask)
-    m_output = model(input_m.input_ids, input_m.attention_mask)
-    q_output = torch.nn.functional.normalize(q_output[0][:, 0], dim=-1)
-    m_output = torch.nn.functional.normalize(m_output[0][:, 0], dim=-1)
+    output = model(inputs.input_ids, inputs.attention_mask)[0]
 
-    # get similarity score
-    score = q_output @ m_output.T
+    # get score
+    score = output.view(-1).float()
 
     # Show text and result
     print("--- query ---")

@@ -16,10 +16,7 @@ def main():
     decoder_pipe = RBLNKandinskyV22InpaintPipeline.from_pretrained(
         decoder_model_id,
         export=True,
-        rbln_config={
-            "img_height": 768,
-            "img_width": 768,
-        },
+        rbln_config={"img_height": 768, "img_width": 768, "unet": {"batch_size": 2}},
     )
 
     # Save compiled results to disk

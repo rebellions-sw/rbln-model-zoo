@@ -25,7 +25,7 @@ def main():
     inputs = image_processor(images=image, return_tensors="pt")
 
     # Inference
-    predicted_depth = model(**inputs).predicted_depth
+    predicted_depth = model(**inputs, return_dict=True).predicted_depth
 
     # Interpolate to original size
     prediction = torch.nn.functional.interpolate(

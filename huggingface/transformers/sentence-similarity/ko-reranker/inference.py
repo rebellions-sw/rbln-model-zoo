@@ -49,7 +49,7 @@ def main():
     )
 
     # Run the model
-    outputs = model(inputs.input_ids, inputs.attention_mask)
+    outputs = model(inputs.input_ids, inputs.attention_mask)[0]
 
     # Get score
     scores = exp_normalize(outputs.view(-1).numpy())

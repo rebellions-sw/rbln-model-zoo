@@ -99,7 +99,7 @@ def main():
     )
 
     inputs = tokenizer(args.text, return_tensors="pt", padding="max_length", max_length=512)
-    output = model(inputs.input_ids, inputs.attention_mask, inputs.token_type_ids)
+    output = model(inputs.input_ids, inputs.attention_mask, inputs.token_type_ids)[0]
     results = postprocess(tokenizer, output, inputs.input_ids, top_k=args.top_k)
 
     prediction = [[result[i]["token_str"] for i in range(args.top_k)] for result in results]

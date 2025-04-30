@@ -39,7 +39,12 @@ def main():
     )
 
     def get_depth_map(image, depth_estimator):
-        image = depth_estimator(image)["depth"]
+        model_inputs = depth_estimator.preprocess(image)
+        model_inputs["return_dict"] = True
+        target_size = model_inputs.pop("target_size")
+        model_outputs = depth_estimator.model(**model_inputs)
+        model_outputs["target_size"] = target_size
+        image = depth_estimator.postprocess(model_outputs)["depth"]
         image = np.array(image)
         image = image[:, :, None]
         image = np.concatenate([image, image, image], axis=2)

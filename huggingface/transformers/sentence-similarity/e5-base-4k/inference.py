@@ -73,8 +73,8 @@ def main():
     ).contiguous()
 
     # run model
-    q_output = model(**input_q)
-    p_output = model(**input_p)
+    q_output = model(**input_q)[0]
+    p_output = model(**input_p)[0]
 
     embeddings_q = average_pool(q_output[0], input_q["attention_mask"])
     embeddings_p = average_pool(p_output[0], input_p["attention_mask"])

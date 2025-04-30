@@ -33,8 +33,11 @@ def main():
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         controlnet=controlnet,
-        rbln_img_width=args.img_width,
-        rbln_img_height=args.img_height,
+        rbln_config={
+            "img_width": args.img_width,
+            "img_height": args.img_height,
+            "unet": {"batch_size": 2},
+        },
     )
 
     # Save compiled results to disk
