@@ -57,13 +57,13 @@ Explore [RBLN SDK documentation](https://docs.rbln.ai) to access detailed inform
 - Tutorials
     - [PyTorch: ResNet50](https://docs.rbln.ai/software/api/python/tutorial/basic/pytorch_resnet50.html)
     - [TensorFlow: BERT-base](https://docs.rbln.ai/software/api/python/tutorial/basic/tensorflow_bert.html)
-    - [HuggingFace transformers: LLama2-7b](https://docs.rbln.ai/software/optimum/tutorial/llama_7b.html)
+    - [HuggingFace transformers: LLama2-7b](https://docs.rbln.ai/software/optimum/tutorial/llama3-8B.html)
     - [HuggingFace diffusers: SDXL-turbo](https://docs.rbln.ai/software/optimum/tutorial/sdxl_turbo.html)
     - [C/C++ binding: ResNet50](https://docs.rbln.ai/software/api/language_binding/c/tutorial/image_classification.html)
     - [C/C++ binding: Yolov8m](https://docs.rbln.ai/software/api/language_binding/c/tutorial/object_detection.html)
 - APIs
-    - [Python Compile & Runtime](https://docs.rbln.ai/software/api/python_api.html)
-    - [HuggingFace Model API (optimum-rbln)](https://docs.rbln.ai/software/optimum/model_api.html)
+    - [Python Compile & Runtime](https://docs.rbln.ai/software/api/python/python_api.html)
+    - [HuggingFace Model API (optimum-rbln)](https://docs.rbln.ai/software/optimum/model_api/overview.html)
     - [C/C++ Binding API](https://docs.rbln.ai/software/api/language_binding/c/api.html)
 - [Supported Models](https://docs.rbln.ai/misc/pytorch_modelzoo.html)
 - [Supported Operations](https://docs.rbln.ai/misc/supported_ops_pytorch.html)
