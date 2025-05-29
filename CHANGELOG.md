@@ -1,5 +1,21 @@
 # Change Log
 
+## May, 30th 2025 (v0.5.10)
+- Compatible version:
+    - `rebel-compiler`: v0.8.0
+    - `optimum-rbln`: v0.8.0
+- Added new models:
+    - `Natural Language Processing`:
+        - OPT-2.7B/6.7B
+    - `Multimodal`
+        - Gemma3-27B
+        - BLIP2-OPT-2.7B/6.7B
+- Inference script update to sync with `optimum-rbln`
+    - huggingface/diffusers/image-to-image/stable_diffusion_i2i/sd-v1.5-controlnet/inference.py
+    - huggingface/diffusers/image-to-image/stable_diffusion_xl_i2i/sdxl-base-1.0-controlnet/inference.py
+    - huggingface/transformers/speech-recognition/wav2vec
+    - huggingface/transformers/depth-estimation/dpt/inference.py
+
 ## April, 30th 2025 (v0.5.9)
 - Compatible version:
     - `rebel-compiler`: v0.7.4
