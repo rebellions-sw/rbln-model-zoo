@@ -45,7 +45,7 @@ def main():
             depth_map = depth_estimator(image).predicted_depth
 
         depth_map = torch.nn.functional.interpolate(
-            depth_map[0].unsqueeze(1),
+            depth_map.unsqueeze(1),
             size=(1024, 1024),
             mode="bicubic",
             align_corners=False,
