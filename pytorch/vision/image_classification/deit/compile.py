@@ -23,9 +23,14 @@ def parsing_argument():
         type=str,
         default="base",
         choices=[
-            "tiny", "small", "base",
-            "tiny_distilled", "small_distilled", "base_distilled",
-            "base_384", "base_distilled_384",
+            "tiny",
+            "small",
+            "base",
+            "tiny_distilled",
+            "small_distilled",
+            "base_distilled",
+            "base_384",
+            "base_distilled_384",
         ],
         help="(str) type, DeiT model name. (tiny, small, base, tiny_distilled,"
         " small_distilled, base_distilled, base_384, base_distilled_384)",
@@ -39,7 +44,7 @@ def main():
     input_size = 384 if "384" in model_name else 224
 
     # Instantiate TorchVision model
-    model = timm.create_model(f'{model_map[model_name]}.fb_in1k', pretrained=True)
+    model = timm.create_model(f"{model_map[model_name]}.fb_in1k", pretrained=True)
     model.eval()
 
     # Compile torch model for ATOM

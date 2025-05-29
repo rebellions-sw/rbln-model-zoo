@@ -17,9 +17,14 @@ def parsing_argument():
         type=str,
         default="base",
         choices=[
-            "tiny", "small", "base",
-            "tiny_distilled", "small_distilled", "base_distilled",
-            "base_384", "base_distilled_384",
+            "tiny",
+            "small",
+            "base",
+            "tiny_distilled",
+            "small_distilled",
+            "base_distilled",
+            "base_384",
+            "base_distilled_384",
         ],
         help="(str) type, DeiT model name. (tiny, small, base, tiny_distilled,"
         " small_distilled, base_distilled, base_384, base_distilled_384)",

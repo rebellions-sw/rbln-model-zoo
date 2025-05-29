@@ -42,7 +42,7 @@ def main():
     def get_depth_map(image, depth_estimator):
         image = feature_extractor(images=image, return_tensors="pt").pixel_values
         with torch.no_grad():
-            depth_map = depth_estimator(image, return_dict=True).predicted_depth
+            depth_map = depth_estimator(image).predicted_depth
 
         depth_map = torch.nn.functional.interpolate(
             depth_map[0].unsqueeze(1),
@@ -74,7 +74,6 @@ def main():
         strength=0.99,
         num_inference_steps=50,
         controlnet_conditioning_scale=controlnet_conditioning_scale,
-        return_dict=True,
     ).images[0]
 
     # Save image result
