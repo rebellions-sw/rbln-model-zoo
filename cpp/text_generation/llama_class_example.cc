@@ -39,8 +39,8 @@ void LLamaClass::ForwardPrefill() {
       auto sliced_cache_positions = tensor_ops::VerticalSlicing(
           new_cache_position, step, step + prefill_chunk_size_);
 
-      // Create query index and empty block tables(with value 0) for KV-cache management
-      Tensor<int> query_idx(query_length % prefill_chunk_size_ - 1);
+      // Create query position and empty block tables(with value 0) for KV-cache management
+      Tensor<int16_t> query_position(query_length % prefill_chunk_size_ - 1);
       Tensor<int16_t> block_tables(0);
 
       // Check if prefill input count exceeds expected limit
@@ -54,8 +54,8 @@ void LLamaClass::ForwardPrefill() {
       // Set inputs for the model runtime
       rbln_set_input(prefill_rt_, 0, sliced_input_tensors.GetData());
       rbln_set_input(prefill_rt_, 1, sliced_cache_positions.GetData());
-      rbln_set_input(prefill_rt_, 2, query_idx.GetData());
-      rbln_set_input(prefill_rt_, 3, block_tables.GetData());
+      rbln_set_input(prefill_rt_, 2, block_tables.GetData());
+      rbln_set_input(prefill_rt_, 3, query_position.GetData());
 
       // Run the model
       rbln_run(prefill_rt_);

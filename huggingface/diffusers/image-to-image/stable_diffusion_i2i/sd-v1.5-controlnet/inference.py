@@ -32,19 +32,13 @@ def main():
         scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
     )
     dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="dpt-large", export=False)
-
     # Prepare inputs
     image = load_image(
         "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/controlnet-img2img.jpg"
     )
 
     def get_depth_map(image, depth_estimator):
-        model_inputs = depth_estimator.preprocess(image)
-        model_inputs["return_dict"] = True
-        target_size = model_inputs.pop("target_size")
-        model_outputs = depth_estimator.model(**model_inputs)
-        model_outputs["target_size"] = target_size
-        image = depth_estimator.postprocess(model_outputs)["depth"]
+        image = depth_estimator(image)["depth"]
         image = np.array(image)
         image = image[:, :, None]
         image = np.concatenate([image, image, image], axis=2)

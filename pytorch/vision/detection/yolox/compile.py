@@ -9,8 +9,15 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         default="yolox_s",
-        choices=["yolox_nano", "yolox_tiny", "yolox_s", "yolox_m", 
-                 "yolox_l", "yolox_x", "yolov3"], # yolov3 is YOLOX-Darknet53
+        choices=[
+            "yolox_nano",
+            "yolox_tiny",
+            "yolox_s",
+            "yolox_m",
+            "yolox_l",
+            "yolox_x",
+            "yolov3",
+        ],  # yolov3 is YOLOX-Darknet53
         help="available model variations",
     )
     return parser.parse_args()

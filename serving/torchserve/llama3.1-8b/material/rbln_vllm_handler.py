@@ -159,9 +159,9 @@ class RBLN_VLLMHandler(BaseHandler):
         model = vllm_engine_params.get("model", {})
         if len(model) == 0:
             model_path = handler_config.get("model_path", {})
-            assert (
-                len(model_path) > 0
-            ), "please define model in vllm_engine_config or model_path in handler"
+            assert len(model_path) > 0, (
+                "please define model in vllm_engine_config or model_path in handler"
+            )
             model = pathlib.Path(self.model_dir).joinpath(model_path)
             if not model.exists():
                 logger.debug(

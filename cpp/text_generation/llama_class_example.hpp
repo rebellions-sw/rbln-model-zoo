@@ -55,7 +55,7 @@ public:
   // Init Model configuration
   void InitConfig() {
     prefill_id_ = "${YOUR_SAMPLE_PATH}/Meta-Llama-3-8B-Instruct/prefill.rbln";
-    dec_id_ = "${YOUR_SAMPLE_PATH}/Meta-Llama-3-8B-Instruct/decoder.rbln";
+    dec_id_ = "${YOUR_SAMPLE_PATH}/Meta-Llama-3-8B-Instruct/decoder_batch_1.rbln";
     input_ids_path_ = "${YOUR_SAMPLE_PATH}/c_input_ids.bin";
     batch_size_ = 1;
     max_seq_len_ = 8192;
