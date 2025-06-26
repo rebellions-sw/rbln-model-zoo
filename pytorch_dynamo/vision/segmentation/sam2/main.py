@@ -10,9 +10,6 @@ import requests
 import torch
 from PIL import Image
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 sys.path.insert(0, os.path.join(sys.path[0], "sam2"))
 
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend

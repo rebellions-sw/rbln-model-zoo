@@ -9,9 +9,6 @@ import numpy as np
 import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 sys.path.append(os.path.join(sys.path[0], "yolov4"))
 from yolov4.models.models import Darknet, load_darknet_weights
 from yolov4.utils.datasets import letterbox

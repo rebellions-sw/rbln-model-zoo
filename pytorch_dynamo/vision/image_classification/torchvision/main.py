@@ -6,9 +6,6 @@ import torch
 import torchvision
 from torchvision.io.image import read_image
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 
 def parsing_argument():
     parser = argparse.ArgumentParser()

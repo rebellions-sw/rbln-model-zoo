@@ -11,9 +11,6 @@ import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 import yaml
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
 sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from yolov3.models.experimental import attempt_load
