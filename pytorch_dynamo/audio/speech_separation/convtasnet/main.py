@@ -8,9 +8,6 @@ from metric import sdri
 from mir_eval import separation
 from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 
 def sisdri_metric(
     estimate: torch.Tensor, reference: torch.Tensor, mix: torch.Tensor, mask: torch.Tensor

@@ -11,9 +11,6 @@ import rebel  # noqa: F401  # needed to use torch dynamo's "rbln" backend.
 import torch
 import yaml
 
-if torch.__version__ >= "2.5.0":
-    torch._dynamo.config.inline_inbuilt_nn_modules = False
-
 sys.path.insert(0, os.path.join(sys.path[0], "YOLOv6"))
 from YOLOv6.yolov6.core.inferer import Inferer
 from YOLOv6.yolov6.data.data_augment import letterbox

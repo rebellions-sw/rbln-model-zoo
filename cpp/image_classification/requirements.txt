@@ -1,2 +1,2 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
-torchvision<=0.21.0
+torchvision<=0.22.0
