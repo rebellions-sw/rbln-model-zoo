@@ -1,5 +1,32 @@
 # Change Log
 
+## July, 4th 2025 (v0.5.11)
+
+* Compatible version:
+
+  * `rebel-compiler`: v0.8.1
+  * `optimum-rbln`: v0.8.1
+* Added new models:
+
+  * `Generative AI`:
+
+    * Cosmos-7B (Text-to-Video / Video-to-Video)
+    * Cosmos-14B (Text-to-Video / Video-to-Video)
+  * `Multimodal`:
+
+    * Gemma-3 (4B / 12B / 27B) – Image-Text-to-Text
+    * ColPali – Visual Document Retrieval
+* Dependency updates
+
+  * PyTorch updated to **v2.7.0**
+  * TorchVision updated to **≤ 0.22.0**
+  * TorchAudio updated to **≤ 2.7.0**
+  * `peft` updated to **≥ 0.15.0**
+  * `huggingface-hub` updated to **≥ 0.23.0**
+* Codebase improvements
+
+  * Removed redundant `torch._dynamo.config.inline_inbuilt_nn_modules = False` overrides (now handled centrally).
+
 ## May, 30th 2025 (v0.5.10)
 - Compatible version:
     - `rebel-compiler`: v0.8.0
