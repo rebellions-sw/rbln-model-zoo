@@ -10,7 +10,7 @@
     * Cosmos-7B (Text-to-Video / Video-to-Video)
     * Cosmos-14B (Text-to-Video / Video-to-Video)
   * `Multimodal`:
-    * Gemma-3 (4B / 12B / 27B) – Image-Text-to-Text
+    * Gemma-3 (4B / 12B) – Image-Text-to-Text
     * ColPali – Visual Document Retrieval
 * Dependency updates
   * PyTorch updated to **v2.7.0**
