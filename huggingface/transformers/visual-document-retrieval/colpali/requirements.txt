@@ -1,0 +1,2 @@
+git+https://github.com/illuin-tech/colpali.git@6f126a136c22d2230a5557eb809dd9134277e1f6
+optimum-rbln
