@@ -3,13 +3,13 @@ from vllm import LLM, SamplingParams
 
 # Make sure the engine configuration
 # matches the parameters used during compilation.
-compiled_model_id = "meta-llama/Meta-Llama-3-8B
+compiled_model_id = "meta-llama/Meta-Llama-3-8B"
 max_seq_len = 8192
 batch_size = 4
 
 llm = LLM(
     model=compiled_model_id,
-    device="rbln",
+    device="auto",
     max_num_seqs=batch_size,
     max_num_batched_tokens=max_seq_len,
     max_model_len=max_seq_len,
