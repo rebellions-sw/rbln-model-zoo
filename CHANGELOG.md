@@ -5,6 +5,7 @@
 * Compatible version:
   * `rebel-compiler`: v0.8.1
   * `optimum-rbln`: v0.8.1
+  * `vllm-rbln`: v0.8.1
 * Added new models:
   * `Generative AI`:
     * Cosmos-7B (Text-to-Video / Video-to-Video)
@@ -15,6 +16,9 @@
   * `Natural Language Processing`:
     * A.X-4.0-light – Text2text-generation
     * Midm-2.0 – Text2text-generation
+  * `vLLM` Toolkit
+    * Encoder-Decoder: T5
+    * Multimodal: BLIP-2, Gemma-3 Vision, Idefics-3, Qwen-2.5-VL
 * Dependency updates
   * PyTorch updated to **v2.7.0**
   * TorchVision updated to **≤ 0.22.0**
