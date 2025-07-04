@@ -31,6 +31,12 @@ def main():
     tokenizer = BartTokenizer.from_pretrained(model_id)
 
     # Load compiled model
+
+    # [info] `facebook/bart-base` and `facebook/bart-large` are
+    # primarily designed for feature extraction.
+    # For text-to-text generation (fill-mask task) in vLLM,
+    # it is recommended to use the BartForConditionalGeneration model
+    # (ex. `lucadiliello/bart-small` model).
     model = RBLNBartForConditionalGeneration.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,

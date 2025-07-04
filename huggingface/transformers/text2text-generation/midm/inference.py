@@ -1,17 +1,24 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNMidmLMHeadModel
-from transformers import AutoConfig, AutoTokenizer
+from optimum.rbln import RBLNLlamaForCausalLM
+from transformers import AutoTokenizer
 
 
 def parsing_argument():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
+        "--model_id",
+        type=str,
+        choices=["Midm-2.0-Base-Instruct", "Midm-2.0-Mini-Instruct"],
+        default="Midm-2.0-Mini-Instruct",
+        help="(str) model type, Size of midm. [Midm-2.0-Base-Instruct, Midm-2.0-Mini-Instruct]",
+    )
+    parser.add_argument(
         "--text",
         type=str,
-        default="###User;AI란?\n###Midm;",
+        default="KT에 대해 소개해줘",
         help="(str) type, text for generation",
     )
     return parser.parse_args()
@@ -19,36 +26,42 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
-    model_id = "KT-AI/midm-bitext-S-7B-inst-v1"
 
-    # Load compiled model
-    config = AutoConfig.from_pretrained(os.path.basename(model_id), trust_remote_code=True)
-    model = RBLNMidmLMHeadModel.from_pretrained(
-        model_id=os.path.basename(model_id),
-        config=config,
-        trust_remote_code=True,
+    model_name = f"K-intelligence/{args.model_id}"
+
+    model = RBLNLlamaForCausalLM.from_pretrained(
+        model_id=os.path.basename(model_name),
         export=False,
     )
 
     # Prepare inputs
-    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
-    inputs = tokenizer(args.text, return_tensors="pt", padding=True)
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer.pad_token = tokenizer.eos_token
+
+    text = args.text
+    messages = [
+        {
+            "role": "system",
+            "content": "Mi:dm(믿:음)은 KT에서 개발한 AI 기반 어시스턴트이다.",
+        },
+        {"role": "user", "content": text},
+    ]
+    text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    model_inputs = tokenizer([text], return_tensors="pt")
 
     # Generate tokens
     output_sequence = model.generate(
-        input_ids=inputs.input_ids[..., :-1],
-        attention_mask=inputs.attention_mask[..., :-1],
-        max_length=8192,
+        model_inputs.input_ids, attention_mask=model_inputs.attention_mask, max_length=32_768
     )
 
-    input_len = inputs.input_ids[..., :-1].shape[-1]
+    input_len = model_inputs.input_ids.shape[-1]
     generated_texts = tokenizer.decode(
         output_sequence[0][input_len:], skip_special_tokens=True, clean_up_tokenization_spaces=True
     )
 
     # Show text and result
-    print("--- text ---")
-    print(args.text)
+    print("--- Text ---")
+    print(text)
     print("--- Result ---")
     print(generated_texts)
 

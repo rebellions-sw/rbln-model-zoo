@@ -1,24 +1,57 @@
 import argparse
-import asyncio
-import sys
 
 from transformers import AutoTokenizer
 
-from vllm import AsyncEngineArgs, AsyncLLMEngine, SamplingParams
+from vllm import LLM, SamplingParams
+
+conversation = [
+    [{"role": "user", "content": "Explain quantum computing in simple terms."}],
+    [{"role": "user", "content": "What are the benefits of renewable energy?"}],
+    [{"role": "user", "content": "Describe the process of photosynthesis."}],
+    [{"role": "user", "content": "How does machine learning work?"}],
+]
 
 
-# Please make sure the engine configurations match the parameters used when compiling.
-def initialize(model_dir, max_seq_len, batch_size):
-    engine_args = AsyncEngineArgs(
-        model=model_dir,
-        device="rbln",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=max_seq_len,
+def parse_args():
+    parser = argparse.ArgumentParser()
+    # You need to set the parameters following rbln_config.json in the compiled model
+    parser.add_argument(
+        "-m",
+        "--model_id",
+        dest="model_id",
+        action="store",
+        help="Compiled model directory path",
+        default="meta-llama/Llama-3.1-8B-Instruct",
     )
-
-    return engine_args
+    parser.add_argument(
+        "-l",
+        "--max-sequence-length",
+        dest="max_seq_len",
+        type=int,
+        action="store",
+        help="Max sequence length",
+        default=32768,
+    )
+    parser.add_argument(
+        "-k",
+        "--kvcache-partition-len",
+        dest="kvcache_partition_len",
+        type=int,
+        action="store",
+        help="KV Cache length",
+        default=32768,
+    )
+    parser.add_argument(
+        "-b",
+        "--batch-size",
+        dest="batch_size",
+        type=int,
+        action="store",
+        help="Batch size",
+        default=1,
+    )
+    args = parser.parse_args()
+    return args.model_id, args.max_seq_len, args.kvcache_partition_len, args.batch_size
 
 
 def stop_tokens(tokenizer):
@@ -31,82 +64,34 @@ def stop_tokens(tokenizer):
         return [tokenizer.eos_token_id]
 
 
-async def run_single(engine, sampling_params, chat, request_id):
-    results_generator = engine.generate(chat, sampling_params, request_id=request_id)
-    final_result = None
-    async for result in results_generator:
-        # You can use the intermediate `result` here, if needed.
-        final_result = result
-    return final_result
-
-
-async def run_multi(engine, sampling_params, chats):
-    tasks = [
-        asyncio.create_task(run_single(engine, sampling_params, chat, i))
-        for (i, chat) in enumerate(chats)
-    ]
-    return [await task for task in tasks]
-
-
-def parse_args():
-    parser = argparse.ArgumentParser()
-
-    # Examples from huggingface model_id : meta-llama/Meta-Llama-3-8B-Instruct
-    parser.add_argument(
-        "-m",
-        "--model_dir",
-        dest="model_dir",
-        action="store",
-        help='Model directory path(ex."Meta-Llama-3-8B-Instruct")',
-    )
-    parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length(ex.8192)",
-    )
-    parser.add_argument(
-        "-b", "--batch-size", dest="batch_size", type=int, action="store", help="Batch size(ex.1)"
-    )
-    if len(sys.argv) < 7:
-        parser.print_help()
-        sys.exit(1)
-    args = parser.parse_args()
-    return args.model_dir, args.max_seq_len, args.batch_size
-
-
 def main():
-    model_dir, max_seq_len, batch_size = parse_args()
-    engine_args = initialize(model_dir, max_seq_len, batch_size)
-    engine = AsyncLLMEngine.from_engine_args(engine_args)
-    tokenizer = AutoTokenizer.from_pretrained(model_dir)
+    # Make sure the engine configuration
+    # matches the parameters used during compilation.
+    model_id, max_seq_len, kvcache_partition_len, batch_size = parse_args()
+    llm = LLM(
+        model=model_id,
+        device="auto",
+        max_num_seqs=batch_size,
+        max_num_batched_tokens=max_seq_len,
+        max_model_len=max_seq_len,
+        block_size=kvcache_partition_len,
+    )
+
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+
     sampling_params = SamplingParams(
         temperature=0.0,
         skip_special_tokens=True,
         stop_token_ids=stop_tokens(tokenizer),
     )
 
-    # Runs a single inference for an example
-    conversation = [{"role": "user", "content": "What is the first letter of English alphabets?"}]
     chat = tokenizer.apply_chat_template(conversation, add_generation_prompt=True, tokenize=False)
-    result = asyncio.run(run_single(engine, sampling_params, chat, "123"))
-    print(result)
 
-    # Runs multi inference for an example
-    conversations = [
-        [{"role": "user", "content": "What is the first letter of English alphabets?"}],
-        [{"role": "user", "content": "What is the last letter of English alphabets?"}],
-    ]
-    chats = [
-        tokenizer.apply_chat_template(conversation, add_generation_prompt=True, tokenize=False)
-        for conversation in conversations
-    ]
-
-    # Runs multiple inferences in parallel
-    results = asyncio.run(run_multi(engine, sampling_params, chats))
-    print(results)
+    outputs = llm.generate(chat, sampling_params)
+    for output in outputs:
+        prompt = output.prompt
+        generated_text = output.outputs[0].text
+        print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
 
 
 if __name__ == "__main__":

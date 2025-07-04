@@ -19,6 +19,11 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
+    # [info] `facebook/bart-base` and `facebook/bart-large` are
+    # primarily designed for feature extraction.
+    # For text-to-text generation (fill-mask task) in vLLM,
+    # it is recommended to use the BartForConditionalGeneration model
+    # (ex. `lucadiliello/bart-small` model).
     model_id = f"facebook/bart-{args.model_name}"
 
     # Compile and export

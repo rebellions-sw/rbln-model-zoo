@@ -1,26 +1,41 @@
+import argparse
 import os
 
-from optimum.rbln import RBLNMidmLMHeadModel
-from transformers import AutoConfig
+from optimum.rbln import RBLNLlamaForCausalLM
+
+DEFAULT_TP_SIZE = {
+    "Midm-2.0-Base-Instruct": 8,
+    "Midm-2.0-Mini-Instruct": 4,
+}
+
+
+def parsing_argument():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--model_id",
+        type=str,
+        choices=["Midm-2.0-Base-Instruct", "Midm-2.0-Mini-Instruct"],
+        default="Midm-2.0-Mini-Instruct",
+        help="(str) model type, Size of midm. [Midm-2.0-Base-Instruct, Midm-2.0-Mini-Instruct]",
+    )
+    return parser.parse_args()
 
 
 def main():
-    model_id = "KT-AI/midm-bitext-S-7B-inst-v1"
+    args = parsing_argument()
 
-    # Compile and export
-    config = AutoConfig.from_pretrained(model_id, trust_remote_code=True)
-    model = RBLNMidmLMHeadModel.from_pretrained(
-        model_id=model_id,
-        config=config,
-        export=True,  # export a PyTorch model to RBLN model with optimum
-        trust_remote_code=True,
+    model_name = f"K-intelligence/{args.model_id}"
+
+    model = RBLNLlamaForCausalLM.from_pretrained(
+        model_id=os.path.basename(model_name),
+        export=True,
         rbln_batch_size=1,
-        rbln_max_seq_len=8192,  # default "max_position_embeddings"
-        rbln_tensor_parallel_size=4,
+        rbln_max_seq_len=32_768,
+        rbln_tensor_parallel_size=DEFAULT_TP_SIZE[os.path.basename(model_name)],
     )
 
-    # Save compiled results to disk
-    model.save_pretrained(os.path.basename(model_id))
+    model.save_pretrained(os.path.basename(model_name))
 
 
 if __name__ == "__main__":
