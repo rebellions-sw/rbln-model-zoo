@@ -1,5 +1,4 @@
 import argparse
-import sys
 
 import requests
 from PIL import Image
@@ -20,14 +19,14 @@ conversation = [
 
 def parse_args():
     parser = argparse.ArgumentParser()
-
-    # Examples from huggingface model_id : llava-hf/llava-v1.6-mistral-7b-hf
+    # You need to set the parameters following rbln_config.json in the compiled model
     parser.add_argument(
         "-m",
-        "--model_dir",
-        dest="model_dir",
+        "--model_id",
+        dest="model_id",
         action="store",
-        help='Model directory path(ex."llava-v1.6-mistral-7b-hf")',
+        help="Compiled model directory path",
+        default="llava-hf/llava-v1.6-mistral-7b-hf",
     )
     parser.add_argument(
         "-l",
@@ -35,30 +34,43 @@ def parse_args():
         dest="max_seq_len",
         type=int,
         action="store",
-        help="Max sequence length(ex.32768)",
+        help="Max sequence length",
+        default=32768,
     )
     parser.add_argument(
-        "-b", "--batch-size", dest="batch_size", type=int, action="store", help="Batch size(ex.1)"
+        "-k",
+        "--kvcache-partition-len",
+        dest="kvcache_partition_len",
+        type=int,
+        action="store",
+        help="KV Cache length",
+        default=16384,
     )
-    if len(sys.argv) < 7:
-        parser.print_help()
-        sys.exit(1)
+    parser.add_argument(
+        "-b",
+        "--batch-size",
+        dest="batch_size",
+        type=int,
+        action="store",
+        help="Batch size",
+        default=1,
+    )
     args = parser.parse_args()
-    return args.model_dir, args.max_seq_len, args.batch_size
+    return args.model_id, args.max_seq_len, args.kvcache_partition_len, args.batch_size
 
 
 def main():
-    model_dir, max_seq_len, batch_size = parse_args()
+    model_id, max_seq_len, kvcache_partition_len, batch_size = parse_args()
     sampling_params = SamplingParams(temperature=0.0, max_tokens=200)
-    processor = LlavaNextProcessor.from_pretrained(model_dir)
+    processor = LlavaNextProcessor.from_pretrained(model_id)
 
     llm = LLM(
-        model=model_dir,
+        model=model_id,
         device="rbln",
         max_num_seqs=batch_size,
         max_num_batched_tokens=max_seq_len,
         max_model_len=max_seq_len,
-        block_size=max_seq_len,
+        block_size=kvcache_partition_len,
         limit_mm_per_prompt={"image": 1},  # The maximum number to accept
     )
 

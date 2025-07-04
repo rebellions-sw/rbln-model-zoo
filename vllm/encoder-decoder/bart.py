@@ -51,13 +51,18 @@ async def run_multi(engine, sampling_params, prompts):
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    # Examples from huggingface model_id : lucadiliello/bart-small
+    # [info] `facebook/bart-base` and `facebook/bart-large` are
+    # primarily designed for feature extraction.
+    # For text-to-text generation (fill-mask task) in vLLM,
+    # it is recommended to use the BartForConditionalGeneration model
+    # (ex. `lucadiliello/bart-small` model).
     parser.add_argument(
         "-m",
         "--model_dir",
         dest="model_dir",
         action="store",
-        help='Model directory path(ex."bart-small")',
+        help="Model directory path",
+        default="lucadiliello/bart-small",
     )
     parser.add_argument(
         "-l",
@@ -65,7 +70,8 @@ def parse_args():
         dest="max_seq_len",
         type=int,
         action="store",
-        help="Max sequence length(ex.512)",
+        help="Max sequence length",
+        default=512,
     )
     parser.add_argument(
         "-b", "--batch-size", dest="batch_size", type=int, action="store", help="Batch size(ex.1)"

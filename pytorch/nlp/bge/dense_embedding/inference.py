@@ -35,6 +35,7 @@ def main():
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer.pad_token = tokenizer.eos_token
     input_q = tokenizer(
         args.query, padding="max_length", return_tensors="pt", max_length=MAX_SEQ_LEN
     )
