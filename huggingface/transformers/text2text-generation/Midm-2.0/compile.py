@@ -16,7 +16,7 @@ def parsing_argument():
         "--model_id",
         type=str,
         choices=["Midm-2.0-Base-Instruct", "Midm-2.0-Mini-Instruct"],
-        default="Midm-2.0-Mini-Instruct",
+        default="Midm-2.0-Base-Instruct",
         help="(str) model type, Size of midm. [Midm-2.0-Base-Instruct, Midm-2.0-Mini-Instruct]",
     )
     return parser.parse_args()
@@ -28,7 +28,7 @@ def main():
     model_name = f"K-intelligence/{args.model_id}"
 
     model = RBLNLlamaForCausalLM.from_pretrained(
-        model_id=os.path.basename(model_name),
+        model_id=model_name,
         export=True,
         rbln_batch_size=1,
         rbln_max_seq_len=32_768,
