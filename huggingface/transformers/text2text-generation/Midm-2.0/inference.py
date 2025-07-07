@@ -12,7 +12,7 @@ def parsing_argument():
         "--model_id",
         type=str,
         choices=["Midm-2.0-Base-Instruct", "Midm-2.0-Mini-Instruct"],
-        default="Midm-2.0-Mini-Instruct",
+        default="Midm-2.0-Base-Instruct",
         help="(str) model type, Size of midm. [Midm-2.0-Base-Instruct, Midm-2.0-Mini-Instruct]",
     )
     parser.add_argument(
