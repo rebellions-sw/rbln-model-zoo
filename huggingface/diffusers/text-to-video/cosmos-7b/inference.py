@@ -124,7 +124,7 @@ def main():
 
     # Inference with upsampled text and Generate video from text
     output = pipe(prompt=upsampled_prompt).frames[0]
-    export_to_video(output, f"{args.text}.mp4", fps=30)
+    export_to_video(output, "t2w_7b.mp4", fps=30)
 
 
 if __name__ == "__main__":
