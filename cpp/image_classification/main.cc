@@ -14,10 +14,10 @@ int main(int argc, char **argv) {
   // Parse arguments
   argparse::ArgumentParser program("image_classification");
   program.add_argument("-i", "--input")
-      .required()
+      .default_value(std::string("tabby.jpg"))
       .help("specify the input image file.");
   program.add_argument("-m", "--model")
-      .required()
+      .default_value(std::string("resnet18.rbln"))
       .help("specify the model file. (.rbln)");
   try {
     program.parse_args(argc, argv);

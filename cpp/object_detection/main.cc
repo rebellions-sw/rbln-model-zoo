@@ -57,10 +57,10 @@ int main(int argc, char **argv) {
   // Parse arguments
   argparse::ArgumentParser program("object_detection");
   program.add_argument("-i", "--input")
-      .required()
+      .default_value(std::string("people4.jpg"))
       .help("specify the input image file.");
   program.add_argument("-m", "--model")
-      .required()
+      .default_value(std::string("yolov8n.rbln"))
       .help("specify the model file. (.rbln)");
   program.add_argument("-o", "--output")
       .default_value("output.bin")

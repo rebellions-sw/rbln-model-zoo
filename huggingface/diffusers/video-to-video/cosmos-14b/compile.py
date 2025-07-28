@@ -1,9 +1,32 @@
 import os
 
-from optimum.rbln import RBLNCosmosVideoToWorldPipeline
+from optimum.rbln import RBLNCosmosVideoToWorldPipeline, RBLNLlavaForConditionalGeneration
 
 
 def main():
+    # step 1. Compile Cosmos Upsampler
+    upsampler_model_id = "mistral-community/pixtral-12b"
+
+    upsampler = RBLNLlavaForConditionalGeneration.from_pretrained(
+        upsampler_model_id,
+        export=True,
+        rbln_config={
+            "vision_tower": {
+                "batch_size": 1,
+                "output_hidden_states": True,
+            },
+            "language_model": {
+                "attn_impl": "eager",
+                "max_seq_len": 4096,
+                "tensor_parallel_size": 4,
+                "use_inputs_embeds": True,
+            },
+        },
+    )
+    # Save upsampler compiled results to disk
+    upsampler.save_pretrained(os.path.basename(upsampler_model_id))
+
+    # step 2. Compile Cosmos core Pipeline (transformer, text_encoder, vae)
     model_id = "nvidia/Cosmos-1.0-Diffusion-14B-Video2World"
 
     # By default, the generated video is a 4-second clip with a resolution of 704x1280 pixels and a frame rate of 30 frames per second (fps).
@@ -23,6 +46,11 @@ def main():
             "create_runtimes": False,
             "transformer": {
                 "tensor_parallel_size": 4,
+            },
+            "safety_checker": {
+                "aegis": {
+                    "tensor_parallel_size": 4,
+                },
             },
         },
     )

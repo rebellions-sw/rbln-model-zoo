@@ -36,7 +36,6 @@ def text_upsampling(text_upsampler, prompt, tokenizer, max_gen_len=512):
         inputs.input_ids,
         attention_mask=inputs.attention_mask,
         max_length=min(1024, input_len + max_gen_len),
-        do_sample=False,
     )
     extended_prompt = tokenizer.decode(
         output_sequence[0][input_len:], skip_special_tokens=True, clean_up_tokenization_spaces=True
@@ -124,7 +123,7 @@ def main():
 
     # Inference with upsampled text and Generate video from text
     output = pipe(prompt=upsampled_prompt).frames[0]
-    export_to_video(output, "t2w_7b.mp4", fps=30)
+    export_to_video(output, f"{os.path.basename(model_id)}.mp4", fps=30)
 
 
 if __name__ == "__main__":
