@@ -1,5 +1,25 @@
 # Change Log
 
+## July, 31th 2025 (v0.5.12)
+
+* Compatible version:
+  * `rebel-compiler`: v0.8.2
+  * `optimum-rbln`: v0.8.2
+  * `vllm-rbln`: v0.8.2
+  * `docs.rbln.ai`: v0.8.2
+* **Added new examples**
+  * `video-to-video`: Cosmos‑7B / Cosmos‑14B + **Pixtral‑12B** prompt upsampler path.
+  * `image-text-to-text`: **LLaVA‑1.5‑7B**.
+  * `image-text-to-text`: **Pixtral‑12B**.
+  * `sentence-similarity`: **Qwen3 Embedding** (0.6B, 4B) and **Qwen3 Reranker** (0.6B, 4B).
+  * `text2text-generation`: **Qwen2.5** (0.5B, 1.5B, 3B); **Qwen3** (0.6B, 1.7B, 4B, 8B).
+  * `text2text-generation`: **Pegasus** (e.g., `google/pegasus-xsum`).
+* **Dependency updates**
+
+  * **CMake ≥ 3.22** required for all C++ samples (`cpp/*/requirements.txt`).
+  * **FFmpeg ≥ 5** required when using **torchcodec**.
+  * **torchcodec ≥ 0.4.0** added to AST/Wav2Vec/Whisper examples.
+
 ## July, 4th 2025 (v0.5.11)
 
 * Compatible version:
