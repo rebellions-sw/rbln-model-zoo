@@ -1,0 +1,2 @@
+optimum-rbln
+sentencepiece>=0.2.0

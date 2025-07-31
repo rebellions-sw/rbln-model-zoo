@@ -25,7 +25,7 @@ def main():
     # Save upsampler compiled results to disk
     text_upsampler.save_pretrained(os.path.basename(upsampler_model_id))
 
-    # step 2. Compile Cosmos Safety Checker
+    # step 2. Compile Cosmos core Pipeline (transformer, text_encoder, vae)
     model_id = "nvidia/Cosmos-1.0-Diffusion-7B-Text2World"
 
     # By default, the generated video is a 4-second clip with a resolution of 704x1280 pixels and a frame rate of 30 frames per second (fps).
@@ -35,7 +35,6 @@ def main():
     height = 704
     width = 1280
 
-    # step 3. Compile Cosmos core Pipeline (transformer, text_encoder, vae)
     pipe = RBLNCosmosTextToWorldPipeline.from_pretrained(
         model_id,
         export=True,  # export PyTorch models to RBLN models with optimum
@@ -45,6 +44,11 @@ def main():
             "create_runtimes": False,
             "transformer": {
                 "tensor_parallel_size": 4,
+            },
+            "safety_checker": {
+                "aegis": {
+                    "tensor_parallel_size": 4,
+                },
             },
         },
     )

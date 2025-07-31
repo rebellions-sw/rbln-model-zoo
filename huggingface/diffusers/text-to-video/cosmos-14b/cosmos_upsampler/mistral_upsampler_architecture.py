@@ -49,6 +49,8 @@ class MistralNeMoAttention(DecoderOnlyAttention):
         use_position_ids,
         kvcache_block_size,
         is_sliding=False,
+        attn_impl="eager",
+        kvcache_partition_len=None,
     ):
         nn.Module.__init__(self)
         self._original_mod = self_attn
@@ -62,7 +64,16 @@ class MistralNeMoAttention(DecoderOnlyAttention):
         self.use_attention_mask = use_attention_mask
         self.use_position_ids = use_position_ids
         self.is_sliding = is_sliding
-        self.attention = self.get_attention()
+        self.attn_impl = attn_impl
+
+        if self.is_sliding and self.attn_impl != "eager":
+            raise NotImplementedError(
+                "Sliding window attention is only supported with eager attention."
+            )
+
+        self.kvcache_partition_len = kvcache_partition_len
+
+        setattr(self, self.get_attention_name(), self.create_attention_op())
         self.kvcache_block_size = kvcache_block_size
         self.__post_init__()
 
@@ -169,7 +180,7 @@ class MistralNeMoForTextUpsampler(DecoderOnlyForCausalLM):
         if self.phase == "prefill":
             hidden_states = hidden_states[:, query_position.to(torch.int).unsqueeze(0)]
 
-        logits = self._original_mod.model.output(hidden_states)
+        logits = self._original_mod.lm_head(hidden_states)
         return logits
 
 
@@ -205,33 +216,20 @@ class RotaryEmbedding1DV1(nn.Module):
 
 
 class MistralNeMoForTextUpsamplerWrapper(DecoderOnlyWrapper):
-    def convert_to_rbln_causal_lm(self, causal_lm, max_seq_len: int):
-        new_layers = []
-        for layer in causal_lm.model.layers:
-            if self.attn_impl == "eager":
-                new_self_attn = MistralNeMoAttention(
-                    layer.attention,
-                    self.use_attention_mask,
-                    use_position_ids=self.use_position_ids,
-                    kvcache_block_size=self.kvcache_block_size,
-                    is_sliding=False,
-                )
-            else:
-                raise NotImplementedError(f"Unknown attn : {self.attn_impl}")
+    def get_attn_layer(self, layer):
+        return layer.attention
 
-            new_layer = MistralNeMoLayer(layer, new_self_attn)
-            new_layers.append(new_layer)
+    def get_rbln_attn_class(self):
+        return MistralNeMoAttention
 
-        new_model = MistralNeMoModel(
-            causal_lm.model,
-            new_layers,
-            partition_len=self.kvcache_partition_len,
-            max_seq_len=max_seq_len,
-            kvcache_block_size=self.kvcache_block_size,
-            sliding_window_layers=self.sliding_window_layers,
-        )
-        new_causal_lm = MistralNeMoForTextUpsampler(causal_lm, new_model)
-        return new_causal_lm
+    def get_rbln_layer_class(self):
+        return MistralNeMoLayer
+
+    def get_rbln_model_class(self):
+        return MistralNeMoModel
+
+    def get_rbln_causal_lm_class(self):
+        return MistralNeMoForTextUpsampler
 
     def get_rotary_emb(self, max_seq_len):
         return RotaryEmbedding1DV1(config=self.config, max_seq_len_cached=max_seq_len)

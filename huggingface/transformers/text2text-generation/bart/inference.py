@@ -50,8 +50,7 @@ def main():
 
     # Generate tokens
     output_sequence = model.generate(
-        input_ids=inputs["input_ids"],
-        attention_mask=inputs["attention_mask"],
+        **inputs,
         max_length=1024,
         **generation_kwargs,
     )

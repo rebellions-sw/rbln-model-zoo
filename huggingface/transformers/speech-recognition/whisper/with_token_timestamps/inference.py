@@ -57,7 +57,7 @@ def main():
     generate_kwargs = {"repetition_penalty": 1.3, "return_token_timestamps": True}
 
     with torch.no_grad():
-        outputs = pipe(dataset[0]["audio"], generate_kwargs=generate_kwargs)
+        outputs = pipe(dataset[0]["audio"]["array"], generate_kwargs=generate_kwargs)
 
     print("--- Result ---")
     print("--Text--")

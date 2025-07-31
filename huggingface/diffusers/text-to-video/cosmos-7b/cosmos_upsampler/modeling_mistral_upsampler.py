@@ -131,4 +131,6 @@ class RBLNMistralNeMoForTextUpsampler(RBLNDecoderOnlyModelForCausalLM):
         # Replace original model configuration to PretrainedConfig
         model.config = config
 
+        model.lm_head = model.model.output
+        del model.model.output
         return model

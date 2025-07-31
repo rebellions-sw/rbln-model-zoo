@@ -2,7 +2,8 @@ import argparse
 import os
 
 from diffusers.utils import export_to_video, load_video
-from optimum.rbln import RBLNCosmosVideoToWorldPipeline
+from optimum.rbln import RBLNCosmosVideoToWorldPipeline, RBLNLlavaForConditionalGeneration
+from transformers import AutoProcessor
 
 
 def parsing_argument():
@@ -10,7 +11,7 @@ def parsing_argument():
     parser.add_argument(
         "--text",
         type=str,
-        default="A dynamic and visually captivating video showcases a sleek, dark-colored SUV driving along a narrow dirt road that runs parallel to a vast, expansive ocean. The setting is a rugged coastal landscape, with the road cutting through dry, golden-brown grass that stretches across rolling hills. The ocean, a deep blue, extends to the horizon, providing a stunning backdrop to the scene. The SUV moves swiftly along the road, kicking up a trail of dust that lingers in the air behind it, emphasizing the speed and power of the vehicle. The camera maintains a steady tracking shot, following the SUV from a slightly elevated angle, which allows for a clear view of both the vehicle and the surrounding scenery. The lighting is natural, suggesting a time of day when the sun is high, casting minimal shadows and highlighting the textures of the grass and the glint of the ocean. The video captures the essence of freedom and adventure, with the SUV navigating the isolated road with ease, suggesting a journey or exploration theme. The consistent motion of the vehicle and the dust trail create a sense of continuity and fluidity throughout the video, making it engaging and immersive.",
+        default=None,
         help="(str) type, Text prompt for generation",
     )
     return parser.parse_args()
@@ -18,6 +19,45 @@ def parsing_argument():
 
 def main():
     args = parsing_argument()
+    video = load_video(
+        "https://github.com/nvidia-cosmos/cosmos-predict1/raw/refs/heads/main/assets/diffusion/video2world_input1.mp4"
+    )
+
+    if args.text is None:
+        print(
+            "Text prompt for generation is not provided. The prompt will be generated with the Video2World Prompt Upsampler (Pixtral-12B)."
+        )
+        upsampler_model_id = "mistral-community/pixtral-12b"
+        upsampler = RBLNLlavaForConditionalGeneration.from_pretrained(
+            model_id=os.path.basename(upsampler_model_id),
+            export=False,
+            rbln_config={
+                "vision_tower": {
+                    "device": 7,
+                },
+                "language_model": {
+                    "device": [4, 5, 6, 7],
+                },
+            },
+        )
+        processor = AutoProcessor.from_pretrained(upsampler_model_id)
+        template = (
+            "[INST][IMG]\n"
+            + "Your task is to transform a given prompt into a refined and concise video description, no more than 150 words. Focus only on the content, no filler words or descriptions on the style. Never mention things outside the video.[/INST]"
+        )
+        inputs = processor(images=video[-1], text=template, return_tensors="pt")
+
+        generated_ids = upsampler.generate(**inputs, max_new_tokens=400)
+        prompt = processor.batch_decode(
+            generated_ids[:, inputs["input_ids"].shape[1] :],
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False,
+        )[0]
+    else:
+        prompt = args.text
+
+    print(f"Input prompt: {prompt}")
+
     model_id = "nvidia/Cosmos-1.0-Diffusion-7B-Video2World"
 
     # Load all pipeline compiled model
@@ -45,7 +85,7 @@ def main():
                 "device_map": {"encoder": 5, "decoder": 6},
             },
             "safety_checker": {
-                "aegis": {"device": [4, 5, 6, 7]},
+                "aegis": {"device": [0, 1, 2, 3]},
                 "siglip_encoder": {"device": 7},
                 "video_safety_model": {"device": 7},
                 "face_blur_filter": {"device": 7},
@@ -53,15 +93,9 @@ def main():
         },
     )
 
-    print(f"Input prompt: {args.text}")
-
-    video = load_video(
-        "https://github.com/nvidia-cosmos/cosmos-predict1/raw/refs/heads/main/assets/diffusion/video2world_input1.mp4"
-    )
-
     # Inference with video & text pair and Generate video from them
-    output = pipe(video=video, prompt=args.text).frames[0]
-    export_to_video(output, "v2w_7b.mp4", fps=30)
+    output = pipe(video=video, prompt=prompt).frames[0]
+    export_to_video(output, f"{os.path.basename(model_id)}.mp4", fps=30)
 
 
 if __name__ == "__main__":

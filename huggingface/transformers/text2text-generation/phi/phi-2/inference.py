@@ -38,7 +38,6 @@ def main():
     # Generate tokens
     output_sequence = model.generate(
         **inputs,
-        do_sample=False,
         max_length=200,
     )
 
