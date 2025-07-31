@@ -32,7 +32,7 @@ def stop_tokens(tokenizer):
 
 
 async def run_single(engine, sampling_params, chat, request_id):
-    results_generator = engine.generate(chat, sampling_params, request_id=request_id)
+    results_generator = engine.generate(chat, sampling_params, request_id=str(request_id))
     final_result = None
     async for result in results_generator:
         # You can use the intermediate `result` here, if needed.
