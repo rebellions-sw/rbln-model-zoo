@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNDistilBertForQuestionAnswering
+from optimum.rbln import RBLNAutoModelForQuestionAnswering
 
 
 def main():
     model_id = "distilbert/distilbert-base-uncased-distilled-squad"
 
     # Compile and export
-    model = RBLNDistilBertForQuestionAnswering.from_pretrained(
+    model = RBLNAutoModelForQuestionAnswering.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

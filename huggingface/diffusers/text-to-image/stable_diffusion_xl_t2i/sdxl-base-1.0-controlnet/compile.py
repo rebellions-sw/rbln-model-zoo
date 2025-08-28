@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers import AutoencoderKL, ControlNetModel
-from optimum.rbln import RBLNStableDiffusionXLControlNetPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def parsing_argument():
@@ -30,7 +30,7 @@ def main():
     vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix")
 
     # Compile and export
-    pipe = RBLNStableDiffusionXLControlNetPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         controlnet=controlnet,

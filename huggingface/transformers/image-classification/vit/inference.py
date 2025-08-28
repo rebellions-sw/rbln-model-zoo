@@ -1,16 +1,16 @@
 import os
 import urllib
 
-from optimum.rbln import RBLNViTForImageClassification
+from optimum.rbln import RBLNAutoModelForImageClassification
 from PIL import Image
-from transformers import ViTFeatureExtractor
+from transformers import AutoFeatureExtractor
 
 
 def main():
     model_id = "google/vit-large-patch16-224"
 
     # Load compiled model
-    model = RBLNViTForImageClassification.from_pretrained(
+    model = RBLNAutoModelForImageClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
@@ -24,7 +24,7 @@ def main():
 
     image = Image.open(img_path)
 
-    image_processor = ViTFeatureExtractor.from_pretrained(model_id)
+    image_processor = AutoFeatureExtractor.from_pretrained(model_id)
     inputs = image_processor([image], return_tensors="pt")
 
     # Run inference

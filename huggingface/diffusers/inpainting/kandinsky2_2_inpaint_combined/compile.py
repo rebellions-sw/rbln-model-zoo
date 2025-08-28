@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNKandinskyV22InpaintCombinedPipeline
+from optimum.rbln import RBLNAutoPipelineForInpainting
 
 
 def main():
     model_id = "kandinsky-community/kandinsky-2-2-decoder-inpaint"
 
     # Compile and export
-    pipe = RBLNKandinskyV22InpaintCombinedPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForInpainting.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_config={

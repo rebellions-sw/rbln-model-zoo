@@ -1,5 +1,20 @@
 # Change Log
 
+## Aug., 28th 2025 (v0.8.3)
+
+* Compatible version:
+  * `rebel-compiler`: v0.8.3
+  * `optimum-rbln`: v0.8.3
+  * `vllm-rbln`: v0.8.3
+  * `docs.rbln.ai`: v0.8.3
+* **Added new examples**
+  * `video-segmentation`: **SAM2**.
+  * `depth-estimation`: **Depth-Anything-v2**.
+  * `segmentation`: **Yolo11-seg**.
+  * `text2text-generation`: **Qwen2.5** (32B, 72B); **Qwen3** (32B).
+* **Dependency updates**
+  * No updates to requirements.txt.
+
 ## July, 31th 2025 (v0.5.12)
 
 * Compatible version:

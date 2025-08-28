@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNViTForImageClassification
+from optimum.rbln import RBLNAutoModelForImageClassification
 
 
 def main():
     model_id = "google/vit-large-patch16-224"
 
     # Compile and export
-    model = RBLNViTForImageClassification.from_pretrained(
+    model = RBLNAutoModelForImageClassification.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

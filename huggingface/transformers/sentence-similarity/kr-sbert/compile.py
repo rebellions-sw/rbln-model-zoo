@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNBertModel
+from optimum.rbln import RBLNAutoModelForTextEncoding
 
 
 def main():
     model_id = "snunlp/KR-SBERT-V40K-klueNLI-augSTS"
 
     # Compile and export
-    model = RBLNBertModel.from_pretrained(
+    model = RBLNAutoModelForTextEncoding.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

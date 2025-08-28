@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNGPT2LMHeadModel
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import GPT2Tokenizer
 
 
@@ -29,7 +29,7 @@ def main():
     model_id = f"openai-community/{args.model_name}"
 
     # Load compiled model
-    model = RBLNGPT2LMHeadModel.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

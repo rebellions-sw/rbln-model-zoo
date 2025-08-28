@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNStableDiffusionXLPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def parsing_argument():
@@ -21,7 +21,7 @@ def main():
     guidance_scale = args.guidance_scale
 
     # Compile and export
-    pipe = RBLNStableDiffusionXLPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_guidance_scale=guidance_scale,

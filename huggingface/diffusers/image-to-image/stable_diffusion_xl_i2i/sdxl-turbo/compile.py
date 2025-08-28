@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNStableDiffusionXLImg2ImgPipeline
+from optimum.rbln import RBLNAutoPipelineForImage2Image
 
 
 def parsing_argument():
@@ -26,7 +26,7 @@ def main():
     model_id = "stabilityai/sdxl-turbo"
 
     # Compile and export
-    pipe = RBLNStableDiffusionXLImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_guidance_scale=0.0,

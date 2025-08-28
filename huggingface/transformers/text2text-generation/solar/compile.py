@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
     model_id = "upstage/SOLAR-10.7B-Instruct-v1.0"
 
     # Compile and export
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

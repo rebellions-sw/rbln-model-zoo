@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusion3Pipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
     model_id = "stabilityai/stable-diffusion-3-medium-diffusers"
 
     # Compile and export
-    pipe = RBLNStableDiffusion3Pipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_img_height=1024,

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNDPTForDepthEstimation
+from optimum.rbln import RBLNAutoModelForDepthEstimation
 
 
 def parsing_argument():
@@ -21,7 +21,7 @@ def main():
     model_id = "Intel/dpt-large"
 
     # Compile and export
-    model = RBLNDPTForDepthEstimation.from_pretrained(
+    model = RBLNAutoModelForDepthEstimation.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

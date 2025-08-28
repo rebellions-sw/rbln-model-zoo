@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 from diffusers.utils import load_image
-from optimum.rbln import RBLNKandinskyV22InpaintCombinedPipeline
+from optimum.rbln import RBLNAutoPipelineForInpainting
 from PIL import Image
 
 
@@ -25,7 +25,7 @@ def main():
     prompt = args.prompt
 
     # Load compiled model
-    pipe = RBLNKandinskyV22InpaintCombinedPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForInpainting.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

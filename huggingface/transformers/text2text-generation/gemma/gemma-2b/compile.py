@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNGemmaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
     model_id = "google/gemma-2b-it"
 
     # Compile and export
-    model = RBLNGemmaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

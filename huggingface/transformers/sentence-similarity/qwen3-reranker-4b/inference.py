@@ -1,7 +1,7 @@
 import os
 
 import torch
-from optimum.rbln import RBLNQwen3ForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -9,7 +9,7 @@ def main():
     model_id = "Qwen/Qwen3-Reranker-4B"
 
     # Load compiled model
-    model = RBLNQwen3ForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

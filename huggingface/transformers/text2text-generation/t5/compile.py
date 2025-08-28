@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNT5ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSeq2SeqLM
 
 DEFAULT_TP_SIZE = {
     "t5-small": 1,
@@ -30,7 +30,7 @@ def main():
     model_id = "google-t5/" + args.model_name
 
     # Compile and export
-    model = RBLNT5ForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSeq2SeqLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

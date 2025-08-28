@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 DEFAULT_TP_SIZE = {
     "Midm-2.0-Base-Instruct": 8,
@@ -27,7 +27,7 @@ def main():
 
     model_name = f"K-intelligence/{args.model_id}"
 
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_name,
         export=True,
         rbln_batch_size=1,

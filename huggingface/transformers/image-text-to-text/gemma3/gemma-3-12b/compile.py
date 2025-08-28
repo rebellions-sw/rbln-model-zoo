@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNGemma3ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForImageTextToText
 
 
 def main():
     model_id = "google/gemma-3-12b-it"
     model_dir = os.path.basename(model_id)
 
-    model = RBLNGemma3ForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForImageTextToText.from_pretrained(
         model_id,
         export=True,
         rbln_config={

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNGPT2LMHeadModel
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def parsing_argument():
@@ -21,7 +21,7 @@ def main():
     model_id = f"openai-community/{args.model_name}"
 
     # Compile and export
-    model = RBLNGPT2LMHeadModel.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

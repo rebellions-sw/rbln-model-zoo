@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusionPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
     model_id = "benjamin-paine/stable-diffusion-v1-5"
 
     # Compile and export
-    pipe = RBLNStableDiffusionPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_config={"unet": {"batch_size": 2}},

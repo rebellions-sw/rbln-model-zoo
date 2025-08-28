@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers import ControlNetModel
-from optimum.rbln import RBLNDPTForDepthEstimation, RBLNStableDiffusionControlNetImg2ImgPipeline
+from optimum.rbln import RBLNAutoModelForDepthEstimation, RBLNAutoPipelineForImage2Image
 
 
 def parsing_argument():
@@ -29,14 +29,14 @@ def main():
     controlnet = ControlNetModel.from_pretrained("lllyasviel/control_v11f1p_sd15_depth")
 
     # Compile and export
-    pipe = RBLNStableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_img_width=args.img_width,
         rbln_img_height=args.img_height,
         controlnet=controlnet,
     )
-    dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="Intel/dpt-large", export=True)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="Intel/dpt-large", export=True)
 
     # Save compiled results to disk
     pipe.save_pretrained(os.path.basename(model_id))

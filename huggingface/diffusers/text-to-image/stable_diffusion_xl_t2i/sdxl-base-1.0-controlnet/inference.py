@@ -4,7 +4,7 @@ import os
 import cv2
 import numpy as np
 from diffusers.utils import load_image
-from optimum.rbln import RBLNStableDiffusionXLControlNetPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 from PIL import Image
 
 
@@ -44,7 +44,7 @@ def main():
     canny_image = Image.fromarray(image)
 
     # Load compiled model
-    pipe = RBLNStableDiffusionXLControlNetPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

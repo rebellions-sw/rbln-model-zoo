@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers.utils import load_image
-from optimum.rbln import RBLNStableDiffusion3Img2ImgPipeline
+from optimum.rbln import RBLNAutoPipelineForImage2Image
 
 
 def parsing_argument():
@@ -23,7 +23,7 @@ def main():
     prompt = args.prompt
 
     # Load compiled model
-    pipe = RBLNStableDiffusion3Img2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
         rbln_config={

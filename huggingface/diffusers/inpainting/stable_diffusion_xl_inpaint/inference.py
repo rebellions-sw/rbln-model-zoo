@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers.utils import load_image
-from optimum.rbln import RBLNStableDiffusionXLInpaintPipeline
+from optimum.rbln import RBLNAutoPipelineForInpainting
 
 
 def parsing_argument():
@@ -29,7 +29,7 @@ def main():
     guidance_scale = args.guidance_scale
 
     # Load compiled model
-    pipe = RBLNStableDiffusionXLInpaintPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForInpainting.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

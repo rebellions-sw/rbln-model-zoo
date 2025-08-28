@@ -1,7 +1,7 @@
 import os
 
 from diffusers import LCMScheduler
-from optimum.rbln import RBLNStableDiffusionXLPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
@@ -10,7 +10,7 @@ def main():
 
     # Load the previously compiled model with fused LoRA weights
     model_path = f"{os.path.basename(model_id)}-pixel-lora"
-    pipe = RBLNStableDiffusionXLPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_path,
         # Set export=False since we're loading an already compiled model
         export=False,

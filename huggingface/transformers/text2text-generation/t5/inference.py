@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNT5ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSeq2SeqLM
 from transformers import AutoTokenizer
 
 
@@ -30,7 +30,7 @@ def main():
     text = args.text
 
     # Load compiled model
-    model = RBLNT5ForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSeq2SeqLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

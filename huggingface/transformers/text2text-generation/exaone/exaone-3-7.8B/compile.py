@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNExaoneForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     model_id = "LGAI-EXAONE/EXAONE-3.0-7.8B-Instruct"
 
     # Compile and export
-    model = RBLNExaoneForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

@@ -4,7 +4,7 @@ import os
 import numpy as np
 import torch
 from diffusers.utils import load_image
-from optimum.rbln import RBLNDPTForDepthEstimation, RBLNStableDiffusionXLControlNetImg2ImgPipeline
+from optimum.rbln import RBLNAutoModelForDepthEstimation, RBLNAutoPipelineForImage2Image
 from PIL import Image
 from transformers import DPTFeatureExtractor
 
@@ -59,11 +59,11 @@ def main():
         return image
 
     # Load compiled model
-    pipe = RBLNStableDiffusionXLControlNetImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
-    dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="dpt-hybrid-midas", export=False)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="dpt-hybrid-midas", export=False)
     depth_image = get_depth_map(image, dpt)
 
     # Generate image

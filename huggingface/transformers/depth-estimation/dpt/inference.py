@@ -2,7 +2,7 @@ import os
 
 import requests
 import torch
-from optimum.rbln import RBLNDPTForDepthEstimation
+from optimum.rbln import RBLNAutoModelForDepthEstimation
 from PIL import Image
 from transformers import AutoImageProcessor
 
@@ -11,7 +11,7 @@ def main():
     model_id = "Intel/dpt-large"
 
     # Load compiled model
-    model = RBLNDPTForDepthEstimation.from_pretrained(
+    model = RBLNAutoModelForDepthEstimation.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,  # export a PyTorch model to RBLN model with optimum
     )

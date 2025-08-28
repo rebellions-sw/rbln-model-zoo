@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusionInpaintPipeline
+from optimum.rbln import RBLNAutoPipelineForInpainting
 
 
 def main():
     model_id = "stable-diffusion-v1-5/stable-diffusion-inpainting"
 
     # Compile and export
-    pipe = RBLNStableDiffusionInpaintPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForInpainting.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_guidance_scale=7.5,

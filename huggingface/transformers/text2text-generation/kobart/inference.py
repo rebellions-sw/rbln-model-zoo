@@ -1,7 +1,7 @@
 import os
 
 import torch
-from optimum.rbln import RBLNBartForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSeq2SeqLM
 from transformers import PreTrainedTokenizerFast
 
 
@@ -11,7 +11,7 @@ def main():
     tokenizer = PreTrainedTokenizerFast.from_pretrained(model_id)
 
     # Load compiled model
-    model = RBLNBartForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSeq2SeqLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

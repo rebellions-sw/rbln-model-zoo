@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from diffusers import UniPCMultistepScheduler
 from diffusers.utils import load_image
-from optimum.rbln import RBLNDPTForDepthEstimation, RBLNStableDiffusionControlNetImg2ImgPipeline
+from optimum.rbln import RBLNAutoModelForDepthEstimation, RBLNAutoPipelineForImage2Image
 from transformers import pipeline
 
 
@@ -26,12 +26,12 @@ def main():
     prompt = args.prompt
 
     # Load compiled models
-    pipe = RBLNStableDiffusionControlNetImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
         scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
     )
-    dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="dpt-large", export=False)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="dpt-large", export=False)
     # Prepare inputs
     image = load_image(
         "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/controlnet-img2img.jpg"

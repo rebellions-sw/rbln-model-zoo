@@ -5,7 +5,7 @@ import urllib.request
 
 import numpy as np
 import torch
-from optimum.rbln import RBLNRobertaForSequenceClassification
+from optimum.rbln import RBLNAutoModelForSequenceClassification
 from transformers import RobertaTokenizerFast
 
 
@@ -47,7 +47,7 @@ def main():
     model_id = f"cardiffnlp/twitter-roberta-base-{task}"
 
     # Load compiled model
-    model = RBLNRobertaForSequenceClassification.from_pretrained(
+    model = RBLNAutoModelForSequenceClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
