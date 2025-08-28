@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNGemmaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -21,7 +21,7 @@ def main():
     model_id = "google/gemma-2b-it"
 
     # Load compiled model
-    model = RBLNGemmaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

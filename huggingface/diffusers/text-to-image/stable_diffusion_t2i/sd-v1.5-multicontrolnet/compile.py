@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers import ControlNetModel, UniPCMultistepScheduler
-from optimum.rbln import RBLNStableDiffusionControlNetPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def parsing_argument():
@@ -33,7 +33,7 @@ def main():
         controlnets.append(controlnet)
 
     # Compile and export
-    pipe = RBLNStableDiffusionControlNetPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         controlnet=controlnets,

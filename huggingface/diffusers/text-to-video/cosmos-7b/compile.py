@@ -46,7 +46,7 @@ def main():
                 "tensor_parallel_size": 4,
             },
             "safety_checker": {
-                "aegis": {
+                "llamaguard3": {
                     "tensor_parallel_size": 4,
                 },
             },

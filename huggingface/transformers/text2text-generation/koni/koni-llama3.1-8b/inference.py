@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -22,7 +22,7 @@ def main():
     model_id = "KISTI-KONI/KONI-Llama3.1-8B-Instruct-20241024"
 
     # Load compiled model
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

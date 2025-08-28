@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNBertForQuestionAnswering
+from optimum.rbln import RBLNAutoModelForQuestionAnswering
 from transformers import pipeline
 
 
@@ -39,7 +39,7 @@ def main():
     )
 
     # Load compiled model
-    model = RBLNBertForQuestionAnswering.from_pretrained(
+    model = RBLNAutoModelForQuestionAnswering.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

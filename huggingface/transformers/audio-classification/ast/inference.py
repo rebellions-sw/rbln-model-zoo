@@ -2,7 +2,7 @@ import os
 
 import torch
 from datasets import load_dataset
-from optimum.rbln import RBLNASTForAudioClassification
+from optimum.rbln import RBLNAutoModelForAudioClassification
 from transformers import AutoFeatureExtractor
 
 
@@ -22,7 +22,7 @@ def main():
     input_values = feature_extractor(sample["array"], return_tensors="pt").input_values
 
     # Load compiled model
-    model = RBLNASTForAudioClassification.from_pretrained(
+    model = RBLNAutoModelForAudioClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

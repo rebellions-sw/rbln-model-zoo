@@ -1,11 +1,11 @@
 import os
 
-from optimum.rbln import RBLNBlip2ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 
 
 def main():
     model_id = "Salesforce/blip2-opt-6.7b"
-    model = RBLNBlip2ForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_id,
         export=True,
         rbln_config={

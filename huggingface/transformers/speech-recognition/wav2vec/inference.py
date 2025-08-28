@@ -2,14 +2,14 @@ import os
 
 import torch
 from datasets import load_dataset
-from optimum.rbln import RBLNWav2Vec2ForCTC
-from transformers import Wav2Vec2Processor
+from optimum.rbln import RBLNAutoModelForCTC
+from transformers import AutoProcessor
 
 
 def main():
     model_id = "facebook/wav2vec2-base-960h"
 
-    processor = Wav2Vec2Processor.from_pretrained(model_id)
+    processor = AutoProcessor.from_pretrained(model_id)
 
     # Prepare inputs
     ds = load_dataset(
@@ -28,7 +28,7 @@ def main():
     ).input_values
 
     # Load compiled model
-    model = RBLNWav2Vec2ForCTC.from_pretrained(
+    model = RBLNAutoModelForCTC.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNXLMRobertaForSequenceClassification
+from optimum.rbln import RBLNAutoModelForSequenceClassification
 from transformers import AutoTokenizer
 
 MAX_SEQ_LEN_CFG = {
@@ -42,7 +42,7 @@ def main():
     model_id = f"BAAI/bge-reranker-{args.model_name}"
 
     # Load compiled model
-    model = RBLNXLMRobertaForSequenceClassification.from_pretrained(
+    model = RBLNAutoModelForSequenceClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

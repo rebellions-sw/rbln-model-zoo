@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNResNetForImageClassification
+from optimum.rbln import RBLNAutoModelForImageClassification
 
 
 def main():
     model_id = "microsoft/resnet-50"
 
     # Compile and export
-    model = RBLNResNetForImageClassification.from_pretrained(
+    model = RBLNAutoModelForImageClassification.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

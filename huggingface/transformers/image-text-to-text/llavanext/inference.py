@@ -1,9 +1,9 @@
 import os
 
 import requests
-from optimum.rbln import RBLNLlavaNextForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 from PIL import Image
-from transformers import LlavaNextProcessor
+from transformers import AutoProcessor
 
 
 def main():
@@ -11,8 +11,8 @@ def main():
     model_dir = os.path.basename(model_id)
 
     # Load compiled model
-    processor = LlavaNextProcessor.from_pretrained(model_dir)
-    model = RBLNLlavaNextForConditionalGeneration.from_pretrained(model_dir, export=False)
+    processor = AutoProcessor.from_pretrained(model_dir)
+    model = RBLNAutoModelForVision2Seq.from_pretrained(model_dir, export=False)
 
     # Prepare image and text prompt, using the appropriate prompt template
     url = "https://rbln-public.s3.ap-northeast-2.amazonaws.com/images/tabby.jpg"

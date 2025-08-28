@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
     model_id = "KISTI-KONI/KONI-Llama3.1-8B-Instruct-20241024"
 
     # Compile and export
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

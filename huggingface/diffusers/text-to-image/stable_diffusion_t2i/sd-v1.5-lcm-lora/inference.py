@@ -1,7 +1,7 @@
 import os
 
 from diffusers import LCMScheduler
-from optimum.rbln import RBLNStableDiffusionPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     model_path = f"{os.path.basename(model_id)}-lora"
 
     # Load compiled model
-    pipe = RBLNStableDiffusionPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=model_path,
         export=False,
     )

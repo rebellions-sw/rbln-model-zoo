@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNQwen2ForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def parsing_argument():
@@ -22,7 +22,7 @@ def main():
     model_name = f"skt/{args.model_id}"
 
     # Compile and export
-    model = RBLNQwen2ForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_name,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

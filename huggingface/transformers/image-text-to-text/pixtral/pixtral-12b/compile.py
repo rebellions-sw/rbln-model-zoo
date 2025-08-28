@@ -1,11 +1,11 @@
 import os
 
-from optimum.rbln import RBLNLlavaForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 
 
 def main():
     model_id = "mistral-community/pixtral-12b"
-    model = RBLNLlavaForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_id,
         export=True,
         rbln_config={

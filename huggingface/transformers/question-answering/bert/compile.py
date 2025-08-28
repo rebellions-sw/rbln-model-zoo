@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNBertForQuestionAnswering
+from optimum.rbln import RBLNAutoModelForQuestionAnswering
 
 
 def parsing_argument():
@@ -26,7 +26,7 @@ def main():
     )
 
     # Compile and export
-    model = RBLNBertForQuestionAnswering.from_pretrained(
+    model = RBLNAutoModelForQuestionAnswering.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_max_seq_len=512,  # default "max_position_embedding"

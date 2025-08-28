@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNDistilBertForQuestionAnswering
+from optimum.rbln import RBLNAutoModelForQuestionAnswering
 from transformers import pipeline
 
 
@@ -28,7 +28,7 @@ def main():
     model_id = "distilbert/distilbert-base-uncased-distilled-squad"
 
     # Load compiled model
-    model = RBLNDistilBertForQuestionAnswering.from_pretrained(
+    model = RBLNAutoModelForQuestionAnswering.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

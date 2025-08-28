@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNStableDiffusionImg2ImgPipeline
+from optimum.rbln import RBLNAutoPipelineForImage2Image
 
 
 def parsing_argument():
@@ -26,7 +26,7 @@ def main():
     model_id = "benjamin-paine/stable-diffusion-v1-5"
 
     # Compile and export
-    pipe = RBLNStableDiffusionImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_img_width=args.img_width,

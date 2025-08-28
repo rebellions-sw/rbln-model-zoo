@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 import torch
-from optimum.rbln import RBLNBertForMaskedLM
+from optimum.rbln import RBLNAutoModelForMaskedLM
 from transformers import BertTokenizer
 
 
@@ -86,7 +86,7 @@ def main():
     model_id = "google-bert/bert-" + args.model_name + "-uncased"
 
     # Load compiled model and tokenizer
-    model = RBLNBertForMaskedLM.from_pretrained(
+    model = RBLNAutoModelForMaskedLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

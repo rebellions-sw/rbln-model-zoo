@@ -2,7 +2,7 @@ import argparse
 import os
 
 import torch
-from optimum.rbln import RBLNXLMRobertaModel
+from optimum.rbln import RBLNAutoModelForTextEncoding
 from transformers import AutoTokenizer
 
 
@@ -30,7 +30,7 @@ def main():
     model_id = "BAAI/bge-m3"
 
     # Load compiled model
-    model = RBLNXLMRobertaModel.from_pretrained(
+    model = RBLNAutoModelForTextEncoding.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNQwen2ForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -22,7 +22,7 @@ def main():
     model_id = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
 
     # Load compiled model
-    model = RBLNQwen2ForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

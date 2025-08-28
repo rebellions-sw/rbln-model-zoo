@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNGemma3ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForImageTextToText
 from transformers import AutoProcessor
 from transformers.image_utils import load_image
 
@@ -11,7 +11,7 @@ def main():
 
     # Load compiled model
     processor = AutoProcessor.from_pretrained(model_id)
-    model = RBLNGemma3ForConditionalGeneration.from_pretrained(model_dir, export=False)
+    model = RBLNAutoModelForImageTextToText.from_pretrained(model_dir, export=False)
 
     # Prepare image and text prompt, using the appropriate prompt template
     messages = [

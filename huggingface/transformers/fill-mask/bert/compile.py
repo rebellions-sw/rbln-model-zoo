@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNBertForMaskedLM
+from optimum.rbln import RBLNAutoModelForMaskedLM
 
 
 def parsing_argument():
@@ -22,7 +22,7 @@ def main():
     model_id = "google-bert/bert-" + args.model_name + "-uncased"
 
     # Compile and export
-    model = RBLNBertForMaskedLM.from_pretrained(
+    model = RBLNAutoModelForMaskedLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNBartForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSeq2SeqLM
 from transformers import BartTokenizer
 
 
@@ -37,7 +37,7 @@ def main():
     # For text-to-text generation (fill-mask task) in vLLM,
     # it is recommended to use the BartForConditionalGeneration model
     # (ex. `lucadiliello/bart-small` model).
-    model = RBLNBartForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSeq2SeqLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

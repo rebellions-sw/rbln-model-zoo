@@ -1,7 +1,7 @@
 import os
 import urllib
 
-from optimum.rbln import RBLNResNetForImageClassification
+from optimum.rbln import RBLNAutoModelForImageClassification
 from PIL import Image
 from transformers import AutoFeatureExtractor
 
@@ -10,7 +10,7 @@ def main():
     model_id = "microsoft/resnet-50"
 
     # Load compiled model
-    model = RBLNResNetForImageClassification.from_pretrained(
+    model = RBLNAutoModelForImageClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,11 +1,11 @@
 import os
 
-from optimum.rbln import RBLNLlavaNextForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 
 
 def main():
     model_id = "llava-hf/llava-v1.6-mistral-7b-hf"
-    model = RBLNLlavaNextForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_id,
         export=True,
         rbln_config={

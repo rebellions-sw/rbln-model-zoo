@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNQwen3ForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -8,7 +8,7 @@ def main():
     model_id = "Qwen/Qwen3-4B"
 
     # Load compiled model
-    model = RBLNQwen3ForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

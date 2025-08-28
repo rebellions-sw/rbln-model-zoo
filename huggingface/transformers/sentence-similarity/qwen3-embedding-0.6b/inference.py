@@ -2,7 +2,7 @@ import os
 
 import torch
 import torch.nn.functional as F
-from optimum.rbln import RBLNQwen3Model
+from optimum.rbln import RBLNAutoModel
 from torch import Tensor
 from transformers import AutoTokenizer
 
@@ -27,7 +27,7 @@ def main():
     model_id = "Qwen/Qwen3-Embedding-0.6B"
 
     # Load compiled model
-    model = RBLNQwen3Model.from_pretrained(
+    model = RBLNAutoModel.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
@@ -58,8 +58,16 @@ def main():
     )
 
     # run model
-    outputs = model(**batch_dict)
-    embeddings = last_token_pool(outputs.last_hidden_state, batch_dict["attention_mask"])
+    hidden_states = []
+    for i in range(len(batch_dict["input_ids"])):
+        inputs = {
+            "input_ids": batch_dict["input_ids"][i].unsqueeze(0),
+            "attention_mask": batch_dict["attention_mask"][i].unsqueeze(0),
+        }
+        hidden_states.append(model(**inputs).last_hidden_state)
+
+    hidden_states = torch.cat(hidden_states, dim=0)
+    embeddings = last_token_pool(hidden_states, batch_dict["attention_mask"])
     embeddings = F.normalize(embeddings, p=2, dim=1)
     scores = embeddings[:2] @ embeddings[2:].T
 
