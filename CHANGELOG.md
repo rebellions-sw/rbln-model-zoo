@@ -13,7 +13,6 @@
   * `segmentation`: **Yolo11-seg**.
   * `text2text-generation`: **Qwen2.5** (32B, 72B); **Qwen3** (32B).
 * **Dependency updates**
-
   * No updates to requirements.txt.
 
 ## July, 31th 2025 (v0.5.12)
