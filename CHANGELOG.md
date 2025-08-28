@@ -8,7 +8,7 @@
   * `vllm-rbln`: v0.8.3
   * `docs.rbln.ai`: v0.8.3
 * **Added new examples**
-  * `video-segmentation`: SAM2
+  * `video-segmentation`: **SAM2**.
   * `depth-estimation`: **Depth-Anything-v2**.
   * `segmentation`: **Yolo11-seg**.
   * `text2text-generation`: **Qwen2.5** (32B, 72B); **Qwen3** (32B).
