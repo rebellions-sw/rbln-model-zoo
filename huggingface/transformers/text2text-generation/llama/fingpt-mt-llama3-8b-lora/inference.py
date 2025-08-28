@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -16,7 +16,7 @@ Answer: """  # noqa: E501
 
     # Load compiled model
     model_save_dir = f"{os.path.basename(model_id)}_{os.path.basename(lora_id)}"
-    model = RBLNLlamaForCausalLM.from_pretrained(model_id=model_save_dir, export=False)
+    model = RBLNAutoModelForCausalLM.from_pretrained(model_id=model_save_dir, export=False)
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)

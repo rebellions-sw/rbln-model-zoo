@@ -2,7 +2,7 @@ import argparse
 import os
 
 import numpy as np
-from optimum.rbln import RBLNXLMRobertaForSequenceClassification
+from optimum.rbln import RBLNAutoModelForSequenceClassification
 from transformers import AutoTokenizer
 
 
@@ -35,7 +35,7 @@ def main():
     model_id = "Dongjin-kr/ko-reranker"
 
     # Load compiled model
-    model = RBLNXLMRobertaForSequenceClassification.from_pretrained(
+    model = RBLNAutoModelForSequenceClassification.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

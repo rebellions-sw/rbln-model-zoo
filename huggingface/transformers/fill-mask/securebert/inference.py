@@ -2,8 +2,8 @@ import argparse
 import os
 
 import torch
-from optimum.rbln import RBLNRobertaForMaskedLM
-from transformers import RobertaTokenizerFast
+from optimum.rbln import RBLNAutoModelForMaskedLM
+from transformers import AutoTokenizer
 
 
 def parsing_argument():
@@ -23,12 +23,12 @@ def main():
     args = parsing_argument()
     model_id = "ehsanaghaei/SecureBERT"
 
-    model = RBLNRobertaForMaskedLM.from_pretrained(
+    model = RBLNAutoModelForMaskedLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
 
-    tokenizer = RobertaTokenizerFast.from_pretrained(model_id)
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
 
     # Function to predict the masked words in a sentence
     inputs = tokenizer(

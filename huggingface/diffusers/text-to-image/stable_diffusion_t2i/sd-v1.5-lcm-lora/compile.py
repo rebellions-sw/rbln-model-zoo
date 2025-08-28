@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusionPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     lcm_lora_id = "latent-consistency/lcm-lora-sdv1-5"
 
     # Compile and export
-    pipe = RBLNStableDiffusionPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         # Enable model export/compilation for NPU
         export=True,

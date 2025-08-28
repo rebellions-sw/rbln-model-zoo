@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNQwen3Model
+from optimum.rbln import RBLNAutoModel
 
 
 def main():
     model_id = "Qwen/Qwen3-Embedding-0.6B"
 
     # Compile and export
-    model = RBLNQwen3Model.from_pretrained(
+    model = RBLNAutoModel.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

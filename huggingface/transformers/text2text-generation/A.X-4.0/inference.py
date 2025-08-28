@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNQwen2ForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -29,7 +29,7 @@ def main():
     model_name = f"skt/{args.model_id}"
 
     # Load compiled model
-    model = RBLNQwen2ForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_name),
         export=False,
     )

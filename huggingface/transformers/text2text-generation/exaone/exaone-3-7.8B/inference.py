@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNExaoneForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -16,7 +16,7 @@ def main():
     model_id = "LGAI-EXAONE/EXAONE-3.0-7.8B-Instruct"
 
     # Load compiled model
-    model = RBLNExaoneForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
         trust_remote_code=True,

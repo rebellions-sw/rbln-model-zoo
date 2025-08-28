@@ -1,11 +1,11 @@
 import os
 
-from optimum.rbln import RBLNIdefics3ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 
 
 def main():
     model_id = "HuggingFaceM4/Idefics3-8B-Llama3"
-    model = RBLNIdefics3ForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_id,
         export=True,
         rbln_config={

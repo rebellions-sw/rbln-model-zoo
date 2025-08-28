@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNKandinskyV22CombinedPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
     model_id = "kandinsky-community/kandinsky-2-2-decoder"
 
     # Compile and export
-    pipe = RBLNKandinskyV22CombinedPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         rbln_config={
             "img_height": 768,

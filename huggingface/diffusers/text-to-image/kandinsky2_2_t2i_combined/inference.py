@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNKandinskyV22CombinedPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def parsing_argument():
@@ -22,7 +22,7 @@ def main():
     prompt = args.prompt
 
     # Load compiled model
-    pipe = RBLNKandinskyV22CombinedPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

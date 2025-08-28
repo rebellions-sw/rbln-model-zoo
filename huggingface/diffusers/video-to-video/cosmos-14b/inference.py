@@ -74,7 +74,7 @@ def main():
             # For example:
             # - Assume each device has a memory capacity of 15.7 GiB (e.g., RBLN-CA12).
             # `text_encoder` (~9.2GB), `transformer` (~14.9GB x 1 device, ~9.8GB x 3 devices), `VAE encoder` (~6.9GB), `VAE decoder` (~6.6GB)
-            # `aegis` (~3.7GB x 4 devices), `siglip_encoder` (~4.5GB), `video_safety_model` (~10.0MB), `face_blur_filter` (~150MB)
+            # `llamaguard3` (~3.7GB x 4 devices), `siglip_encoder` (~4.5GB), `video_safety_model` (~10.0MB), `face_blur_filter` (~150MB)
             "transformer": {
                 "device": [0, 1, 2, 3],
             },
@@ -85,7 +85,7 @@ def main():
                 "device_map": {"encoder": 9, "decoder": 9},
             },
             "safety_checker": {
-                "aegis": {"device": [4, 5, 6, 7]},
+                "llamaguard3": {"device": [4, 5, 6, 7]},
                 "siglip_encoder": {"device": 7},
                 "video_safety_model": {"device": 7},
                 "face_blur_filter": {"device": 7},

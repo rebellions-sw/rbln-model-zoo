@@ -3,7 +3,7 @@ import os
 
 import torch
 from datasets import load_dataset
-from optimum.rbln import RBLNWhisperForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSpeechSeq2Seq
 from transformers import AutoProcessor, pipeline
 
 
@@ -39,7 +39,7 @@ def main():
     dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
 
     # Load compiled model
-    model = RBLNWhisperForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSpeechSeq2Seq.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

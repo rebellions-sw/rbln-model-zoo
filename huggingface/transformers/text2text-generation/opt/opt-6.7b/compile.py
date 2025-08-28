@@ -1,13 +1,13 @@
 import os
 
-from optimum.rbln import RBLNOPTForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
     model_id = "facebook/opt-6.7b"
 
     # Compile and export
-    model = RBLNOPTForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

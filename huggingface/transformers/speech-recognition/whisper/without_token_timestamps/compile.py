@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNWhisperForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSpeechSeq2Seq
 
 
 def parsing_argument():
@@ -22,7 +22,7 @@ def main():
     model_id = f"openai/whisper-{args.model_name}"
 
     # Compile and export
-    model = RBLNWhisperForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSpeechSeq2Seq.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNMistralForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -22,7 +22,7 @@ def main():
     model_id = "mistralai/Mistral-7B-Instruct-v0.3"
 
     # Load compiled model
-    model = RBLNMistralForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

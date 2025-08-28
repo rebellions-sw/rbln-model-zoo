@@ -3,7 +3,7 @@ import os
 from io import BytesIO
 
 import requests
-from optimum.rbln import RBLNStableDiffusionImg2ImgPipeline
+from optimum.rbln import RBLNAutoPipelineForImage2Image
 from PIL import Image
 
 
@@ -36,7 +36,7 @@ def main():
     prompt = args.prompt
 
     # Load compiled model
-    pipe = RBLNStableDiffusionImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,7 +1,7 @@
 import os
 
 import requests
-from optimum.rbln import RBLNBlip2ForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 from PIL import Image
 from transformers import AutoProcessor
 
@@ -12,7 +12,7 @@ def main():
 
     # Load compiled model
     processor = AutoProcessor.from_pretrained(model_id)
-    model = RBLNBlip2ForConditionalGeneration.from_pretrained(model_dir, export=False)
+    model = RBLNAutoModelForVision2Seq.from_pretrained(model_dir, export=False)
 
     # Prepare image and text prompt, using the appropriate prompt template
     url = "http://images.cocodataset.org/val2017/000000039769.jpg"

@@ -3,7 +3,7 @@ import os
 
 import torch
 import torch.nn.functional as F
-from optimum.rbln import RBLNBertModel
+from optimum.rbln import RBLNAutoModelForTextEncoding
 from transformers import AutoTokenizer
 
 
@@ -52,7 +52,7 @@ def main():
     model_id = "dwzhu/e5-base-4k"
 
     # Load compiled model
-    model = RBLNBertModel.from_pretrained(
+    model = RBLNAutoModelForTextEncoding.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from peft import PeftModel
 from transformers import LlamaForCausalLM
 
@@ -24,7 +24,7 @@ def main():
     model = model.merge_and_unload()
 
     # Convert to RBLN-optimized model format
-    model = RBLNLlamaForCausalLM.from_model(
+    model = RBLNAutoModelForCausalLM.from_model(
         model,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

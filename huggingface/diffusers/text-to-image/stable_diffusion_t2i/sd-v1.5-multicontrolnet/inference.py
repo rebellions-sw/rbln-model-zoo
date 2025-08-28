@@ -6,7 +6,7 @@ import numpy as np
 from controlnet_aux import OpenposeDetector
 from diffusers import UniPCMultistepScheduler
 from diffusers.utils import load_image
-from optimum.rbln import RBLNStableDiffusionControlNetPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 from PIL import Image
 
 
@@ -59,7 +59,7 @@ def main():
     openpose_image = openpose(openpose_image)
 
     # Load compiled model
-    pipe = RBLNStableDiffusionControlNetPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
         scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),

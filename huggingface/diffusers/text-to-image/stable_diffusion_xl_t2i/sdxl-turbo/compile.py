@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusionXLPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
@@ -8,7 +8,7 @@ def main():
 
     # Compile and export
     # As SDXL-turbo does not use guidance_scale, we disable them with rbln_guidance_scale=0.0
-    pipe = RBLNStableDiffusionXLPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_guidance_scale=0.0,

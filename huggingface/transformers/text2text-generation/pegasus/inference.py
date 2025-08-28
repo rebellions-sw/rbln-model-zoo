@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNPegasusForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForSeq2SeqLM
 from transformers import PegasusTokenizer
 
 
@@ -30,7 +30,7 @@ def main():
     tokenizer = PegasusTokenizer.from_pretrained(args.model_name)
 
     # Load compiled model
-    model = RBLNPegasusForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForSeq2SeqLM.from_pretrained(
         model_id=os.path.basename(args.model_name),
         export=False,
     )

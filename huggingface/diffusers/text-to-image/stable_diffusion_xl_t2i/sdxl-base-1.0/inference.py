@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNStableDiffusionXLPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def parsing_argument():
@@ -28,7 +28,7 @@ def main():
     guidance_scale = args.guidance_scale
 
     # Load compiled model
-    pipe = RBLNStableDiffusionXLPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

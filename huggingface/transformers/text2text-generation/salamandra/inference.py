@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -8,7 +8,7 @@ def main():
     model_id = "BSC-LT/salamandra-7b-instruct"
 
     # Load compiled model
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

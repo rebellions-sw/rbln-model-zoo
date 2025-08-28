@@ -2,7 +2,7 @@ import argparse
 import os
 
 from diffusers import AutoencoderKL, ControlNetModel
-from optimum.rbln import RBLNDPTForDepthEstimation, RBLNStableDiffusionXLControlNetImg2ImgPipeline
+from optimum.rbln import RBLNAutoModelForDepthEstimation, RBLNAutoPipelineForImage2Image
 
 
 def parsing_argument():
@@ -30,7 +30,7 @@ def main():
     vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix")
 
     # Compile and export
-    pipe = RBLNStableDiffusionXLControlNetImg2ImgPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         controlnet=controlnet,
@@ -43,7 +43,9 @@ def main():
             "unet": {"batch_size": 2},
         },
     )
-    dpt = RBLNDPTForDepthEstimation.from_pretrained(model_id="Intel/dpt-hybrid-midas", export=True)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(
+        model_id="Intel/dpt-hybrid-midas", export=True
+    )
 
     # Save compiled results to disk
     pipe.save_pretrained(os.path.basename(model_id))

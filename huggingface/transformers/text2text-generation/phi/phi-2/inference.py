@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNPhiForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -25,7 +25,7 @@ def main():
     model_id = "microsoft/phi-2"
 
     # Load compiled model
-    model = RBLNPhiForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )

@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNStableDiffusionXLPipeline
+from optimum.rbln import RBLNAutoPipelineForText2Image
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     # NOTE: Unlike GPU-based pipelines where LoRAs can be loaded dynamically after model creation,
     # RBLN SDK requires all LoRA configurations at compile time since the adapters need to be
     # fused with the weights during compilation for NPU inference
-    pipe = RBLNStableDiffusionXLPipeline.from_pretrained(
+    pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id,
         # Enable model export/compilation for NPU
         export=True,

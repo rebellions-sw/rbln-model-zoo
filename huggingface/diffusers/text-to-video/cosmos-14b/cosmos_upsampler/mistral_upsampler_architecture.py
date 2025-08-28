@@ -24,6 +24,8 @@ from optimum.rbln.transformers.models.decoderonly.decoderonly_architecture impor
     DecoderOnlyWrapper,
 )
 
+from .mistral_upsampler_config import RBLNMistralNeMoForTextUpsamplerConfig
+
 
 def rotate_half(x: torch.Tensor) -> torch.Tensor:
     """Rotate half the hidden dimensions of the input tensor."""
@@ -45,12 +47,8 @@ class MistralNeMoAttention(DecoderOnlyAttention):
     def __init__(
         self,
         self_attn,
-        use_attention_mask,
-        use_position_ids,
-        kvcache_block_size,
-        is_sliding=False,
-        attn_impl="eager",
-        kvcache_partition_len=None,
+        rbln_config: "RBLNMistralNeMoForTextUpsamplerConfig",
+        is_sliding: bool = False,
     ):
         nn.Module.__init__(self)
         self._original_mod = self_attn
@@ -61,20 +59,21 @@ class MistralNeMoAttention(DecoderOnlyAttention):
         self.qk_norm = self._original_mod.use_qk_normalization
         self.scale = torch.tensor(self.get_attn_scale())
         self._phase = "prefill"
-        self.use_attention_mask = use_attention_mask
-        self.use_position_ids = use_position_ids
+        self.quantization = rbln_config.quantization
+        self.use_attention_mask = rbln_config.use_attention_mask
+        self.use_position_ids = rbln_config.use_position_ids
         self.is_sliding = is_sliding
-        self.attn_impl = attn_impl
+        self.attn_impl = rbln_config.attn_impl
 
         if self.is_sliding and self.attn_impl != "eager":
             raise NotImplementedError(
                 "Sliding window attention is only supported with eager attention."
             )
 
-        self.kvcache_partition_len = kvcache_partition_len
+        self.kvcache_partition_len = rbln_config.kvcache_partition_len
 
         setattr(self, self.get_attention_name(), self.create_attention_op())
-        self.kvcache_block_size = kvcache_block_size
+        self.kvcache_block_size = rbln_config.kvcache_block_size
         self.__post_init__()
 
     def __post_init__(self):

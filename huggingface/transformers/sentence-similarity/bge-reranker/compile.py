@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNXLMRobertaForSequenceClassification
+from optimum.rbln import RBLNAutoModelForSequenceClassification
 
 MAX_SEQ_LEN_CFG = {
     "v2-m3": 8192,
@@ -27,7 +27,7 @@ def main():
     model_id = f"BAAI/bge-reranker-{args.model_name}"
 
     # Compile and export
-    model = RBLNXLMRobertaForSequenceClassification.from_pretrained(
+    model = RBLNAutoModelForSequenceClassification.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,

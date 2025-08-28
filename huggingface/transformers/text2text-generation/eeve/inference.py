@@ -1,7 +1,7 @@
 import argparse
 import os
 
-from optimum.rbln import RBLNLlamaForCausalLM
+from optimum.rbln import RBLNAutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
@@ -22,7 +22,7 @@ def main():
     model_id = "yanolja/EEVE-Korean-Instruct-10.8B-v1.0"
 
     # Load compiled model
-    model = RBLNLlamaForCausalLM.from_pretrained(
+    model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
     )
