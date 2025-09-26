@@ -20,7 +20,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .mistral_upsampler_config import ModelConfig
+from .configuration_mistral_upsampler import ModelConfig
 from .modeling_util import create_norm
 
 

@@ -24,7 +24,7 @@ from optimum.rbln.transformers.models.decoderonly.decoderonly_architecture impor
     DecoderOnlyWrapper,
 )
 
-from .mistral_upsampler_config import RBLNMistralNeMoForTextUpsamplerConfig
+from .configuration_mistral_upsampler import RBLNMistralNeMoForTextUpsamplerConfig
 
 
 def rotate_half(x: torch.Tensor) -> torch.Tensor:
