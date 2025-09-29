@@ -19,8 +19,8 @@ from typing import List, Optional, Set, Union
 import torch
 import torch.nn as nn
 
+from .configuration_mistral_upsampler import create_prompt_upsampler
 from .mistral_upsampler_architecture import T2WTransformer
-from .mistral_upsampler_config import create_prompt_upsampler
 from .modeling_util import process_state_dict, sample_top_k, sample_top_p
 
 
@@ -30,7 +30,6 @@ class MistralNeMoForTextUpsampler(nn.Module):
         model_id: str,
         batch_size: int = 1,
         max_seq_len: int = 1024,
-        dtype: str = "float32",
         **kwargs,
     ):
         super().__init__()
@@ -40,7 +39,13 @@ class MistralNeMoForTextUpsampler(nn.Module):
             batch_size=batch_size,
             max_seq_len=max_seq_len,
         )
-        model_config.precision = dtype
+
+        # setting dtype
+        dtype_map = {"auto": "float32"}
+        precision = kwargs.get("torch_dtype", "auto")
+        precision = dtype_map.get(precision, precision)
+        model_config.precision = precision
+        self.dtype = precision
 
         n_layers = kwargs.get("num_hidden_layers", None) or kwargs.get("n_layers", None)
         if n_layers is not None:
