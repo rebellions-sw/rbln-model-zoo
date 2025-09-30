@@ -27,8 +27,8 @@ from optimum.rbln.transformers.models.decoderonly.modeling_decoderonly import (
 from optimum.rbln.utils.logging import get_logger
 from transformers import GenerationConfig, PretrainedConfig
 
+from .configuration_mistral_upsampler import RBLNMistralNeMoForTextUpsamplerConfig
 from .mistral_upsampler_architecture import MistralNeMoForTextUpsamplerWrapper
-from .mistral_upsampler_config import RBLNMistralNeMoForTextUpsamplerConfig
 from .model.modeling_mistral_upsampler import MistralNeMoForTextUpsampler
 
 logger = get_logger()
@@ -78,7 +78,7 @@ class RBLNMistralNeMoForTextUpsampler(RBLNDecoderOnlyModelForCausalLM):
 
         self.device = torch.device("cpu")
         self.training = False
-        self.dtype = torch.float32
+        self.dtype = rbln_config.torch_dtype
 
         # FIXME :: model_save_dir is not used after initialized. (This can be used when save/load)
         # This attribute is needed to keep one reference on the temporary directory, since garbage collecting it
@@ -104,7 +104,6 @@ class RBLNMistralNeMoForTextUpsampler(RBLNDecoderOnlyModelForCausalLM):
         rbln_config: Optional[RBLNMistralNeMoForTextUpsamplerConfig] = None,
         **kwargs,
     ) -> MistralNeMoForTextUpsampler:
-        precision = rbln_config.precision
         max_seq_len = rbln_config.max_seq_len
         batch_size = rbln_config.batch_size
 
@@ -112,7 +111,6 @@ class RBLNMistralNeMoForTextUpsampler(RBLNDecoderOnlyModelForCausalLM):
             model_id=model_id,
             batch_size=batch_size,
             max_seq_len=max_seq_len,
-            dtype=precision,
             **kwargs,
         )
 

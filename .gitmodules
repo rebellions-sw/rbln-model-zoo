@@ -58,3 +58,6 @@
 [submodule "pytorch_dynamo/vision/detection/yolov3/ultralytics"]
 	path = pytorch_dynamo/vision/detection/yolov3/ultralytics
 	url = https://github.com/ultralytics/ultralytics.git
+[submodule "huggingface/third-party-models/video-to-video/cosmos_transfer1/cosmos-transfer1"]
+	path = huggingface/third-party-models/video-to-video/cosmos_transfer1/cosmos-transfer1
+	url = https://github.com/nvidia-cosmos/cosmos-transfer1.git

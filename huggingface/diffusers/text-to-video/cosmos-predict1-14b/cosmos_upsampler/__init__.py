@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .mistral_upsampler_config import RBLNMistralNeMoForTextUpsamplerConfig
+from .configuration_mistral_upsampler import RBLNMistralNeMoForTextUpsamplerConfig
 from .modeling_mistral_upsampler import RBLNMistralNeMoForTextUpsampler
 
 __all__ = ["RBLNMistralNeMoForTextUpsampler", "RBLNMistralNeMoForTextUpsamplerConfig"]
