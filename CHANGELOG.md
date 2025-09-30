@@ -1,5 +1,21 @@
 # Change Log
 
+## September, 30th 2025 (v0.9.1)
+
+* Compatible version:
+  * `rebel-compiler`: v0.9.1
+  * `optimum-rbln`: v0.9.1
+  * `vllm-rbln`: v0.9.1
+  * `docs.rbln.ai`: v0.9.1
+* **Added new examples**
+  * `video-to-video`: **Cosmos-Transfer1** (Multi-Control, Regional Prompting, Multiview, LVG, 4K Upscaler).
+  * `zero-shot-detection`: **Grounding DINO** (base, tiny).
+  * `multimodal`: **Qwen2-VL**.
+* **Dependency updates**
+  * `loguru` ≥ 0.7.3.
+* **Notes**
+  * Added `huggingface/third-party-models/` to host unofficial models **outside the standard Hugging Face Transformers and Diffusers ecosystem**.
+
 ## Aug., 28th 2025 (v0.8.3)
 
 * Compatible version:

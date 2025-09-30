@@ -198,16 +198,12 @@ class RoPEAttention(BaseRoPEAttention):
             assert self.rope_k_repeat
 
         num_k_rope = k.size(-2) - num_k_exclude_rope
-        q, k_new = apply_rotary_enc(
+        q, k[:, :, :num_k_rope] = apply_rotary_enc(
             q,
             k[:, :, :num_k_rope],
             freqs_cis=(self.freqs_cis_real, self.freqs_cis_imag),
             repeat_freqs_k=self.rope_k_repeat,
         )
-        if num_k_rope < k.size(2):
-            k = torch.cat([k_new, k[:, :, num_k_rope:]], dim=2)
-        else:
-            k = k_new
 
         dropout_p = self.dropout_p if self.training else 0.0
 
