@@ -8,7 +8,8 @@
   * `vllm-rbln`: v0.9.2
   * `docs.rbln.ai`: v0.9.2
 * **Added new examples**
-  * `Visual document retrieval `: **ColQwen2**, **ColQwen2.5**
+  * `Visual reasoning`: **Cosmos-Reason1**
+  * `Visual document retrieval`: **ColQwen2**, **ColQwen2.5**
 * **Dependency updates**
   * `torch`==2.8.0
   * `transformers`==4.57.1
