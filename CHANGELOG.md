@@ -1,5 +1,25 @@
 # Change Log
 
+## October, 31th 2025 (v0.9.2)
+
+* Compatible version:
+  * `rebel-compiler`: v0.9.2
+  * `optimum-rbln`: v0.9.2
+  * `vllm-rbln`: v0.9.2
+  * `docs.rbln.ai`: v0.9.2
+* **Added new examples**
+  * `Visual resoning`: **Cosmos-Reason1**
+  * `Visual document retrieval `: **ColQwen2**, **ColQwen2.5**
+* **Dependency updates**
+  * `torch`==2.8.0
+  * `transformers`==4.57.1
+  * `numpy`>=2.0.2
+  * `torchvision`<=0.23.0
+  * `torchaudio`<=2.8.0
+  * `imageio`==2.37.0
+* **Notes**
+  * Tooling: refreshed `pre-commit` / `ruff` pins
+
 ## September, 30th 2025 (v0.9.1)
 
 * Compatible version:
