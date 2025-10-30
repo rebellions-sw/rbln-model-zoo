@@ -13,6 +13,7 @@
 * **Dependency updates**
   * `torch`==2.8.0
   * `transformers`==4.57.1
+  * `diffusers`==0.35.1
   * `numpy`>=2.0.2
   * `torchvision`<=0.23.0
   * `torchaudio`<=2.8.0
