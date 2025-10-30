@@ -33,7 +33,12 @@ def main():
 
     # Generate image
     image = pipe(
-        args.prompt, image=init_image, height=768, width=768, num_inference_steps=100, strength=0.2
+        args.prompt,
+        image=init_image,
+        height=768,
+        width=768,
+        num_inference_steps=100,
+        strength=0.2,
     ).images[0]
 
     # Save image result

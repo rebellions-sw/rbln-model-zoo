@@ -40,7 +40,9 @@ def main():
     pipe = RBLNAutoPipelineForText2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
-        scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
+        scheduler=UniPCMultistepScheduler.from_pretrained(
+            model_id, subfolder="scheduler"
+        ),
     )
 
     # Generate image

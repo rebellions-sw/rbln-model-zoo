@@ -125,7 +125,9 @@ class DepthAnythingModel:
             square_image = Image.new("RGB", (max_side, max_side), (0, 0, 0))
             square_image.paste(image, (0, 0))
             inputs = self.image_processor(images=square_image, return_tensors="pt")
-            inputs = {k: v.to(self.device, dtype=torch.float32) for k, v in inputs.items()}
+            inputs = {
+                k: v.to(self.device, dtype=torch.float32) for k, v in inputs.items()
+            }
 
             with torch.no_grad():
                 outputs = self.model(**inputs)
@@ -146,7 +148,9 @@ class DepthAnythingModel:
         cap.release()
 
         depths = np.stack(depths)
-        depths_normed = (depths - depths.min()) / (depths.max() - depths.min() + 1e-8) * 255.0
+        depths_normed = (
+            (depths - depths.min()) / (depths.max() - depths.min() + 1e-8) * 255.0
+        )
         depths_normed = depths_normed.astype(np.uint8)
 
         os.makedirs(os.path.dirname(output_video), exist_ok=True)

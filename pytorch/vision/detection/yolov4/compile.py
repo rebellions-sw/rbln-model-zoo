@@ -29,7 +29,12 @@ def main():
         f"https://github.com/AlexeyAB/darknet/releases/download/yolov4/{weight}", weight
     )
 
-    cfg = os.path.abspath(os.path.dirname(__file__)) + "/yolov4/cfg/" + model_name + ".cfg"
+    cfg = (
+        os.path.abspath(os.path.dirname(__file__))
+        + "/yolov4/cfg/"
+        + model_name
+        + ".cfg"
+    )
 
     model = Darknet(cfg, weight)
     load_darknet_weights(model, weight)

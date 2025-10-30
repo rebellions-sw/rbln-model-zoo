@@ -28,7 +28,10 @@ def main():
     # LCM allows for much fewer steps than traditional schedulers (typically 4-8 steps)
     # Lower guidance scale (1.0-2.0) works better with LCM
     img = pipe(
-        prompt=prompt, negative_prompt=negative_prompt, num_inference_steps=8, guidance_scale=1.5
+        prompt=prompt,
+        negative_prompt=negative_prompt,
+        num_inference_steps=8,
+        guidance_scale=1.5,
     ).images[0]
 
     # Save the generated image

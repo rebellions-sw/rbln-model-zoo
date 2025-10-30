@@ -1,6 +1,9 @@
 import os
 
-from cosmos_upsampler import RBLNMistralNeMoForTextUpsampler, RBLNMistralNeMoForTextUpsamplerConfig
+from cosmos_upsampler import (
+    RBLNMistralNeMoForTextUpsampler,
+    RBLNMistralNeMoForTextUpsamplerConfig,
+)
 from optimum.rbln import RBLNAutoConfig, RBLNAutoModel, RBLNCosmosTextToWorldPipeline
 
 

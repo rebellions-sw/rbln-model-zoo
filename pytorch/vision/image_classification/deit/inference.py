@@ -48,7 +48,9 @@ def main():
     # Preprocessing Image
     preprocess = transforms.Compose(
         [
-            transforms.Resize(resize_size, interpolation=transforms.InterpolationMode.BICUBIC),
+            transforms.Resize(
+                resize_size, interpolation=transforms.InterpolationMode.BICUBIC
+            ),
             transforms.CenterCrop(input_size),
             transforms.Normalize(_CHANNEL_MEANS, _CHANNEL_STDS),
         ]

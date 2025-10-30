@@ -1,5 +1,7 @@
+from pathlib import Path
+
+import huggingface_hub as hf_hub
 import rebel
-from huggingface_hub import from_pretrained_keras
 
 import tensorflow as tf
 
@@ -8,7 +10,40 @@ def main():
     input_h = 480
     input_w = 640
 
-    model = from_pretrained_keras("keras-io/monocular-depth-estimation")
+    model_id = "keras-io/monocular-depth-estimation"
+
+    def load_model():
+        from_pretrained_keras = getattr(hf_hub, "from_pretrained_keras", None)
+        if from_pretrained_keras is not None:
+            model = from_pretrained_keras(model_id)
+            return model
+
+        # Manually load the model because from_pretrained_keras is unavailable on
+        # huggingface-hub >= 1.0.0 when running under Python 3.9.
+        snapshot_download = getattr(hf_hub, "snapshot_download", None)
+        if snapshot_download is not None:
+            local_dir = Path(snapshot_download(model_id, local_dir_use_symlinks=False))
+
+            # Wrap the on-disk SavedModel so we can invoke it like a Keras layer.
+            # This runs the exported signature directly instead of rebuilding the
+            # weights as Python objects.
+            tfsm_layer = tf.keras.layers.TFSMLayer(
+                str(local_dir), call_endpoint="serving_default"
+            )
+
+            def model(input_img, layer=tfsm_layer):
+                outputs = layer(input_img)
+                return (
+                    next(iter(outputs.values()))
+                    if isinstance(outputs, dict)
+                    else outputs
+                )
+
+            return model
+
+        raise RuntimeError("Could not load the model.")
+
+    model = load_model()
 
     func = tf.function(lambda input_img: model(input_img))
 

@@ -17,7 +17,10 @@ def scale_coords_landmarks(img1_shape, coords, img0_shape, ratio_pad=None):
     # Rescale coords (xyxy) from img1_shape to img0_shape
     if ratio_pad is None:  # calculate from img0_shape
         gain = min(img1_shape[0] / img0_shape[0], img1_shape[1] / img0_shape[1])
-        pad = (img1_shape[1] - img0_shape[1] * gain) / 2, (img1_shape[0] - img0_shape[0] * gain) / 2
+        pad = (
+            (img1_shape[1] - img0_shape[1] * gain) / 2,
+            (img1_shape[0] - img0_shape[0] * gain) / 2,
+        )
     else:
         gain = ratio_pad[0][0]
         pad = ratio_pad[1]
@@ -47,7 +50,9 @@ def show_results(img, xywh, conf, landmarks, class_num):
     y1 = int(xywh[1] * h - 0.5 * xywh[3] * h)
     x2 = int(xywh[0] * w + 0.5 * xywh[2] * w)
     y2 = int(xywh[1] * h + 0.5 * xywh[3] * h)
-    cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), thickness=tl, lineType=cv2.LINE_AA)
+    cv2.rectangle(
+        img, (x1, y1), (x2, y2), (0, 255, 0), thickness=tl, lineType=cv2.LINE_AA
+    )
 
     clors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0), (0, 255, 255)]
 
@@ -59,7 +64,14 @@ def show_results(img, xywh, conf, landmarks, class_num):
     tf = max(tl - 1, 1)  # font thickness
     label = str(int(class_num)) + ": " + str(conf)[:5]
     cv2.putText(
-        img, label, (x1, y1 - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA
+        img,
+        label,
+        (x1, y1 - 2),
+        0,
+        tl / 3,
+        [225, 255, 255],
+        thickness=tf,
+        lineType=cv2.LINE_AA,
     )
     return img
 
@@ -78,7 +90,9 @@ def postprocess(outputs, input_image, origin_image):
     pred = non_max_suppression_face(torch.from_numpy(outputs), 0.02, 0.5)[0]
     gn = torch.tensor(origin_image.shape)[[1, 0, 1, 0]]
     gn_lks = torch.tensor(origin_image.shape)[[1, 0, 1, 0, 1, 0, 1, 0, 1, 0]]
-    pred[:, :4] = scale_coords(input_image.shape[2:], pred[:, :4], origin_image.shape).round()
+    pred[:, :4] = scale_coords(
+        input_image.shape[2:], pred[:, :4], origin_image.shape
+    ).round()
     pred[:, 5:15] = scale_coords_landmarks(
         input_image.shape[2:], pred[:, 5:15], origin_image.shape
     ).round()

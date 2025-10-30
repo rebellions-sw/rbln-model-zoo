@@ -25,7 +25,10 @@ def parsing_argument():
 def main():
     args = parsing_argument()
     model_id = "benjamin-paine/stable-diffusion-v1-5"
-    controlnet_model_ids = ["lllyasviel/sd-controlnet-openpose", "lllyasviel/sd-controlnet-canny"]
+    controlnet_model_ids = [
+        "lllyasviel/sd-controlnet-openpose",
+        "lllyasviel/sd-controlnet-canny",
+    ]
 
     controlnets = []
     for cmi in controlnet_model_ids:
@@ -42,7 +45,9 @@ def main():
             "img_height": args.img_height,
             "unet": {"batch_size": 2},
         },
-        scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
+        scheduler=UniPCMultistepScheduler.from_pretrained(
+            model_id, subfolder="scheduler"
+        ),
     )
 
     # Save compiled results to disk

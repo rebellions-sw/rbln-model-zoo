@@ -29,9 +29,13 @@ def main():
     pipe = RBLNAutoPipelineForImage2Image.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
-        scheduler=UniPCMultistepScheduler.from_pretrained(model_id, subfolder="scheduler"),
+        scheduler=UniPCMultistepScheduler.from_pretrained(
+            model_id, subfolder="scheduler"
+        ),
     )
-    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="dpt-large", export=False)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(
+        model_id="dpt-large", export=False
+    )
     # Prepare inputs
     image = load_image(
         "https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/diffusers/controlnet-img2img.jpg"
@@ -46,7 +50,9 @@ def main():
         depth_map = detected_map.permute(2, 0, 1)
         return depth_map
 
-    depth_estimator = pipeline("depth-estimation", model=dpt, image_processor="Intel/dpt-large")
+    depth_estimator = pipeline(
+        "depth-estimation", model=dpt, image_processor="Intel/dpt-large"
+    )
     depth_map = get_depth_map(image, depth_estimator).unsqueeze(0)
 
     # Generate image

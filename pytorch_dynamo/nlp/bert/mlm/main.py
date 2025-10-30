@@ -38,7 +38,9 @@ def main():
     # Prepare input text sequence for masked language modeling
     tokenizer = BertTokenizer.from_pretrained(model_name)
     text = "the color of rose is [MASK]."
-    inputs = tokenizer(text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN)
+    inputs = tokenizer(
+        text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN
+    )
 
     # (Optional) First call of forward invokes the compilation
     model(**inputs)
@@ -47,7 +49,9 @@ def main():
     logits = model(**inputs).logits
 
     # Decoding final logit to text
-    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(as_tuple=True)[0]
+    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(
+        as_tuple=True
+    )[0]
     predicted_token_id = logits[0, mask_token_index].argmax(axis=-1)
     print(f"Predicted word: {tokenizer.decode(predicted_token_id)}")
 

@@ -36,7 +36,9 @@ def main():
 
     # Prepare inputs
     processor = AutoProcessor.from_pretrained(model_id)
-    dataset = load_dataset("distil-whisper/librispeech_long", "clean", split="validation")
+    dataset = load_dataset(
+        "distil-whisper/librispeech_long", "clean", split="validation"
+    )
 
     # Load compiled model
     model = RBLNAutoModelForSpeechSeq2Seq.from_pretrained(
@@ -54,7 +56,11 @@ def main():
         return_timestamps="word",
         batch_size=1,
     )
-    generate_kwargs = {"repetition_penalty": 1.3, "return_token_timestamps": True}
+    generate_kwargs = {
+        "repetition_penalty": 1.3,
+        "return_token_timestamps": True,
+        "num_beams": 1,
+    }
 
     with torch.no_grad():
         outputs = pipe(dataset[0]["audio"]["array"], generate_kwargs=generate_kwargs)

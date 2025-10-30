@@ -40,7 +40,9 @@ def main():
     )
 
     # Generate image
-    image = pipe(prompt, image=init_image, guidance_scale=guidance_scale, strength=0.8).images[0]
+    image = pipe(
+        prompt, image=init_image, guidance_scale=guidance_scale, strength=0.8
+    ).images[0]
 
     # Save image result
     image.save(f"{prompt}.png")

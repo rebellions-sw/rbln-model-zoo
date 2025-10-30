@@ -59,7 +59,9 @@ class MistralNeMoForTextUpsampler(nn.Module):
 
     def load_model(self):
         ckpt_path = self.config.ckpt_path
-        checkpoint = torch.load(ckpt_path, map_location="cpu", mmap=True, weights_only=True)
+        checkpoint = torch.load(
+            ckpt_path, map_location="cpu", mmap=True, weights_only=True
+        )
         llm_checkpoint = checkpoint["model"] if "model" in checkpoint else checkpoint
         llm_checkpoint = process_state_dict(llm_checkpoint, prefix_to_remove="model.")
         self.model.load_state_dict(llm_checkpoint, strict=False)
@@ -70,7 +72,9 @@ class MistralNeMoForTextUpsampler(nn.Module):
         input_pos: Optional[torch.Tensor] = None,
         token_embeddings: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
-        return self.model(tokens=tokens, input_pos=input_pos, token_embeddings=token_embeddings)
+        return self.model(
+            tokens=tokens, input_pos=input_pos, token_embeddings=token_embeddings
+        )
 
     @torch.inference_mode()
     def generate(
@@ -127,7 +131,9 @@ class MistralNeMoForTextUpsampler(nn.Module):
         if prompt_tokens.ndim == 1:
             prompt_tokens = prompt_tokens.view(1, -1)
         else:
-            assert prompt_tokens.ndim == 2, f"prompt_tokens has shape {prompt_tokens.shape}"
+            assert prompt_tokens.ndim == 2, (
+                f"prompt_tokens has shape {prompt_tokens.shape}"
+            )
 
         batch_size, prompt_len = prompt_tokens.shape
 
@@ -152,12 +158,17 @@ class MistralNeMoForTextUpsampler(nn.Module):
             assert prompt_tokens.shape == (
                 num_gen_seq,
                 prompt_len,
-            ), f"prompt_tokens must be of shape (num_gen_seq, seq_len), got {prompt_tokens.shape}"
+            ), (
+                f"prompt_tokens must be of shape (num_gen_seq, seq_len), got {prompt_tokens.shape}"
+            )
             batch_size = len(prompt_tokens)
 
         # create an empty tensor of the expected final shape and fill in the current tokens
         empty = torch.empty(
-            batch_size, total_len, dtype=prompt_tokens.dtype, device=prompt_tokens.device
+            batch_size,
+            total_len,
+            dtype=prompt_tokens.dtype,
+            device=prompt_tokens.device,
         )
         empty[:, :prompt_len] = prompt_tokens
         seq = empty

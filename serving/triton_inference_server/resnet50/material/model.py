@@ -58,7 +58,9 @@ class TritonPythonModel:
 
         self.model_config = model_config = json.loads(args["model_config"])
         output0_config = pb_utils.get_output_config_by_name(model_config, "OUTPUT__0")
-        self.output0_dtype = pb_utils.triton_string_to_numpy(output0_config["data_type"])
+        self.output0_dtype = pb_utils.triton_string_to_numpy(
+            output0_config["data_type"]
+        )
 
         # Path to rbln compiled model file
         rbln_path = os.path.join(
@@ -100,7 +102,9 @@ class TritonPythonModel:
             # Run inference
             result = self.module.run(in_0.as_numpy())
             out_tensor_0 = pb_utils.Tensor("OUTPUT__0", result.astype(output0_dtype))
-            inference_response = pb_utils.InferenceResponse(output_tensors=[out_tensor_0])
+            inference_response = pb_utils.InferenceResponse(
+                output_tensors=[out_tensor_0]
+            )
             responses.append(inference_response)
 
         return responses

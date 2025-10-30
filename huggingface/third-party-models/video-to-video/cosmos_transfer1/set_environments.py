@@ -13,12 +13,16 @@ def set_environments():
             module_name = filename[:-3]
             full_target_name = f"{target_import_prefix}.{module_name}"
             custom_file_path = os.path.join(custom_dir, filename)
-            spec = importlib.util.spec_from_file_location(full_target_name, custom_file_path)
+            spec = importlib.util.spec_from_file_location(
+                full_target_name, custom_file_path
+            )
             module = importlib.util.module_from_spec(spec)
             sys.modules[full_target_name] = module
             spec.loader.exec_module(module)
 
-    sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "cosmos-transfer1"))
+    sys.path.append(
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "cosmos-transfer1")
+    )
 
     mock_module = MagicMock()
     mock_module.is_initialized.return_value = False
@@ -33,7 +37,9 @@ def set_environments():
     sys.modules["transformer_engine.pytorch"] = mock_module
     sys.modules["transformer_engine.pytorch.attention"] = mock_module
     sys.modules["transformer_engine.pytorch.attention.rope"] = mock_module
-    sys.modules["transformer_engine.pytorch.attention.dot_product_attention"] = mock_module
+    sys.modules["transformer_engine.pytorch.attention.dot_product_attention"] = (
+        mock_module
+    )
     sys.modules[
         "transformer_engine.pytorch.attention.dot_product_attention.dot_product_attention"
     ] = mock_module

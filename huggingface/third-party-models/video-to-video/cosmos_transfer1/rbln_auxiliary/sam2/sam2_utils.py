@@ -125,7 +125,9 @@ def convert_masks_to_frames(masks: list, num_masks_max: int = 100):
     return all_masks
 
 
-def generate_video_from_images(masks: list, output_file_path: str, fps, num_masks_max: int = 100):
+def generate_video_from_images(
+    masks: list, output_file_path: str, fps, num_masks_max: int = 100
+):
     all_masks = convert_masks_to_frames(masks, num_masks_max)
     write_video(all_masks, output_file_path, fps)
     print("Video generated successfully!")

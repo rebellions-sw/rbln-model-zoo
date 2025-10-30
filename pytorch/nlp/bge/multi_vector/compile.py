@@ -13,10 +13,14 @@ class RBLNBGEM3ColbertEmbeddingWrapper(torch.nn.Module):
             "input_ids": input_ids,
             "attention_mask": attention_mask,
         }
-        last_hidden_state = self.model.model(**inputs, return_dict=True).last_hidden_state
+        last_hidden_state = self.model.model(
+            **inputs, return_dict=True
+        ).last_hidden_state
 
         # colbert_embedding
-        colbert_embedding = self.model.colbert_embedding(last_hidden_state, attention_mask)
+        colbert_embedding = self.model.colbert_embedding(
+            last_hidden_state, attention_mask
+        )
         colbert_embedding = torch.nn.functional.normalize(colbert_embedding, dim=-1)
 
         return colbert_embedding

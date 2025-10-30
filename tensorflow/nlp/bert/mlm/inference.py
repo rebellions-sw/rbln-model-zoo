@@ -27,7 +27,9 @@ def main():
     # Prepare input text sequence for masked language modeling
     tokenizer = BertTokenizer.from_pretrained(model_name)
     text = "The capital of Korea is [MASK]."
-    inputs = tokenizer(text, return_tensors="tf", padding="max_length", max_length=MAX_SEQ_LEN)
+    inputs = tokenizer(
+        text, return_tensors="tf", padding="max_length", max_length=MAX_SEQ_LEN
+    )
 
     input_ids = inputs["input_ids"].numpy()
     attention_mask = inputs["attention_mask"].numpy()

@@ -2,7 +2,10 @@ import argparse
 import os
 
 from diffusers.utils import export_to_video, load_video
-from optimum.rbln import RBLNCosmosVideoToWorldPipeline, RBLNLlavaForConditionalGeneration
+from optimum.rbln import (
+    RBLNAutoModelForVision2Seq,
+    RBLNCosmosVideoToWorldPipeline,
+)
 from transformers import AutoProcessor
 
 
@@ -28,7 +31,7 @@ def main():
             "Text prompt for generation is not provided. The prompt will be generated with the Video2World Prompt Upsampler (Pixtral-12B)."
         )
         upsampler_model_id = "mistral-community/pixtral-12b"
-        upsampler = RBLNLlavaForConditionalGeneration.from_pretrained(
+        upsampler = RBLNAutoModelForVision2Seq.from_pretrained(
             model_id=os.path.basename(upsampler_model_id),
             export=False,
             rbln_config={

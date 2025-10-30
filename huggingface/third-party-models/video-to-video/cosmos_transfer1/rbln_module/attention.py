@@ -63,8 +63,12 @@ def apply_rotary_pos_emb(
             f"Rotary Embeddings only suppported up to {max_seq_len} sequence length!"
         )
 
-        cos_ = torch.concatenate([cos_[i : i + cur_seq_len] for i in start_positions], dim=1)
-        sin_ = torch.concatenate([sin_[i : i + cur_seq_len] for i in start_positions], dim=1)
+        cos_ = torch.concatenate(
+            [cos_[i : i + cur_seq_len] for i in start_positions], dim=1
+        )
+        sin_ = torch.concatenate(
+            [sin_[i : i + cur_seq_len] for i in start_positions], dim=1
+        )
 
     assert cur_seq_len <= max_seq_len, (
         f"Rotary Embeddings only supported up to {max_seq_len} sequence length!"
@@ -98,7 +102,9 @@ class CustomAttention:
         self.attention_dropout = attention_dropout
         self.attn_mask_type = attn_mask_type
         if attn_mask_type not in ["no_mask", "causal", "arbitrary"]:
-            raise ValueError(f"attention mask type {self.attn_mask_type} is not supported")
+            raise ValueError(
+                f"attention mask type {self.attn_mask_type} is not supported"
+            )
 
     def __call__(
         self,
@@ -110,9 +116,17 @@ class CustomAttention:
         core_attention_bias=None,
     ):
         if self.qkv_format == "sbhd":
-            q, k, v = q.permute(1, 2, 0, 3), k.permute(1, 2, 0, 3), v.permute(1, 2, 0, 3)
+            q, k, v = (
+                q.permute(1, 2, 0, 3),
+                k.permute(1, 2, 0, 3),
+                v.permute(1, 2, 0, 3),
+            )
         elif self.qkv_format == "bshd":
-            q, k, v = q.permute(0, 2, 1, 3), k.permute(0, 2, 1, 3), v.permute(0, 2, 1, 3)
+            q, k, v = (
+                q.permute(0, 2, 1, 3),
+                k.permute(0, 2, 1, 3),
+                v.permute(0, 2, 1, 3),
+            )
 
         b, h, s, d = q.shape
         if self.attn_mask_type == "no_mask":
@@ -216,7 +230,9 @@ class FeedForward(nn.Module):
 
 
 class GPT2FeedForward(FeedForward):
-    def __init__(self, d_model: int, d_ff: int, dropout: float = 0.1, bias: bool = False):
+    def __init__(
+        self, d_model: int, d_ff: int, dropout: float = 0.1, bias: bool = False
+    ):
         super().__init__(
             d_model=d_model,
             d_ff=d_ff,
@@ -239,7 +255,9 @@ class GPT2FeedForward(FeedForward):
 # ---------------------- Normalization Layer -----------------------
 
 
-def normalize(x: torch.Tensor, dim: Optional[List[int]] = None, eps: float = 0) -> torch.Tensor:
+def normalize(
+    x: torch.Tensor, dim: Optional[List[int]] = None, eps: float = 0
+) -> torch.Tensor:
     """
     Normalizes the input tensor along specified dimensions such that the average square
     norm of elements is adjusted.
@@ -360,7 +378,9 @@ class RegionalAttentionOp(BaseAttentionOp):
         def preprocess_mask(mask: Tensor) -> Tensor:
             mask = mask.permute(3, 0, 1, 2)
             B, T, H, W = mask.shape
-            mask = mask.unsqueeze(1)  # dummy unsqueeze since trilinear interpolation expects 5D
+            mask = mask.unsqueeze(
+                1
+            )  # dummy unsqueeze since trilinear interpolation expects 5D
 
             mask_i = [
                 torch.nn.functional.interpolate(
@@ -399,12 +419,14 @@ class RegionalAttentionOp(BaseAttentionOp):
             dtype=torch.bool,
         )
         for i, mask in enumerate(processed_masks):
-            regional_attention_mask[:, :, (i + 1) * prompt_len : (i + 2) * prompt_len] = (
-                mask.unsqueeze(-1).bool()
-            )
+            regional_attention_mask[
+                :, :, (i + 1) * prompt_len : (i + 2) * prompt_len
+            ] = mask.unsqueeze(-1).bool()
 
         regional_masks_tensor = torch.stack(processed_masks, dim=-1).bool()  # [B, S, R]
-        global_mask = (regional_masks_tensor.sum(dim=-1) == 0).unsqueeze(-1).bool()  # [B, S, 1]
+        global_mask = (
+            (regional_masks_tensor.sum(dim=-1) == 0).unsqueeze(-1).bool()
+        )  # [B, S, 1]
         regional_attention_mask[:, :, :prompt_len] = global_mask
         combined_k = torch.cat([k] + regional_k, dim=0)
         combined_v = torch.cat([v] + regional_v, dim=0)
@@ -570,7 +592,9 @@ class Attention(nn.Module):
             k = self.to_k[0](context)
             v = self.to_v[0](context)
             q, k, v = map(
-                lambda t: rearrange(t, "b ... (n c) -> b ... n c", n=self.heads, c=self.dim_head),
+                lambda t: rearrange(
+                    t, "b ... (n c) -> b ... n c", n=self.heads, c=self.dim_head
+                ),
                 (q, k, v),
             )
         else:
@@ -582,8 +606,12 @@ class Attention(nn.Module):
         k = self.to_k[1](k)
         v = self.to_v[1](v)
         if self.is_selfattn and rope_emb is not None:  # only apply to self-attention!
-            q = apply_rotary_pos_emb(q, rope_emb, tensor_format=self.qkv_format, fused=True)
-            k = apply_rotary_pos_emb(k, rope_emb, tensor_format=self.qkv_format, fused=True)
+            q = apply_rotary_pos_emb(
+                q, rope_emb, tensor_format=self.qkv_format, fused=True
+            )
+            k = apply_rotary_pos_emb(
+                k, rope_emb, tensor_format=self.qkv_format, fused=True
+            )
         return q, k, v
 
     def cal_attn(self, q, k, v, mask=None):
@@ -630,7 +658,9 @@ class Attention(nn.Module):
         is_bshd = self.qkv_format == "bshd"
 
         # Get number of regions
-        num_regions = regional_contexts.shape[1] if is_bshd else regional_contexts.shape[0]
+        num_regions = (
+            regional_contexts.shape[1] if is_bshd else regional_contexts.shape[0]
+        )
 
         # Process each region
         for i in range(num_regions):

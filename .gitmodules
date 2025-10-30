@@ -61,3 +61,8 @@
 [submodule "huggingface/third-party-models/video-to-video/cosmos_transfer1/cosmos-transfer1"]
 	path = huggingface/third-party-models/video-to-video/cosmos_transfer1/cosmos-transfer1
 	url = https://github.com/nvidia-cosmos/cosmos-transfer1.git
+[submodule "huggingface/transformers/visual-document-retrieval/colqwen2_5/colpali"]
+	path = huggingface/transformers/visual-document-retrieval/colqwen2_5/colpali
+	url = https://github.com/illuin-tech/colpali
+[submodule "huggingface/transformers/visual-document-retrieval/colpali/colpali"]
+	path = huggingface/transformers/visual-document-retrieval/colpali/colpali

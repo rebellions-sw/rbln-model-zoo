@@ -1,7 +1,10 @@
 import os
+import sys
+
+sys.path.insert(0, os.path.join(sys.path[0], 'colpali'))
 
 import torch
-from colpali_engine.models import ColPali
+from colpali.colpali_engine.models import ColPali
 from optimum.rbln import RBLNColPaliForRetrieval
 from peft.tuners import lora
 from transformers import ColPaliConfig, ColPaliForRetrieval

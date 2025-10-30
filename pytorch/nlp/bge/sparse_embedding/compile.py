@@ -16,7 +16,9 @@ class RBLNBGEM3SparseEmbeddingWrapper(torch.nn.Module):
         hidden_state = self.model.model(**inputs, return_dict=True).last_hidden_state
 
         # sparse_embedding
-        sparse_vecs = self.model.sparse_embedding(hidden_state, input_ids, return_embedding=False)
+        sparse_vecs = self.model.sparse_embedding(
+            hidden_state, input_ids, return_embedding=False
+        )
 
         return sparse_vecs
 

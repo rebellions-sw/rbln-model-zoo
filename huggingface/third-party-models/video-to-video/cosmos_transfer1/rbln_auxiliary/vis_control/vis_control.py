@@ -20,7 +20,9 @@ import imageio
 import numpy as np
 import torch
 import torchvision.transforms.functional as transforms_F
-from cosmos_transfer1.diffusion.config.transfer.augmentors import BilateralOnlyBlurAugmentorConfig
+from cosmos_transfer1.diffusion.config.transfer.augmentors import (
+    BilateralOnlyBlurAugmentorConfig,
+)
 from cosmos_transfer1.diffusion.datasets.augmentors.control_input import Blur
 from cosmos_transfer1.utils import log
 
@@ -33,7 +35,8 @@ class VisControlModel:
         self.blur_kernel_size = 15
         self.blur_sigma = 7.0
         self.blur = Blur(
-            config=BilateralOnlyBlurAugmentorConfig[blur_strength], output_key="vis_control"
+            config=BilateralOnlyBlurAugmentorConfig[blur_strength],
+            output_key="vis_control",
         )
 
     def _load_frame(self, video_path: str) -> np.ndarray:
@@ -56,7 +59,9 @@ class VisControlModel:
         frames = self._load_frame(input_video)
         H, W = frames.shape[2], frames.shape[3]
 
-        scale_factor = random.randint(self.min_downup_factor, self.max_downup_factor + 1)
+        scale_factor = random.randint(
+            self.min_downup_factor, self.max_downup_factor + 1
+        )
 
         frames = self.blur(frames)
         # turn into tensor

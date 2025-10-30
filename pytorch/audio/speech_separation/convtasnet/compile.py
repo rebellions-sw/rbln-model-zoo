@@ -10,7 +10,9 @@ from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
 def main():
     model = CONVTASNET_BASE_LIBRI2MIX.get_model()
 
-    dataset_url = "https://rbln-public.s3.ap-northeast-2.amazonaws.com/datasets/Libri2Mix.tar"
+    dataset_url = (
+        "https://rbln-public.s3.ap-northeast-2.amazonaws.com/datasets/Libri2Mix.tar"
+    )
     dataset_path = "./Libri2Mix.tar"
     with urllib.request.urlopen(dataset_url) as response, open(dataset_path, "wb") as f:
         f.write(response.read())

@@ -12,7 +12,8 @@ import yaml
 sys.path.append(os.path.join(sys.path[0], "yolov3"))
 sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from yolov3.utils.augmentations import letterbox
-from yolov3.utils.general import non_max_suppression as nms, scale_boxes
+from yolov3.utils.general import non_max_suppression as nms
+from yolov3.utils.general import scale_boxes
 from yolov3.utils.plots import Annotator, colors
 
 
@@ -29,7 +30,9 @@ def preprocess(image):
 def postprocess(outputs, input_image, origin_image):
     pred = nms(torch.from_numpy(outputs[0]), 0.25, 0.45, None, False, max_det=1000)[0]
     annotator = Annotator(origin_image, line_width=3)
-    pred[:, :4] = scale_boxes(input_image.shape[2:], pred[:, :4], origin_image.shape).round()
+    pred[:, :4] = scale_boxes(
+        input_image.shape[2:], pred[:, :4], origin_image.shape
+    ).round()
     yaml_path = os.path.abspath(os.path.dirname(__file__)) + "/yolov3/data/coco128.yaml"
     with open(yaml_path) as f:
         data = yaml.safe_load(f)

@@ -92,7 +92,9 @@ class VideoPositionEmb(nn.Module):
     def disable_context_parallel(self):
         self.cp_group = None
 
-    def forward(self, x_B_T_H_W_C: torch.Tensor, fps=Optional[torch.Tensor]) -> torch.Tensor:
+    def forward(
+        self, x_B_T_H_W_C: torch.Tensor, fps=Optional[torch.Tensor]
+    ) -> torch.Tensor:
         """
         It delegates the embedding generation to generate_embeddings function.
         """
@@ -122,7 +124,9 @@ class VideoRopePositionEmb(VideoPositionEmb):
     ):
         del kwargs
         super().__init__()
-        self.register_buffer("seq", torch.arange(len_h * len_w * len_t, dtype=torch.float))
+        self.register_buffer(
+            "seq", torch.arange(len_h * len_w * len_t, dtype=torch.float)
+        )
 
         self.register_buffer(
             "dim_range",
@@ -140,7 +144,9 @@ class VideoRopePositionEmb(VideoPositionEmb):
         _, T, H, W, _ = B_T_H_W_C
         length = T * H * W
         emb_L_D = torch.outer(self.seq[:length], freq)
-        return rearrange(torch.cat([emb_L_D, emb_L_D], dim=-1), "l d -> l 1 1 d").float()
+        return rearrange(
+            torch.cat([emb_L_D, emb_L_D], dim=-1), "l d -> l 1 1 d"
+        ).float()
 
 
 class VideoRopePosition3DEmb(VideoPositionEmb):
@@ -159,7 +165,9 @@ class VideoRopePosition3DEmb(VideoPositionEmb):
     ):
         del kwargs
         super().__init__()
-        self.register_buffer("seq", torch.arange(max(len_h, len_w, len_t), dtype=torch.float))
+        self.register_buffer(
+            "seq", torch.arange(max(len_h, len_w, len_t), dtype=torch.float)
+        )
         self.base_fps = base_fps
         self.max_h = len_h
         self.max_w = len_w
@@ -168,7 +176,9 @@ class VideoRopePosition3DEmb(VideoPositionEmb):
         dim_h = dim // 6 * 2
         dim_w = dim_h
         dim_t = dim - 2 * dim_h
-        assert dim == dim_h + dim_w + dim_t, f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        assert dim == dim_h + dim_w + dim_t, (
+            f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        )
         self.register_buffer(
             "dim_spatial_range",
             torch.arange(0, dim_h, 2)[: (dim_h // 2)].float() / dim_h,
@@ -238,7 +248,9 @@ class VideoRopePosition3DEmb(VideoPositionEmb):
             assert T == 1, "T should be 1 for image batch."
             half_emb_t = torch.outer(self.seq[:T], temporal_freqs)
         else:
-            half_emb_t = torch.outer(self.seq[:T] / fps[:1] * self.base_fps, temporal_freqs)
+            half_emb_t = torch.outer(
+                self.seq[:T] / fps[:1] * self.base_fps, temporal_freqs
+            )
 
         em_T_H_W_D = torch.cat(
             [
@@ -273,7 +285,9 @@ class LearnablePosEmbAxis(VideoPositionEmb):
         del kwargs  # unused
         super().__init__()
         self.interpolation = interpolation
-        assert self.interpolation in ["crop"], f"Unknown interpolation method {self.interpolation}"
+        assert self.interpolation in ["crop"], (
+            f"Unknown interpolation method {self.interpolation}"
+        )
 
         self.pos_emb_h = nn.Parameter(torch.zeros(len_h, model_channels))
         self.pos_emb_w = nn.Parameter(torch.zeros(len_w, model_channels))
@@ -296,9 +310,12 @@ class LearnablePosEmbAxis(VideoPositionEmb):
                 + repeat(emb_h_H, "h d-> b t h w d", b=B, t=T, w=W)
                 + repeat(emb_w_W, "w d-> b t h w d", b=B, t=T, h=H)
             )
-            assert list(emb.shape)[:4] == [B, T, H, W], (
-                f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
-            )
+            assert list(emb.shape)[:4] == [
+                B,
+                T,
+                H,
+                W,
+            ], f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
         else:
             raise ValueError(f"Unknown interpolation method {self.interpolation}")
 
@@ -321,7 +338,9 @@ class LearnableEmb3D(VideoPositionEmb):
         super().__init__()
         assert is_learnable is True
         self.interpolation = interpolation
-        self.pos_embed = nn.Parameter(torch.zeros(1, len_t, len_h, len_w, model_channels))
+        self.pos_embed = nn.Parameter(
+            torch.zeros(1, len_t, len_h, len_w, model_channels)
+        )
         trunc_normal_(self.pos_embed, std=0.02)
 
     def generate_embeddings(
@@ -366,7 +385,9 @@ class LearnableEmb3D_FPS_Aware(VideoPositionEmb):
 
         if self.interpolation == "crop":
             self.pos_embed = nn.Parameter(
-                torch.zeros(1, len_t * int(max_fps / min_fps), len_h, len_w, model_channels)
+                torch.zeros(
+                    1, len_t * int(max_fps / min_fps), len_h, len_w, model_channels
+                )
             )  # should be max_seq_length * (max_fps / min_fps)
         elif self.interpolation == "resize":
             self.pos_embed = nn.Parameter(
@@ -388,7 +409,9 @@ class LearnableEmb3D_FPS_Aware(VideoPositionEmb):
                     [
                         self.pos_embed[
                             :,
-                            : (int(self.max_fps / curr_fps) * T) : int(self.max_fps / curr_fps),
+                            : (int(self.max_fps / curr_fps) * T) : int(
+                                self.max_fps / curr_fps
+                            ),
                             :H,
                             :W,
                         ]
@@ -452,13 +475,17 @@ class SinCosPosEmbAxis(VideoPositionEmb):
         del kwargs  # unused
         super().__init__()
         self.interpolation = interpolation
-        assert self.interpolation in ["crop"], f"Unknown interpolation method {self.interpolation}"
+        assert self.interpolation in ["crop"], (
+            f"Unknown interpolation method {self.interpolation}"
+        )
 
         dim = model_channels
         dim_h = dim // 6 * 2
         dim_w = dim_h
         dim_t = dim - 2 * dim_h
-        assert dim == dim_h + dim_w + dim_t, f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        assert dim == dim_h + dim_w + dim_t, (
+            f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        )
 
         # rescale pos id is equivalent to rescale frequency
         emb_h = get_1d_sincos_pos_embed_from_grid(
@@ -471,9 +498,15 @@ class SinCosPosEmbAxis(VideoPositionEmb):
             dim_t, pos=np.arange(len_t) * 1.0 / t_extrapolation_ratio
         )
 
-        self.register_buffer("pos_emb_h", torch.from_numpy(emb_h).float(), persistent=False)
-        self.register_buffer("pos_emb_w", torch.from_numpy(emb_w).float(), persistent=False)
-        self.register_buffer("pos_emb_t", torch.from_numpy(emb_t).float(), persistent=False)
+        self.register_buffer(
+            "pos_emb_h", torch.from_numpy(emb_h).float(), persistent=False
+        )
+        self.register_buffer(
+            "pos_emb_w", torch.from_numpy(emb_w).float(), persistent=False
+        )
+        self.register_buffer(
+            "pos_emb_t", torch.from_numpy(emb_t).float(), persistent=False
+        )
 
     def generate_embeddings(
         self, B_T_H_W_C: torch.Size, fps=Optional[torch.Tensor]
@@ -491,9 +524,12 @@ class SinCosPosEmbAxis(VideoPositionEmb):
                 ],
                 dim=-1,
             )
-            assert list(emb.shape)[:4] == [B, T, H, W], (
-                f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
-            )
+            assert list(emb.shape)[:4] == [
+                B,
+                T,
+                H,
+                W,
+            ], f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
             return emb
 
         raise ValueError(f"Unknown interpolation method {self.interpolation}")
@@ -546,7 +582,9 @@ class SinCosPosEmb_FPS_Aware(VideoPositionEmb):
                 torch.from_numpy(param).float(),
             )
         else:
-            self.register_buffer("pos_embed", torch.from_numpy(param).float(), persistent=False)
+            self.register_buffer(
+                "pos_embed", torch.from_numpy(param).float(), persistent=False
+            )
 
     def generate_embeddings(
         self, B_T_H_W_C: torch.Size, fps=Optional[torch.Tensor]
@@ -559,7 +597,9 @@ class SinCosPosEmb_FPS_Aware(VideoPositionEmb):
                     [
                         self.pos_embed[
                             :,
-                            : (int(self.max_fps / curr_fps) * T) : int(self.max_fps / curr_fps),
+                            : (int(self.max_fps / curr_fps) * T) : int(
+                                self.max_fps / curr_fps
+                            ),
                             :H,
                             :W,
                         ]
@@ -646,7 +686,9 @@ class SinCosPosEmb(VideoPositionEmb):
                 torch.from_numpy(param).float(),
             )
         else:
-            self.register_buffer("pos_embed", torch.from_numpy(param).float(), persistent=False)
+            self.register_buffer(
+                "pos_embed", torch.from_numpy(param).float(), persistent=False
+            )
 
     def generate_embeddings(
         self, B_T_H_W_C: torch.Size, fps=Optional[torch.Tensor]
@@ -665,7 +707,9 @@ class SinCosPosEmb(VideoPositionEmb):
                 "1 c h w t -> 1 t h w c",
             )
         if self.interpolation == "crop_resize":
-            pos_embed_crop = self.pos_embed[:, : self.init_length_for_resize, :H, :W]  # B,T,H,W,C
+            pos_embed_crop = self.pos_embed[
+                :, : self.init_length_for_resize, :H, :W
+            ]  # B,T,H,W,C
             _, t, h, w, c = pos_embed_crop.shape
 
             pos_embed_crop_resize_t = rearrange(
@@ -706,7 +750,9 @@ class MultiCameraVideoPositionEmb(nn.Module):
     def disable_context_parallel(self):
         self.cp_group = None
 
-    def forward(self, x_B_T_H_W_C: torch.Tensor, fps=Optional[torch.Tensor]) -> torch.Tensor:
+    def forward(
+        self, x_B_T_H_W_C: torch.Tensor, fps=Optional[torch.Tensor]
+    ) -> torch.Tensor:
         """
         With CP, the function assume that the input tensor is already split. It
         delegates the embedding generation to generate_embeddings function.
@@ -745,7 +791,9 @@ class MultiCameraVideoRopePosition3DEmb(MultiCameraVideoPositionEmb):
     ):
         del kwargs
         super().__init__()
-        self.register_buffer("seq", torch.arange(max(len_h, len_w, len_t), dtype=torch.float))
+        self.register_buffer(
+            "seq", torch.arange(max(len_h, len_w, len_t), dtype=torch.float)
+        )
         self.base_fps = base_fps
         self.max_h = len_h
         self.max_w = len_w
@@ -754,7 +802,9 @@ class MultiCameraVideoRopePosition3DEmb(MultiCameraVideoPositionEmb):
         dim_h = dim // 6 * 2
         dim_w = dim_h
         dim_t = dim - 2 * dim_h
-        assert dim == dim_h + dim_w + dim_t, f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        assert dim == dim_h + dim_w + dim_t, (
+            f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        )
         self.register_buffer(
             "dim_spatial_range",
             torch.arange(0, dim_h, 2)[: (dim_h // 2)].float() / dim_h,
@@ -828,7 +878,9 @@ class MultiCameraVideoRopePosition3DEmb(MultiCameraVideoPositionEmb):
             assert T == 1, "T should be 1 for image batch."
             half_emb_t = torch.outer(self.seq[:T], temporal_freqs)
         else:
-            half_emb_t = torch.outer(self.seq[:T] / fps[:1] * self.base_fps, temporal_freqs)
+            half_emb_t = torch.outer(
+                self.seq[:T] / fps[:1] * self.base_fps, temporal_freqs
+            )
 
         em_T_H_W_D = torch.cat(
             [
@@ -917,13 +969,17 @@ class MultiCameraSinCosPosEmbAxis(MultiCameraVideoPositionEmb):
         self.n_views = n_views
         super().__init__()
         self.interpolation = interpolation
-        assert self.interpolation in ["crop"], f"Unknown interpolation method {self.interpolation}"
+        assert self.interpolation in ["crop"], (
+            f"Unknown interpolation method {self.interpolation}"
+        )
 
         dim = model_channels
         dim_h = dim // 6 * 2
         dim_w = dim_h
         dim_t = dim - 2 * dim_h
-        assert dim == dim_h + dim_w + dim_t, f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        assert dim == dim_h + dim_w + dim_t, (
+            f"bad dim: {dim} != {dim_h} + {dim_w} + {dim_t}"
+        )
 
         # rescale pos id is equivalent to rescale frequency
         emb_h = get_1d_sincos_pos_embed_from_grid(
@@ -936,9 +992,15 @@ class MultiCameraSinCosPosEmbAxis(MultiCameraVideoPositionEmb):
             dim_t, pos=np.arange(len_t) * 1.0 / t_extrapolation_ratio
         )
 
-        self.register_buffer("pos_emb_h", torch.from_numpy(emb_h).float(), persistent=False)
-        self.register_buffer("pos_emb_w", torch.from_numpy(emb_w).float(), persistent=False)
-        self.register_buffer("pos_emb_t", torch.from_numpy(emb_t).float(), persistent=False)
+        self.register_buffer(
+            "pos_emb_h", torch.from_numpy(emb_h).float(), persistent=False
+        )
+        self.register_buffer(
+            "pos_emb_w", torch.from_numpy(emb_w).float(), persistent=False
+        )
+        self.register_buffer(
+            "pos_emb_t", torch.from_numpy(emb_t).float(), persistent=False
+        )
 
     def generate_embeddings(
         self, B_T_H_W_C: torch.Size, fps=Optional[torch.Tensor]
@@ -956,8 +1018,12 @@ class MultiCameraSinCosPosEmbAxis(MultiCameraVideoPositionEmb):
                     torch.cat(
                         [
                             repeat(emb_t_T, "t d-> b t h w d", b=B, h=H, w=W),
-                            repeat(emb_h_H, "h d-> b t h w d", b=B, t=single_camera_T, w=W),
-                            repeat(emb_w_W, "w d-> b t h w d", b=B, t=single_camera_T, h=H),
+                            repeat(
+                                emb_h_H, "h d-> b t h w d", b=B, t=single_camera_T, w=W
+                            ),
+                            repeat(
+                                emb_w_W, "w d-> b t h w d", b=B, t=single_camera_T, h=H
+                            ),
                         ],
                         dim=-1,
                     )
@@ -965,9 +1031,12 @@ class MultiCameraSinCosPosEmbAxis(MultiCameraVideoPositionEmb):
                 ],
                 1,
             )
-            assert list(emb.shape)[:4] == [B, T, H, W], (
-                f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
-            )
+            assert list(emb.shape)[:4] == [
+                B,
+                T,
+                H,
+                W,
+            ], f"bad shape: {list(emb.shape)[:4]} != {B, T, H, W}"
             return emb
 
         raise ValueError(f"Unknown interpolation method {self.interpolation}")

@@ -27,7 +27,9 @@ def preprocess(image):
 
 def postprocess(outputs, input_image, origin_image):
     pred = nms(torch.from_numpy(outputs), 0.5, 0.5, None, False, max_det=1000)[0]
-    pred[:, :4] = Inferer.rescale(input_image.shape[2:], pred[:, :4], origin_image.shape).round()
+    pred[:, :4] = Inferer.rescale(
+        input_image.shape[2:], pred[:, :4], origin_image.shape
+    ).round()
     yaml_path = os.path.abspath(os.path.dirname(__file__)) + "/YOLOv6/data/coco.yaml"
     with open(yaml_path) as f:
         data = yaml.safe_load(f)

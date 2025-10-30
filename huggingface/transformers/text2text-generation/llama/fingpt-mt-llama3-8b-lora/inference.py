@@ -16,7 +16,9 @@ Answer: """  # noqa: E501
 
     # Load compiled model
     model_save_dir = f"{os.path.basename(model_id)}_{os.path.basename(lora_id)}"
-    model = RBLNAutoModelForCausalLM.from_pretrained(model_id=model_save_dir, export=False)
+    model = RBLNAutoModelForCausalLM.from_pretrained(
+        model_id=model_save_dir, export=False
+    )
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
@@ -25,7 +27,9 @@ Answer: """  # noqa: E501
     # Generate tokens
     output_sequence = model.generate(**inputs, max_length=512)
     input_len = inputs.input_ids.shape[-1]
-    generated_texts = tokenizer.decode(output_sequence[0][input_len:], skip_special_tokens=True)
+    generated_texts = tokenizer.decode(
+        output_sequence[0][input_len:], skip_special_tokens=True
+    )
 
     # Show text and result
     print("--- text ---")

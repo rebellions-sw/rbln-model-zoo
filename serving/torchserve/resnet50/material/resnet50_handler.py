@@ -46,7 +46,9 @@ class Resnet50Handler(BaseHandler):
         input_data = data[0].get("data")
         if input_data is None:
             input_data = data[0].get("body")
-        assert input_data is not None, print("[RBLN][ERROR] Data not found with client request.")
+        assert input_data is not None, print(
+            "[RBLN][ERROR] Data not found with client request."
+        )
         if not isinstance(input_data, (bytes, bytearray)):
             raise ValueError("[RBLN][ERROR] Preprocessed data is not binary data.")
 

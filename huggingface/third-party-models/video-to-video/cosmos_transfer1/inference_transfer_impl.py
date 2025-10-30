@@ -40,7 +40,6 @@ from rbln_inference.rbln_pipeline import (
     RBLNDiffusionControl2WorldGenerationPipeline,
     RBLNDistilledControl2WorldGenerationPipeline,
 )
-
 from utils.device_utils import get_rbln_device
 
 torch.serialization.add_safe_globals([BytesIO])
@@ -48,7 +47,8 @@ torch.serialization.add_safe_globals([BytesIO])
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Control to world generation demo script", conflict_handler="resolve"
+        description="Control to world generation demo script",
+        conflict_handler="resolve",
     )
 
     # Add transfer specific arguments
@@ -126,7 +126,10 @@ def parse_arguments() -> argparse.Namespace:
         help="Tokenizer weights directory relative to checkpoint_dir",
     )
     parser.add_argument(
-        "--rbln_dir", type=str, required=True, help="Base directory containing compiled models"
+        "--rbln_dir",
+        type=str,
+        required=True,
+        help="Base directory containing compiled models",
     )
     parser.add_argument(
         "--video_save_name",
@@ -154,7 +157,9 @@ def parse_arguments() -> argparse.Namespace:
     )
     parser.add_argument("--fps", type=int, default=24, help="FPS of the output video")
     parser.add_argument(
-        "--use_distilled", action="store_true", help="Use distilled ControlNet model variant"
+        "--use_distilled",
+        action="store_true",
+        help="Use distilled ControlNet model variant",
     )
     parser.add_argument("--seed", type=int, default=1, help="Random seed")
     parser.add_argument(
@@ -265,7 +270,9 @@ def main():
                     if hint_key in current_control_inputs:
                         current_control_inputs[hint_key].update(override)
                     else:
-                        log.warning(f"Ignoring unknown control key in override: {hint_key}")
+                        log.warning(
+                            f"Ignoring unknown control key in override: {hint_key}"
+                        )
 
             # if control inputs are not provided, run respective preprocessor (for seg and depth)
             log.info("running preprocessor")
@@ -291,9 +298,9 @@ def main():
                         f"region_definitions_path: {regional_prompt['region_definitions_path']}"
                     )
                     region_definition_path = regional_prompt["region_definitions_path"]
-                    if isinstance(region_definition_path, str) and region_definition_path.endswith(
-                        ".json"
-                    ):
+                    if isinstance(
+                        region_definition_path, str
+                    ) and region_definition_path.endswith(".json"):
                         with open(region_definition_path, "r") as f:
                             region_definitions_json = json.load(f)
                         region_definitions.extend(region_definitions_json)
@@ -323,7 +330,9 @@ def main():
         )
     else:
         checkpoint = (
-            BASE_7B_CHECKPOINT_AV_SAMPLE_PATH if cfg.is_av_sample else BASE_7B_CHECKPOINT_PATH
+            BASE_7B_CHECKPOINT_AV_SAMPLE_PATH
+            if cfg.is_av_sample
+            else BASE_7B_CHECKPOINT_PATH
         )
         pipeline = RBLNDiffusionControl2WorldGenerationPipeline(
             checkpoint_dir=cfg.checkpoint_dir,
@@ -364,12 +373,18 @@ def main():
     videos, final_prompts = batch_outputs
     for i, (video, prompt) in enumerate(zip(videos, final_prompts)):
         if cfg.batch_input_path:
-            video_save_subfolder = os.path.join(cfg.video_save_folder, f"video_{batch_start + i}")
+            video_save_subfolder = os.path.join(
+                cfg.video_save_folder, f"video_{batch_start + i}"
+            )
             video_save_path = os.path.join(video_save_subfolder, "output.mp4")
             prompt_save_path = os.path.join(video_save_subfolder, "prompt.txt")
         else:
-            video_save_path = os.path.join(cfg.video_save_folder, f"{cfg.video_save_name}.mp4")
-            prompt_save_path = os.path.join(cfg.video_save_folder, f"{cfg.video_save_name}.txt")
+            video_save_path = os.path.join(
+                cfg.video_save_folder, f"{cfg.video_save_name}.mp4"
+            )
+            prompt_save_path = os.path.join(
+                cfg.video_save_folder, f"{cfg.video_save_name}.txt"
+            )
 
         os.makedirs(os.path.dirname(video_save_path), exist_ok=True)
         save_video(

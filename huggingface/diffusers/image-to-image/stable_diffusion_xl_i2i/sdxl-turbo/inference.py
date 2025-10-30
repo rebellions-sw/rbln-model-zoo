@@ -47,7 +47,11 @@ def main():
 
     # Generate image
     image = pipe(
-        prompt, image=init_image, num_inference_steps=2, guidance_scale=0.0, strength=0.5
+        prompt,
+        image=init_image,
+        num_inference_steps=2,
+        guidance_scale=0.0,
+        strength=0.5,
     ).images[0]
 
     # Save image result

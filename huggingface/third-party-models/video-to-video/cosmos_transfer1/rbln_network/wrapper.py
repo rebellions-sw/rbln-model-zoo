@@ -123,7 +123,9 @@ class ControlNetWrapper(torch.nn.Module):
 
         num_control_blocks = self.controlnet.layer_mask.index(True)
         num_layers_to_use = num_control_blocks
-        control_gate_per_layer = [i < num_layers_to_use for i in range(num_control_blocks)]
+        control_gate_per_layer = [
+            i < num_layers_to_use for i in range(num_control_blocks)
+        ]
 
         for idx, (name, block) in enumerate(self.controlnet.blocks.items()):
             x = block(

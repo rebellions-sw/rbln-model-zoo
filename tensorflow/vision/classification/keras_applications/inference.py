@@ -197,7 +197,9 @@ def main():
 
     preprocess = getattr(app, preprocess_map[model_name]).preprocess_input
     input_size = input_size_map.get(model_name, 224)
-    img = image.load_img(img_path, target_size=(224, 224)).resize((input_size, input_size))
+    img = image.load_img(img_path, target_size=(224, 224)).resize(
+        (input_size, input_size)
+    )
 
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)

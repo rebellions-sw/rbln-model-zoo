@@ -28,13 +28,17 @@ def parsing_argument():
     return parser.parse_args()
 
 
-def average_pool(last_hidden_states: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
+def average_pool(
+    last_hidden_states: torch.Tensor, attention_mask: torch.Tensor
+) -> torch.Tensor:
     last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
     return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
 
 
 def get_position_ids(
-    input_ids: torch.Tensor, max_original_positions: int = 512, encode_max_length: int = 4096
+    input_ids: torch.Tensor,
+    max_original_positions: int = 512,
+    encode_max_length: int = 4096,
 ) -> torch.Tensor:
     position_ids = list(range(input_ids.size(1)))
     factor = max(encode_max_length // max_original_positions, 1)
@@ -60,10 +64,18 @@ def main():
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     input_q = tokenizer(
-        [args.query], max_length=4096, padding="max_length", truncation=True, return_tensors="pt"
+        [args.query],
+        max_length=4096,
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
     )
     input_p = tokenizer(
-        [args.passage], max_length=4096, padding="max_length", truncation=True, return_tensors="pt"
+        [args.passage],
+        max_length=4096,
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
     )
     input_q["position_ids"] = get_position_ids(
         input_q["input_ids"], max_original_positions=512, encode_max_length=4096

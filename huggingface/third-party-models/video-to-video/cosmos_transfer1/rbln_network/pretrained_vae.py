@@ -36,8 +36,12 @@ class RBLNVideoJITTokenizer:
             weights_only=False,
         )
 
-        latent_mean = latent_mean.view(self.latent_ch, -1)[:, : self.latent_chunk_duration]
-        latent_std = latent_std.view(self.latent_ch, -1)[:, : self.latent_chunk_duration]
+        latent_mean = latent_mean.view(self.latent_ch, -1)[
+            :, : self.latent_chunk_duration
+        ]
+        latent_std = latent_std.view(self.latent_ch, -1)[
+            :, : self.latent_chunk_duration
+        ]
 
         target_shape = [1, self.latent_ch, self.latent_chunk_duration, 1, 1]
 
@@ -53,14 +57,18 @@ class RBLNVideoJITTokenizer:
         assert T % self.pixel_chunk_duration == 0, (
             f"Temporal dimension {T} is not divisible by chunk_length {self.pixel_chunk_duration}"
         )
-        return rearrange(state, "b c (n t) h w -> (b n) c t h w", t=self.pixel_chunk_duration)
+        return rearrange(
+            state, "b c (n t) h w -> (b n) c t h w", t=self.pixel_chunk_duration
+        )
 
     def transform_decode_state_shape(self, latent: torch.Tensor) -> torch.Tensor:
         B, _, T, _, _ = latent.shape
         assert T % self.latent_chunk_duration == 0, (
             f"Temporal dimension {T} is not divisible by chunk_length {self.latent_chunk_duration}"
         )
-        return rearrange(latent, "b c (n t) h w -> (b n) c t h w", t=self.latent_chunk_duration)
+        return rearrange(
+            latent, "b c (n t) h w -> (b n) c t h w", t=self.latent_chunk_duration
+        )
 
     @torch.no_grad()
     def encode(self, state: torch.Tensor) -> torch.Tensor:
@@ -124,7 +132,9 @@ class RBLNVideoJITTokenizer:
     @property
     def latent_chunk_duration(self) -> int:
         # return self._latent_chunk_duration
-        assert (self.pixel_chunk_duration - 1) % self.temporal_compression_factor == 0, (
+        assert (
+            self.pixel_chunk_duration - 1
+        ) % self.temporal_compression_factor == 0, (
             f"Pixel chunk duration {self.pixel_chunk_duration} is not divisible by "
             f"latent chunk duration {self.latent_chunk_duration}"
         )
@@ -141,7 +151,9 @@ class RBLNVideoJITTokenizer:
             f"Temporal dimension {num_pixel_frames} is not divisible by chunk_length "
             f"{self.pixel_chunk_duration}"
         )
-        return num_pixel_frames // self.pixel_chunk_duration * self.latent_chunk_duration
+        return (
+            num_pixel_frames // self.pixel_chunk_duration * self.latent_chunk_duration
+        )
 
     def get_pixel_num_frames(self, num_latent_frames: int) -> int:
         if num_latent_frames == 1:
@@ -150,4 +162,6 @@ class RBLNVideoJITTokenizer:
             f"Temporal dimension {num_latent_frames} is not divisible by chunk_length "
             f"{self.latent_chunk_duration}"
         )
-        return num_latent_frames // self.latent_chunk_duration * self.pixel_chunk_duration
+        return (
+            num_latent_frames // self.latent_chunk_duration * self.pixel_chunk_duration
+        )

@@ -28,10 +28,14 @@ def main():
 
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id, model_max_length=MAX_SEQ_LEN)
-    inputs = tokenizer(args.text, padding="max_length", return_tensors="pt", max_length=MAX_SEQ_LEN)
+    inputs = tokenizer(
+        args.text, padding="max_length", return_tensors="pt", max_length=MAX_SEQ_LEN
+    )
 
     # run model
-    embeddings = module.run(inputs.input_ids, inputs.attention_mask, inputs.token_type_ids)[1]
+    embeddings = module.run(
+        inputs.input_ids, inputs.attention_mask, inputs.token_type_ids
+    )[1]
 
     # Show result
     print("--- sentence embeddings ---")

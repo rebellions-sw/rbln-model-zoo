@@ -32,7 +32,8 @@ def generate_prompts(batch_size: int, model_id: str):
     )
 
     inputs = [
-        {"prompt": text, "multi_modal_data": {"image": image}} for text, image in zip(texts, images)
+        {"prompt": text, "multi_modal_data": {"image": image}}
+        for text, image in zip(texts, images)
     ]
     labels = [dataset[i]["label"] for i in range(batch_size)]
     return inputs, labels
@@ -50,33 +51,6 @@ def parse_args():
         default="mistral-community/pixtral-12b",
     )
     parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length",
-        default=131072,
-    )
-    parser.add_argument(
-        "-k",
-        "--kvcache-partition-len",
-        dest="kvcache_partition_len",
-        type=int,
-        action="store",
-        help="KV Cache length",
-        default=16384,
-    )
-    parser.add_argument(
-        "-b",
-        "--batch-size",
-        dest="batch_size",
-        type=int,
-        action="store",
-        help="Batch size",
-        default=1,
-    )
-    parser.add_argument(
         "-n",
         "--num-input_prompt",
         dest="num_input_prompt",
@@ -85,29 +59,13 @@ def parse_args():
         help="The number of prompts",
         default=1,
     )
-    args = parser.parse_args()
-    return (
-        args.model_id,
-        args.max_seq_len,
-        args.kvcache_partition_len,
-        args.batch_size,
-        args.num_input_prompt,
-    )
+    return args.model_id, args.num_input_prompt
 
 
 def main():
-    # Make sure the engine configuration
-    # matches the parameters used during compilation.
-    model_id, max_seq_len, kvcache_partition_len, batch_size, num_input_prompt = parse_args()
+    model_id, num_input_prompt = parse_args()
     sampling_params = SamplingParams(temperature=0.0, max_tokens=200)
-    llm = LLM(
-        model=model_id,
-        device="auto",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=kvcache_partition_len,
-    )
+    llm = LLM(model=model_id)
 
     inputs, labels = generate_prompts(num_input_prompt, model_id)
 

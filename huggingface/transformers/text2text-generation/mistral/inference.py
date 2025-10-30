@@ -38,7 +38,9 @@ def main():
         },
         {"role": "user", "content": args.text},
     ]
-    text = tokenizer.apply_chat_template(conversation, tokenize=False, add_generation_prompt=True)
+    text = tokenizer.apply_chat_template(
+        conversation, tokenize=False, add_generation_prompt=True
+    )
     inputs = tokenizer(text, return_tensors="pt", padding=True)
 
     # Generate tokens
@@ -51,7 +53,9 @@ def main():
 
     input_len = inputs.input_ids.shape[-1]
     generated_texts = tokenizer.decode(
-        output_sequence[0][input_len:], skip_special_tokens=True, clean_up_tokenization_spaces=True
+        output_sequence[0][input_len:],
+        skip_special_tokens=True,
+        clean_up_tokenization_spaces=True,
     )
 
     # Show text and result

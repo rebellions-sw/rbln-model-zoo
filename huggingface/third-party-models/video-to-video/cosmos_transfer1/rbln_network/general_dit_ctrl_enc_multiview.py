@@ -121,7 +121,12 @@ class RBLNGeneralDITMultiviewEncoder:
             # We need to add the extra channel for video condition mask
             padding_channels = self.in_channels - x.shape[1]
             x = torch.cat(
-                [x, torch.zeros((B, padding_channels, T, H, W), dtype=x.dtype, device=x.device)],
+                [
+                    x,
+                    torch.zeros(
+                        (B, padding_channels, T, H, W), dtype=x.dtype, device=x.device
+                    ),
+                ],
                 dim=1,
             )
         else:
@@ -271,7 +276,10 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
                 interpolation=transforms.InterpolationMode.NEAREST,
             )
             x_B_C_T_H_W = torch.cat(
-                [x_B_C_T_H_W, padding_mask.unsqueeze(1).repeat(1, 1, x_B_C_T_H_W.shape[2], 1, 1)],
+                [
+                    x_B_C_T_H_W,
+                    padding_mask.unsqueeze(1).repeat(1, 1, x_B_C_T_H_W.shape[2], 1, 1),
+                ],
                 dim=1,
             )
 
@@ -280,7 +288,9 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
                 max=self.net.n_views_emb - 1
             )  # View indices [0, 1, ..., V-1]
             view_indices = view_indices.to(x_B_C_T_H_W.device)
-            view_embedding = self.net.view_embeddings(view_indices)  # Shape: [V, embedding_dim]
+            view_embedding = self.net.view_embeddings(
+                view_indices
+            )  # Shape: [V, embedding_dim]
             view_embedding = rearrange(view_embedding, "V D -> D V")
             view_embedding = (
                 view_embedding.unsqueeze(0).unsqueeze(3).unsqueeze(4).unsqueeze(5)
@@ -289,8 +299,12 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
             view_indices_B_T = view_indices_B_T.clamp(max=self.net.n_views_emb - 1)
             view_indices_B_T = view_indices_B_T.to(x_B_C_T_H_W.device).long()
             view_embedding = self.net.view_embeddings(view_indices_B_T)  # B, (V T), D
-            view_embedding = rearrange(view_embedding, "B (V T) D -> B D V T", V=self.net.n_views)
-            view_embedding = view_embedding.unsqueeze(-1).unsqueeze(-1)  # Shape: [B, D, V, T, 1, 1]
+            view_embedding = rearrange(
+                view_embedding, "B (V T) D -> B D V T", V=self.net.n_views
+            )
+            view_embedding = view_embedding.unsqueeze(-1).unsqueeze(
+                -1
+            )  # Shape: [B, D, V, T, 1, 1]
 
         if self.net.add_repeat_frame_embedding:
             if frame_repeat is None:
@@ -299,13 +313,17 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
                     .to(view_embedding.device)
                     .to(view_embedding.dtype)
                 )
-            frame_repeat_embedding = self.net.repeat_frame_embedding(frame_repeat.unsqueeze(-1))
+            frame_repeat_embedding = self.net.repeat_frame_embedding(
+                frame_repeat.unsqueeze(-1)
+            )
             frame_repeat_embedding = rearrange(frame_repeat_embedding, "B V D -> B D V")
-            view_embedding = view_embedding + frame_repeat_embedding.unsqueeze(3).unsqueeze(
-                4
-            ).unsqueeze(5)
+            view_embedding = view_embedding + frame_repeat_embedding.unsqueeze(
+                3
+            ).unsqueeze(4).unsqueeze(5)
 
-        x_B_C_V_T_H_W = rearrange(x_B_C_T_H_W, "B C (V T) H W -> B C V T H W", V=self.net.n_views)
+        x_B_C_V_T_H_W = rearrange(
+            x_B_C_T_H_W, "B C (V T) H W -> B C V T H W", V=self.net.n_views
+        )
         view_embedding = view_embedding.expand(
             x_B_C_V_T_H_W.shape[0],
             view_embedding.shape[1],
@@ -330,7 +348,9 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
         else:
             x_B_C_V_T_H_W = torch.cat([x_B_C_V_T_H_W, view_embedding], dim=1)
 
-        x_B_C_T_H_W = rearrange(x_B_C_V_T_H_W, " B C V T H W -> B C (V T) H W", V=self.net.n_views)
+        x_B_C_T_H_W = rearrange(
+            x_B_C_V_T_H_W, " B C V T H W -> B C (V T) H W", V=self.net.n_views
+        )
         x_B_T_H_W_D = self.net.x_embedder(x_B_C_T_H_W)
 
         if self.net.extra_per_block_abs_pos_emb:
@@ -348,7 +368,9 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
                 x_B_T_H_W_D, fps=fps
             )  # [B, T, H, W, D]
         else:
-            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(x_B_T_H_W_D)  # [B, T, H, W, D]
+            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(
+                x_B_T_H_W_D
+            )  # [B, T, H, W, D]
         return x_B_T_H_W_D, None, extra_pos_emb
 
     def prepare_hint_embedded_sequence(
@@ -385,7 +407,9 @@ class RBLNRuntimeControlNetMultiview(RBLNRuntimeControlNet):
                 x_B_T_H_W_D, fps=fps
             )  # [B, T, H, W, D]
         else:
-            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(x_B_T_H_W_D)  # [B, T, H, W, D]
+            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(
+                x_B_T_H_W_D
+            )  # [B, T, H, W, D]
         return x_B_T_H_W_D, None
 
     def forward(

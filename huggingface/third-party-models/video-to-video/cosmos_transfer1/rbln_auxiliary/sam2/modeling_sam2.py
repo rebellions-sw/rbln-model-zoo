@@ -25,13 +25,18 @@ class PromptEncoder(BasePromptEncoder):
             )
             points = torch.cat([points, padding_point], dim=1)
             labels = torch.cat([labels, padding_label], dim=1)
-        point_embedding = self.pe_layer.forward_with_coords(points, self.input_image_size)
+        point_embedding = self.pe_layer.forward_with_coords(
+            points, self.input_image_size
+        )
 
         for i, w in enumerate(
-            [self.not_a_point_embed.weight] + [pe.weight for pe in self.point_embeddings]
+            [self.not_a_point_embed.weight]
+            + [pe.weight for pe in self.point_embeddings]
         ):
             point_embedding = torch.where(
-                (labels == (i - 1 if i else -1)).unsqueeze(-1), point_embedding + w, point_embedding
+                (labels == (i - 1 if i else -1)).unsqueeze(-1),
+                point_embedding + w,
+                point_embedding,
             )
         return point_embedding
 
@@ -41,7 +46,9 @@ class PromptEncoder(BasePromptEncoder):
         boxes: Optional[torch.Tensor],
         masks: Optional[torch.Tensor],
     ) -> int:
-        return next(filter(lambda x: x is not None, [points_coords, boxes, masks]), 1).shape[0]
+        return next(
+            filter(lambda x: x is not None, [points_coords, boxes, masks]), 1
+        ).shape[0]
 
     def forward(
         self,
@@ -51,9 +58,13 @@ class PromptEncoder(BasePromptEncoder):
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         points_coords, points_labels = points
         bs = self._get_batch_size(points_coords, boxes, masks)
-        sparse_embeddings = torch.empty((bs, 0, self.embed_dim), device=self._get_device())
+        sparse_embeddings = torch.empty(
+            (bs, 0, self.embed_dim), device=self._get_device()
+        )
         if points_coords is not None:
-            point_embeddings = self._embed_points(points_coords, points_labels, pad=(boxes is None))
+            point_embeddings = self._embed_points(
+                points_coords, points_labels, pad=(boxes is None)
+            )
             sparse_embeddings = torch.cat(
                 [sparse_embeddings.to(point_embeddings.dtype), point_embeddings], dim=1
             )
@@ -150,7 +161,9 @@ class RoPEAttention(BaseRoPEAttention):
         )
         self.rope_k_repeat = rope_k_repeat
 
-    def forward(self, q: Tensor, k: Tensor, v: Tensor, num_k_exclude_rope: int = 0) -> Tensor:
+    def forward(
+        self, q: Tensor, k: Tensor, v: Tensor, num_k_exclude_rope: int = 0
+    ) -> Tensor:
         import math
 
         import torch.nn.functional as F
@@ -168,7 +181,9 @@ class RoPEAttention(BaseRoPEAttention):
             self.freqs_cis_real.shape[0] != q.shape[-2]
             or self.freqs_cis_imag.shape[0] != q.shape[-2]
         ):
-            self.freqs_cis_real, self.freqs_cis_imag = self.compute_cis(end_x=w, end_y=h)
+            self.freqs_cis_real, self.freqs_cis_imag = self.compute_cis(
+                end_x=w, end_y=h
+            )
 
         if q.shape[-2] != k.shape[-2]:
             assert self.rope_k_repeat
@@ -250,11 +265,15 @@ def build_sam2_video_predictor_hf(model_id, **kwargs):
             model.eval()
         return model
 
-    return build_sam2_video_predictor(config_file=config_name, ckpt_path=ckpt_path, **kwargs)
+    return build_sam2_video_predictor(
+        config_file=config_name, ckpt_path=ckpt_path, **kwargs
+    )
 
 
 class RBLNSAM2VideoPredictor(SAM2VideoPredictorVOS):
-    def __init__(self, *args, options: dict = {"cache_dir": ".cache", "device": 0}, **kwargs):
+    def __init__(
+        self, *args, options: dict = {"cache_dir": ".cache", "device": 0}, **kwargs
+    ):
         super().__init__(*args, **kwargs)
         torch._dynamo.config.recompile_limit = 16
         self._custom_compile_all_components(options=options)
@@ -263,7 +282,9 @@ class RBLNSAM2VideoPredictor(SAM2VideoPredictorVOS):
     def _compile_all_components(self):
         pass
 
-    def _custom_compile_all_components(self, options: dict = {"cache_dir": ".cache", "device": 0}):
+    def _custom_compile_all_components(
+        self, options: dict = {"cache_dir": ".cache", "device": 0}
+    ):
         cache_dir = options["cache_dir"]
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
@@ -314,7 +335,10 @@ class RBLNSAM2VideoPredictor(SAM2VideoPredictorVOS):
 
     @classmethod
     def from_pretrained(
-        cls, model_id: str, options: dict = {"cache_dir": ".cache", "device": 0}, **kwargs
+        cls,
+        model_id: str,
+        options: dict = {"cache_dir": ".cache", "device": 0},
+        **kwargs,
     ):
         kwargs["device"] = "cpu"
         kwargs["vos_optimized"] = True

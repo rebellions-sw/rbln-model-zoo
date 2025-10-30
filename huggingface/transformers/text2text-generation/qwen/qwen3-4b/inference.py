@@ -27,12 +27,16 @@ def main():
 
     # Generate tokens
     output_sequence = model.generate(
-        model_inputs.input_ids, attention_mask=model_inputs.attention_mask, max_length=40960
+        model_inputs.input_ids,
+        attention_mask=model_inputs.attention_mask,
+        max_length=40960,
     )
 
     input_len = model_inputs.input_ids.shape[-1]
     generated_texts = tokenizer.decode(
-        output_sequence[0][input_len:], skip_special_tokens=True, clean_up_tokenization_spaces=True
+        output_sequence[0][input_len:],
+        skip_special_tokens=True,
+        clean_up_tokenization_spaces=True,
     )
 
     # Show text and result

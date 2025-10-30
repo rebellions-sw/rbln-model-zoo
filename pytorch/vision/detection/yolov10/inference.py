@@ -12,7 +12,8 @@ import yaml
 
 sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from ultralytics.data.augment import LetterBox
-from ultralytics.utils.ops import non_max_suppression as nms, scale_boxes
+from ultralytics.utils.ops import non_max_suppression as nms
+from ultralytics.utils.ops import scale_boxes
 from ultralytics.utils.plotting import Annotator
 
 
@@ -36,7 +37,8 @@ def postprocess_in_detect(preds: torch.Tensor, max_det: int = 300, nc: int = 80)
     scores, index = scores.flatten(1).topk(min(max_det, anchors))
     i = torch.arange(batch_size)[..., None]  # batch indices
     return torch.cat(
-        [boxes[i, index // nc], scores[..., None], (index % nc)[..., None].float()], dim=-1
+        [boxes[i, index // nc], scores[..., None], (index % nc)[..., None].float()],
+        dim=-1,
     )
 
 
@@ -65,7 +67,14 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         default="yolov10s",
-        choices=["yolov10s", "yolov10n", "yolov10b", "yolov10m", "yolov10l", "yolov10x"],
+        choices=[
+            "yolov10s",
+            "yolov10n",
+            "yolov10b",
+            "yolov10m",
+            "yolov10l",
+            "yolov10x",
+        ],
         help="available model variations",
     )
     return parser.parse_args()

@@ -43,9 +43,13 @@ def main():
     image1 = load_image(
         "https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg"
     )
-    image2 = load_image("https://cdn.britannica.com/59/94459-050-DBA42467/Skyline-Chicago.jpg")
+    image2 = load_image(
+        "https://cdn.britannica.com/59/94459-050-DBA42467/Skyline-Chicago.jpg"
+    )
 
-    prompt = processor.apply_chat_template(messages, add_generation_prompt=True, tokenize=False)
+    prompt = processor.apply_chat_template(
+        messages, add_generation_prompt=True, tokenize=False
+    )
     inputs = processor(text=prompt, images=[image1, image2], return_tensors="pt")
 
     # autoregressively complete prompt

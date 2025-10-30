@@ -16,7 +16,8 @@ def postprocess(tokenizer, model_outputs, batch_input_ids, top_k=5):
     ]
 
     logits = [
-        output[masked_index, :] for output, masked_index in zip(model_outputs, masked_indices)
+        output[masked_index, :]
+        for output, masked_index in zip(model_outputs, masked_indices)
     ]
     probs = [logit.softmax(dim=-1) for logit in logits]
 
@@ -28,7 +29,9 @@ def postprocess(tokenizer, model_outputs, batch_input_ids, top_k=5):
         batch_input_ids, values, predictions, masked_indices, single_masks
     ):
         result = []
-        for i, (_value, _prediction) in enumerate(zip(value.tolist(), prediction.tolist())):
+        for i, (_value, _prediction) in enumerate(
+            zip(value.tolist(), prediction.tolist())
+        ):
             row = []
             for v, p in zip(_value, _prediction):
                 # Copy is important since we're going to modify this array in place
@@ -95,14 +98,22 @@ def main():
 
     # Function to predict the masked words in a sentence
     inputs = tokenizer(
-        args.text, max_length=512, padding="max_length", truncation=True, return_tensors="pt"
+        args.text,
+        max_length=512,
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
     )
 
-    inputs = tokenizer(args.text, return_tensors="pt", padding="max_length", max_length=512)
+    inputs = tokenizer(
+        args.text, return_tensors="pt", padding="max_length", max_length=512
+    )
     output = model(inputs.input_ids, inputs.attention_mask, inputs.token_type_ids)[0]
     results = postprocess(tokenizer, output, inputs.input_ids, top_k=args.top_k)
 
-    prediction = [[result[i]["token_str"] for i in range(args.top_k)] for result in results]
+    prediction = [
+        [result[i]["token_str"] for i in range(args.top_k)] for result in results
+    ]
     print("Tokens: ", prediction)
     return results
 

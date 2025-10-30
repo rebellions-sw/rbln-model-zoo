@@ -36,7 +36,9 @@ def main():
         rbln_img_height=args.img_height,
         controlnet=controlnet,
     )
-    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="Intel/dpt-large", export=True)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(
+        model_id="Intel/dpt-large", export=True
+    )
 
     # Save compiled results to disk
     pipe.save_pretrained(os.path.basename(model_id))

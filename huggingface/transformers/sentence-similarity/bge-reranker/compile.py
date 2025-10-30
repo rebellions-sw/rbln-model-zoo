@@ -31,7 +31,9 @@ def main():
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_batch_size=1,
-        rbln_max_seq_len=MAX_SEQ_LEN_CFG[args.model_name],  # default "max_position_embeddings"
+        rbln_max_seq_len=MAX_SEQ_LEN_CFG[
+            args.model_name
+        ],  # default "max_position_embeddings"
     )
 
     # Save compiled results to disk

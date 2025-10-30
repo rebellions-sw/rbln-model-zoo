@@ -8,7 +8,11 @@ from unittest.mock import MagicMock
 from ts.handler_utils.utils import send_intermediate_predict_response
 from ts.service import PredictionException
 from ts.torch_handler.base_handler import BaseHandler
-from vllm.entrypoints.openai.protocol import ChatCompletionRequest, CompletionRequest, ErrorResponse
+from vllm.entrypoints.openai.protocol import (
+    ChatCompletionRequest,
+    CompletionRequest,
+    ErrorResponse,
+)
 from vllm.entrypoints.openai.serving_chat import OpenAIServingChat
 from vllm.entrypoints.openai.serving_completion import OpenAIServingCompletion
 from vllm.entrypoints.openai.serving_models import BaseModelPath, OpenAIServingModels
@@ -34,7 +38,9 @@ class RBLN_VLLMHandler(BaseHandler):
 
     def initialize(self, ctx):
         self.model_dir = ctx.system_properties.get("model_dir")
-        vllm_engine_config = self._get_vllm_engine_config(ctx.model_yaml_config.get("handler", {}))
+        vllm_engine_config = self._get_vllm_engine_config(
+            ctx.model_yaml_config.get("handler", {})
+        )
 
         os.environ["VLLM_WORKER_MULTIPROC_METHOD"] = "spawn"
 
@@ -45,14 +51,17 @@ class RBLN_VLLMHandler(BaseHandler):
         else:
             served_model_names = [vllm_engine_config.model]
 
-        chat_template = ctx.model_yaml_config.get("handler", {}).get("chat_template", None)
+        chat_template = ctx.model_yaml_config.get("handler", {}).get(
+            "chat_template", None
+        )
 
         loop = asyncio.get_event_loop()
         model_config = loop.run_until_complete(self.vllm_engine.get_model_config())
 
         # vllm v0.7.0 competible
         base_model_paths = [
-            BaseModelPath(name=name, model_path=self.model_dir) for name in served_model_names
+            BaseModelPath(name=name, model_path=self.model_dir)
+            for name in served_model_names
         ]
 
         self.openai_serving_models = OpenAIServingModels(
@@ -96,7 +105,9 @@ class RBLN_VLLMHandler(BaseHandler):
         output = await self.postprocess(output)
 
         stop_time = time.time()
-        metrics.add_time("HandlerTime", round((stop_time - start_time) * 1000, 2), None, "ms")
+        metrics.add_time(
+            "HandlerTime", round((stop_time - start_time) * 1000, 2), None, "ms"
+        )
         return output
 
     async def preprocess(self, requests, context):

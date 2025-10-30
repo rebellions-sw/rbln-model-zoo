@@ -13,7 +13,13 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["yolo11n-seg", "yolo11s-seg", "yolo11m-seg", "yolo11l-seg", "yolo11x-seg"],
+        choices=[
+            "yolo11n-seg",
+            "yolo11s-seg",
+            "yolo11m-seg",
+            "yolo11l-seg",
+            "yolo11x-seg",
+        ],
         default="yolo11n-seg",
         help="YOLO segmentation model name",
     )
@@ -59,7 +65,10 @@ def postprocess(preds, batch, orig_imgs, img_path: str, cfg: dict):
 
     box_cls = torch.from_numpy(preds[0][:, : cfg["box_cls_dim"], :])
     masks = torch.from_numpy(preds[4])
-    new_preds = [torch.cat((box_cls, masks), dim=1), tuple(torch.from_numpy(p) for p in preds[1:6])]
+    new_preds = [
+        torch.cat((box_cls, masks), dim=1),
+        tuple(torch.from_numpy(p) for p in preds[1:6]),
+    ]
     p = ops.non_max_suppression(
         new_preds[0],
         cfg["conf"],
@@ -78,14 +87,18 @@ def postprocess(preds, batch, orig_imgs, img_path: str, cfg: dict):
             masks = None
         elif cfg["retina_masks"]:
             pred[:, :4] = ops.scale_boxes(batch.shape[2:], pred[:, :4], orig_img.shape)
-            masks = ops.process_mask_native(proto[0], pred[:, 6:], pred[:, :4], orig_img.shape[:2])
+            masks = ops.process_mask_native(
+                proto[0], pred[:, 6:], pred[:, :4], orig_img.shape[:2]
+            )
         else:
             masks = ops.process_mask(
                 proto[0], pred[:, 6:], pred[:, :4], batch.shape[2:], upsample=True
             )
             pred[:, :4] = ops.scale_boxes(batch.shape[2:], pred[:, :4], orig_img.shape)
         results.append(
-            Results(orig_img, path=path, names=cfg["names"], boxes=pred[:, :6], masks=masks)
+            Results(
+                orig_img, path=path, names=cfg["names"], boxes=pred[:, :6], masks=masks
+            )
         )
     return results
 

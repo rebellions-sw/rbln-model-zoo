@@ -11,7 +11,13 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         type=str,
-        choices=["yolo11n-seg", "yolo11s-seg", "yolo11m-seg", "yolo11l-seg", "yolo11x-seg"],
+        choices=[
+            "yolo11n-seg",
+            "yolo11s-seg",
+            "yolo11m-seg",
+            "yolo11l-seg",
+            "yolo11x-seg",
+        ],
         default="yolo11n-seg",
         help="model name",
     )

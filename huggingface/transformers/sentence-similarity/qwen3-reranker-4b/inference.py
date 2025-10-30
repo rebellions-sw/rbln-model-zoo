@@ -39,11 +39,11 @@ def main():
 
     def format_instruction(instruction, query, doc):
         if instruction is None:
-            instruction = (
-                "Given a web search query, retrieve relevant passages that answer the query"
+            instruction = "Given a web search query, retrieve relevant passages that answer the query"
+        output = (
+            "<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}".format(
+                instruction=instruction, query=query, doc=doc
             )
-        output = "<Instruct>: {instruction}\n<Query>: {query}\n<Document>: {doc}".format(
-            instruction=instruction, query=query, doc=doc
         )
         return output
 
@@ -57,7 +57,9 @@ def main():
         )
         for i, ele in enumerate(inputs["input_ids"]):
             inputs["input_ids"][i] = prefix_tokens + ele + suffix_tokens
-        inputs = tokenizer.pad(inputs, padding=True, return_tensors="pt", max_length=max_length)
+        inputs = tokenizer.pad(
+            inputs, padding=True, return_tensors="pt", max_length=max_length
+        )
         for key in inputs:
             inputs[key] = inputs[key]
         return inputs
@@ -72,7 +74,9 @@ def main():
         return scores
 
     # Tokenize the input texts
-    pairs = [format_instruction(task, query, doc) for query, doc in zip(queries, documents)]
+    pairs = [
+        format_instruction(task, query, doc) for query, doc in zip(queries, documents)
+    ]
     inputs = process_inputs(pairs)
     scores = compute_logits(inputs)
 

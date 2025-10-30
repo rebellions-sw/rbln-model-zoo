@@ -38,8 +38,12 @@ def main():
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     tokenizer.pad_token = tokenizer.eos_token
-    input_q = tokenizer(args.query, padding="max_length", return_tensors="pt", max_length=8192)
-    input_m = tokenizer(args.message, padding="max_length", return_tensors="pt", max_length=8192)
+    input_q = tokenizer(
+        args.query, padding="max_length", return_tensors="pt", max_length=8192
+    )
+    input_m = tokenizer(
+        args.message, padding="max_length", return_tensors="pt", max_length=8192
+    )
 
     # run model
     q_output = model(input_q.input_ids, input_q.attention_mask)[0]

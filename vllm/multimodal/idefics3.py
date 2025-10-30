@@ -7,7 +7,9 @@ from vllm import LLM, SamplingParams
 
 
 def generate_prompts(batch_size: int, model_id: str):
-    dataset = load_dataset("lmms-lab/llava-bench-in-the-wild", split="train").shuffle(seed=42)
+    dataset = load_dataset("lmms-lab/llava-bench-in-the-wild", split="train").shuffle(
+        seed=42
+    )
     processor = AutoProcessor.from_pretrained(model_id, padding_side="left")
     messages = [
         [
@@ -40,13 +42,13 @@ def generate_prompts(batch_size: int, model_id: str):
     )
 
     return [
-        {"prompt": text, "multi_modal_data": {"image": image}} for text, image in zip(texts, images)
+        {"prompt": text, "multi_modal_data": {"image": image}}
+        for text, image in zip(texts, images)
     ]
 
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    # You need to set the parameters following rbln_config.json in the compiled model
     parser.add_argument(
         "-m",
         "--model_id",
@@ -55,64 +57,13 @@ def parse_args():
         help="Compiled model directory path",
         default="HuggingFaceM4/Idefics3-8B-Llama3",
     )
-    parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length",
-        default=131072,
-    )
-    parser.add_argument(
-        "-k",
-        "--kvcache-partition-len",
-        dest="kvcache_partition_len",
-        type=int,
-        action="store",
-        help="KV Cache length",
-        default=16384,
-    )
-    parser.add_argument(
-        "-b",
-        "--batch-size",
-        dest="batch_size",
-        type=int,
-        action="store",
-        help="Batch size",
-        default=1,
-    )
-    parser.add_argument(
-        "-n",
-        "--num-input_prompt",
-        dest="num_input_prompt",
-        type=int,
-        action="store",
-        help="The number of prompts",
-        default=1,
-    )
     args = parser.parse_args()
-    return (
-        args.model_id,
-        args.max_seq_len,
-        args.kvcache_partition_len,
-        args.batch_size,
-        args.num_input_prompt,
-    )
+    return args.model_id
 
 
 def main():
-    # Make sure the engine configuration
-    # matches the parameters used during compilation.
-    model_id, max_seq_len, kvcache_partition_len, batch_size, num_input_prompt = parse_args()
-    llm = LLM(
-        model=model_id,
-        device="auto",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=kvcache_partition_len,
-    )
+    model_id = parse_args()
+    llm = LLM(model=model_id)
     tokenizer = AutoTokenizer.from_pretrained(model_id)
 
     sampling_params = SamplingParams(
