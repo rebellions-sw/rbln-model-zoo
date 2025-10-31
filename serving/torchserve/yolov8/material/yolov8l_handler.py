@@ -14,7 +14,8 @@ import torch
 import yaml
 from ts.torch_handler.base_handler import BaseHandler
 from ultralytics.data.augment import LetterBox
-from ultralytics.yolo.utils.ops import non_max_suppression as nms, scale_boxes
+from ultralytics.yolo.utils.ops import non_max_suppression as nms
+from ultralytics.yolo.utils.ops import scale_boxes
 
 
 class YOLOv8_Handler(BaseHandler):
@@ -65,7 +66,9 @@ class YOLOv8_Handler(BaseHandler):
             preprocessed_data = LetterBox(new_shape=(640, 640))(image=image)
             preprocessed_data = preprocessed_data.transpose((2, 0, 1))[::-1]
             preprocessed_data = preprocessed_data[None]
-            preprocessed_data = np.ascontiguousarray(preprocessed_data, dtype=np.float32)
+            preprocessed_data = np.ascontiguousarray(
+                preprocessed_data, dtype=np.float32
+            )
             preprocessed_data /= 255
             self.input_image = preprocessed_data
 
@@ -91,7 +94,9 @@ class YOLOv8_Handler(BaseHandler):
         postprocess_output = inference_output
 
         pred = nms(postprocess_output, 0.25, 0.45, None, False, max_det=1000)[0]
-        pred[:, :4] = scale_boxes(self.input_image.shape[2:], pred[:, :4], self.input_image.shape)
+        pred[:, :4] = scale_boxes(
+            self.input_image.shape[2:], pred[:, :4], self.input_image.shape
+        )
         yaml_path = "./coco128.yaml"
 
         postprocess_output = []
@@ -100,7 +105,9 @@ class YOLOv8_Handler(BaseHandler):
         names = list(data["names"].values())
         for *xyxy, conf, cls in reversed(pred):
             xyxy_str = f"{xyxy[0]}, {xyxy[1]}, {xyxy[2]}, {xyxy[3]}"
-            postprocess_output.append(f"xyxy : {xyxy_str}, conf : {conf}, cls : {names[int(cls)]}")
+            postprocess_output.append(
+                f"xyxy : {xyxy_str}, conf : {conf}, cls : {names[int(cls)]}"
+            )
 
         return postprocess_output
 

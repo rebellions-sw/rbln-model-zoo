@@ -51,15 +51,17 @@ class RBLNMultiViewGeneralDIT(RBLNGeneralDIT):
         frame_repeat: Optional[torch.Tensor] = None,
         view_indices_B_T: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, Optional[torch.Tensor], torch.Tensor]:
-        x_B_T_H_W_D, rope_emb_L_1_1_D, extra_pos_emb = self.base_model.prepare_embedded_sequence(
-            x_B_C_T_H_W,
-            fps=fps,
-            padding_mask=padding_mask,
-            latent_condition=latent_condition,
-            latent_condition_sigma=latent_condition_sigma,
-            trajectory=trajectory,
-            frame_repeat=frame_repeat,
-            view_indices_B_T=view_indices_B_T,
+        x_B_T_H_W_D, rope_emb_L_1_1_D, extra_pos_emb = (
+            self.base_model.prepare_embedded_sequence(
+                x_B_C_T_H_W,
+                fps=fps,
+                padding_mask=padding_mask,
+                latent_condition=latent_condition,
+                latent_condition_sigma=latent_condition_sigma,
+                trajectory=trajectory,
+                frame_repeat=frame_repeat,
+                view_indices_B_T=view_indices_B_T,
+            )
         )
         if "rope" in self.base_model.pos_emb_cls.lower():
             rope_emb_L_1_1_D = apply_sincos_to_pos_embed(rope_emb_L_1_1_D)
@@ -201,7 +203,9 @@ class RBLNMultiViewVideoExtendGeneralDIT(RBLNMultiViewGeneralDIT):
                         f"condition_video_pose has more frames than the input video: "
                         f"{condition_video_pose.shape} > {x.shape}"
                     )
-                    condition_video_pose = condition_video_pose[:, :, :T, :, :].contiguous()
+                    condition_video_pose = condition_video_pose[
+                        :, :, :T, :, :
+                    ].contiguous()
                 input_list.append(condition_video_pose)
             x = torch.cat(
                 input_list,

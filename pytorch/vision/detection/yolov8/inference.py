@@ -11,7 +11,8 @@ import yaml
 
 sys.path.append(os.path.join(sys.path[0], "ultralytics"))
 from ultralytics.data.augment import LetterBox
-from ultralytics.utils.ops import non_max_suppression as nms, scale_boxes
+from ultralytics.utils.ops import non_max_suppression as nms
+from ultralytics.utils.ops import scale_boxes
 from ultralytics.utils.plotting import Annotator
 
 

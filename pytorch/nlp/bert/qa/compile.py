@@ -29,7 +29,9 @@ def main():
     MAX_SEQ_LEN = 384
 
     # Instantiate HuggingFace PyTorch BERT-base model
-    model = BertForQuestionAnswering.from_pretrained(model_name, return_dict=False).eval()
+    model = BertForQuestionAnswering.from_pretrained(
+        model_name, return_dict=False
+    ).eval()
 
     # Compile
     input_info = [

@@ -32,9 +32,7 @@ def preprocess(text):
 
 
 def download_label_mapping(task):
-    mapping_link = (
-        f"https://raw.githubusercontent.com/cardiffnlp/tweeteval/main/datasets/{task}/mapping.txt"
-    )
+    mapping_link = f"https://raw.githubusercontent.com/cardiffnlp/tweeteval/main/datasets/{task}/mapping.txt"
     with urllib.request.urlopen(mapping_link) as f:
         html = f.read().decode("utf-8").split("\n")
         csvreader = csv.reader(html, delimiter="\t")
@@ -59,7 +57,11 @@ def main():
     # Encode the text
     text = preprocess(args.text)
     inputs = tokenizer.batch_encode_plus(
-        [text], max_length=512, truncation=True, padding="max_length", return_tensors="pt"
+        [text],
+        max_length=512,
+        truncation=True,
+        padding="max_length",
+        return_tensors="pt",
     )
 
     # Run the model

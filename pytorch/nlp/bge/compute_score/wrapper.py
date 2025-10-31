@@ -18,7 +18,9 @@ class RBLNBGEM3ComputeScoreWrapper(torch.nn.Module):
         dense_vecs = torch.nn.functional.normalize(hidden_state[:, 0], dim=-1)
 
         # sparse_embedding
-        token_weights = self.model.sparse_embedding(hidden_state, input_ids, return_embedding=False)
+        token_weights = self.model.sparse_embedding(
+            hidden_state, input_ids, return_embedding=False
+        )
         sparse_vecs = torch.zeros(
             input_ids.size(0),
             input_ids.size(1),
@@ -27,7 +29,10 @@ class RBLNBGEM3ComputeScoreWrapper(torch.nn.Module):
             device=token_weights.device,
         )
         sparse_vecs = torch.scatter(
-            sparse_vecs, dim=sparse_vecs.dim() - 1, index=input_ids.unsqueeze(-1), src=token_weights
+            sparse_vecs,
+            dim=sparse_vecs.dim() - 1,
+            index=input_ids.unsqueeze(-1),
+            src=token_weights,
         )
         sparse_vecs = torch.max(sparse_vecs, dim=1).values
         unused_tokens = [

@@ -32,7 +32,11 @@ def main():
 
     # Function to predict the masked words in a sentence
     inputs = tokenizer(
-        args.text, max_length=512, padding="max_length", truncation=True, return_tensors="pt"
+        args.text,
+        max_length=512,
+        padding="max_length",
+        truncation=True,
+        return_tensors="pt",
     )
 
     masked_position = (inputs.input_ids.squeeze() == tokenizer.mask_token_id).nonzero()

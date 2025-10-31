@@ -59,7 +59,9 @@ def generate_prompts_video(model_id: str):
                 **video_kwargs,
             },
         }
-        for text, video_inputs, video_kwargs in zip(texts, arr_video_inputs, arr_video_kwargs)
+        for text, video_inputs, video_kwargs in zip(
+            texts, arr_video_inputs, arr_video_kwargs
+        )
     ]
 
 
@@ -74,49 +76,15 @@ def parse_args():
         help="Compiled model directory path",
         default="Qwen/Qwen2.5-VL-7B-Instruct",
     )
-    parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length",
-        default=114688,
-    )
-    parser.add_argument(
-        "-k",
-        "--kvcache-partition-len",
-        dest="kvcache_partition_len",
-        type=int,
-        action="store",
-        help="KV Cache length",
-        default=16384,
-    )
-    parser.add_argument(
-        "-b",
-        "--batch-size",
-        dest="batch_size",
-        type=int,
-        action="store",
-        help="Batch size",
-        default=1,
-    )
     args = parser.parse_args()
-    return args.model_id, args.max_seq_len, args.kvcache_partition_len, args.batch_size
+    return args.model_id
 
 
 def main():
     # Make sure the engine configuration
     # matches the parameters used during compilation.
-    model_id, max_seq_len, kvcache_partition_len, batch_size = parse_args()
-    llm = LLM(
-        model=model_id,
-        device="rbln",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=kvcache_partition_len,
-    )
+    model_id = parse_args()
+    llm = LLM(model=model_id)
 
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     sampling_params = SamplingParams(

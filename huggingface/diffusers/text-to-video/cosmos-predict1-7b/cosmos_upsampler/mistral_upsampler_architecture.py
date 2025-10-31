@@ -71,9 +71,10 @@ class MistralNeMoAttention(DecoderOnlyAttention):
             )
 
         self.kvcache_partition_len = rbln_config.kvcache_partition_len
+        self.kvcache_block_size = rbln_config.kvcache_block_size
+        self.lora_config = rbln_config.lora_config
 
         setattr(self, self.get_attention_name(), self.create_attention_op())
-        self.kvcache_block_size = rbln_config.kvcache_block_size
         self.__post_init__()
 
     def __post_init__(self):
@@ -82,7 +83,10 @@ class MistralNeMoAttention(DecoderOnlyAttention):
         self.v_proj = self._original_mod.wv
         self.o_proj = self._original_mod.wo
 
-    def projection(self, hidden_states) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def projection(
+        self, hidden_states, lora_int_id: Optional[torch.Tensor] = None
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        # NOTE: This model does not support LoRA
         query_states = self.q_proj(hidden_states)
         key_states = self.k_proj(hidden_states)
         value_states = self.v_proj(hidden_states)
@@ -104,37 +108,8 @@ class MistralNeMoLayer(DecoderOnlyLayer):
     def get_post_attention_layernorm(self):
         return self._original_mod.ffn_norm
 
-    def forward(
-        self,
-        hidden_states: torch.Tensor,
-        attention_mask: torch.Tensor,
-        seq_positions: torch.LongTensor,
-        past_key_values: Tuple[Tuple[torch.Tensor]],
-        cos: Optional[torch.Tensor] = None,
-        sin: Optional[torch.Tensor] = None,
-        block_tables: Optional[torch.Tensor] = None,
-    ):
-        residual = hidden_states
-        hidden_states = self.get_pre_attention_layernorm()(hidden_states)
-
-        hidden_states = self.self_attn(
-            hidden_states=hidden_states,
-            attention_mask=attention_mask,
-            seq_positions=seq_positions,
-            past_key_values=past_key_values,
-            cos=cos,
-            sin=sin,
-            block_tables=block_tables,
-        )
-        hidden_states = residual + hidden_states
-
-        # Fully Connected
-        residual = hidden_states
-        hidden_states = self.get_post_attention_layernorm()(hidden_states)
-        hidden_states = self._original_mod.feed_forward(hidden_states)
-        hidden_states = residual + hidden_states
-
-        return hidden_states
+    def get_mlp(self):
+        return self._original_mod.feed_forward
 
 
 class MistralNeMoModel(DecoderOnlyModel):
@@ -143,44 +118,7 @@ class MistralNeMoModel(DecoderOnlyModel):
 
 
 class MistralNeMoForTextUpsampler(DecoderOnlyForCausalLM):
-    def __init__(self, causal_lm, model):
-        nn.Module.__init__(self)
-        self.config = causal_lm.config
-        self._original_mod = causal_lm
-        self.model = model
-        self._phase = "prefill"
-
-    def forward(
-        self,
-        input_ids: torch.Tensor = None,
-        inputs_embeds: torch.Tensor = None,
-        attention_mask: torch.Tensor = None,
-        cache_position: torch.Tensor = None,
-        position_ids: torch.Tensor = None,
-        query_position: torch.Tensor = None,
-        past_key_values: Tuple[Tuple[torch.Tensor]] = None,
-        rotary_emb: nn.Module = None,
-        global_block_tables: Optional[torch.Tensor] = None,
-        local_block_tables: Optional[torch.Tensor] = None,
-    ):
-        # outputs
-        hidden_states = self.model(
-            input_ids=input_ids,
-            inputs_embeds=inputs_embeds,
-            attention_mask=attention_mask,
-            cache_position=cache_position,
-            position_ids=position_ids,
-            past_key_values=past_key_values,
-            rotary_emb=rotary_emb,
-            global_block_tables=global_block_tables,
-            local_block_tables=local_block_tables,
-        )
-
-        if self.phase == "prefill":
-            hidden_states = hidden_states[:, query_position.to(torch.int).unsqueeze(0)]
-
-        logits = self._original_mod.lm_head(hidden_states)
-        return logits
+    pass
 
 
 class RotaryEmbedding1DV1(nn.Module):
@@ -192,10 +130,15 @@ class RotaryEmbedding1DV1(nn.Module):
         super().__init__()
         self.mscale = 1.0
         self.config = config
-        self.dim = config.head_dim if config.head_dim else self.config.dim // self.config.n_heads
+        self.dim = (
+            config.head_dim
+            if config.head_dim
+            else self.config.dim // self.config.n_heads
+        )
 
         self.inv_freq = 1.0 / (
-            self.config.rope_theta ** (torch.arange(0, self.dim, 2, dtype=torch.int64) / self.dim)
+            self.config.rope_theta
+            ** (torch.arange(0, self.dim, 2, dtype=torch.int64) / self.dim)
         )
         cache_position = torch.arange(0, max_seq_len_cached, dtype=torch.float32)
         cache_position_expanded = cache_position[:, None]
@@ -203,7 +146,9 @@ class RotaryEmbedding1DV1(nn.Module):
         inv_freq_expanded = self.inv_freq[None, :]
         self.freqs = cache_position_expanded.float() @ inv_freq_expanded.float()
 
-        emb = torch.stack((self.freqs, self.freqs), dim=-1).reshape(*self.freqs.shape[:-1], -1)
+        emb = torch.stack((self.freqs, self.freqs), dim=-1).reshape(
+            *self.freqs.shape[:-1], -1
+        )
         self.register_buffer("_cos_cached", (emb.cos() * self.mscale), persistent=False)
         self.register_buffer("_sin_cached", (emb.sin() * self.mscale), persistent=False)
 

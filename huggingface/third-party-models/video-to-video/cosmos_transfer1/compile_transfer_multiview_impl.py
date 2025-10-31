@@ -39,7 +39,8 @@ torch.serialization.add_safe_globals([BytesIO])
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Control to world generation demo script", conflict_handler="resolve"
+        description="Control to world generation demo script",
+        conflict_handler="resolve",
     )
     parser.add_argument(
         "--checkpoint_dir",
@@ -67,14 +68,19 @@ def parse_arguments() -> argparse.Namespace:
         help="Optional input RGB video path",
     )
     parser.add_argument(
-        "--rbln_dir", type=str, required=True, help="Base directory containing compiled models"
+        "--rbln_dir",
+        type=str,
+        required=True,
+        help="Base directory containing compiled models",
     )
     parser.add_argument(
         "--sigma_max", type=float, default=80.0, help="sigma_max for partial denoising"
     )
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size")
     parser.add_argument("--fps", type=int, default=24, help="FPS of the output video")
-    parser.add_argument("--use_perf", action="store_true", help="using performance mode")
+    parser.add_argument(
+        "--use_perf", action="store_true", help="using performance mode"
+    )
     cmd_args = parser.parse_args()
 
     # Load and parse JSON input
@@ -101,16 +107,22 @@ def validate_controlnet_specs(cfg, controlnet_specs):
 
     for hint_key, config in controlnet_specs.items():
         if hint_key not in list(valid_hint_keys) + ["prompts", "view_condition_video"]:
-            raise ValueError(f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}")
+            raise ValueError(
+                f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}"
+            )
         if hint_key in valid_hint_keys:
             if "ckpt_path" not in config:
                 log.info(f"No checkpoint path specified for {hint_key}. Using default.")
-                config["ckpt_path"] = os.path.join(checkpoint_dir, default_model_names[hint_key])
+                config["ckpt_path"] = os.path.join(
+                    checkpoint_dir, default_model_names[hint_key]
+                )
 
             # Regardless whether "control_weight_prompt" is provided (i.e. whether we automatically
             # generate spatiotemporal control weight binary masks), control_weight is needed to.
             if "control_weight" not in config:
-                log.warning(f"No control weight specified for {hint_key}. Setting to 0.5.")
+                log.warning(
+                    f"No control weight specified for {hint_key}. Setting to 0.5."
+                )
                 config["control_weight"] = "0.5"
             else:
                 # Check if control weight is a path or a scalar
@@ -120,7 +132,9 @@ def validate_controlnet_specs(cfg, controlnet_specs):
                         # Try converting to float
                         scalar_value = float(weight)
                         if scalar_value < 0:
-                            raise ValueError(f"Control weight for {hint_key} must be non-negative.")
+                            raise ValueError(
+                                f"Control weight for {hint_key} must be non-negative."
+                            )
                     except ValueError:
                         raise ValueError(
                             f"Control weight for {hint_key} must be a valid non-negative float "

@@ -24,7 +24,10 @@ def main():
         # LoRA configurations must be specified during model loading for RBLN compilation
         lora_ids=[lcm_lora_id, pixel_lora_id],
         # Filenames of the LoRA weights within their repositories
-        lora_weights_names=["pytorch_lora_weights.safetensors", "pixel-art-xl.safetensors"],
+        lora_weights_names=[
+            "pytorch_lora_weights.safetensors",
+            "pixel-art-xl.safetensors",
+        ],
         # Scaling factors for each LoRA's effect (higher = stronger effect)
         lora_scales=[1.0, 1.2],
         # RBLN-specific configuration:

@@ -3,7 +3,9 @@ import torch
 
 
 def main():
-    model = torch.hub.load("milesial/Pytorch-UNet", "unet_carvana", pretrained=False, scale=0.5)
+    model = torch.hub.load(
+        "milesial/Pytorch-UNet", "unet_carvana", pretrained=False, scale=0.5
+    )
 
     checkpoint_url = "https://github.com/milesial/Pytorch-UNet/releases/download/v3.0/unet_carvana_scale0.5_epoch2.pth"
 

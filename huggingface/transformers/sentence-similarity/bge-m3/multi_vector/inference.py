@@ -77,7 +77,8 @@ def load_last_linear(model_name, hidden_size, colbert_dim: int = -1):
             ignore_patterns=["flax_model.msgpack", "rust_model.ot", "tf_model.h5"],
         )
     colbert_linear = torch.nn.Linear(
-        in_features=hidden_size, out_features=hidden_size if colbert_dim == -1 else colbert_dim
+        in_features=hidden_size,
+        out_features=hidden_size if colbert_dim == -1 else colbert_dim,
     )
     colbert_state_dict = torch.load(
         os.path.join(model_name, "colbert_linear.pt"), map_location="cpu"
@@ -137,16 +138,24 @@ def main():
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     tokenizer.pad_token = tokenizer.eos_token
-    input_q = tokenizer(args.query, padding="max_length", return_tensors="pt", max_length=8192)
-    input_m = tokenizer(args.message, padding="max_length", return_tensors="pt", max_length=8192)
+    input_q = tokenizer(
+        args.query, padding="max_length", return_tensors="pt", max_length=8192
+    )
+    input_m = tokenizer(
+        args.message, padding="max_length", return_tensors="pt", max_length=8192
+    )
 
     # Run model
     q_output = model(input_q.input_ids, input_q.attention_mask)
     m_output = model(input_m.input_ids, input_m.attention_mask)
 
     colbert_linear = load_last_linear(model_id, model.config.hidden_size)
-    q_colbert_embedding = colbert_embedding(colbert_linear, q_output[0], input_q.attention_mask)
-    m_colbert_embedding = colbert_embedding(colbert_linear, m_output[0], input_m.attention_mask)
+    q_colbert_embedding = colbert_embedding(
+        colbert_linear, q_output[0], input_q.attention_mask
+    )
+    m_colbert_embedding = colbert_embedding(
+        colbert_linear, m_output[0], input_m.attention_mask
+    )
     q_output = torch.nn.functional.normalize(q_colbert_embedding, dim=-1)
     m_output = torch.nn.functional.normalize(m_colbert_embedding, dim=-1)
 

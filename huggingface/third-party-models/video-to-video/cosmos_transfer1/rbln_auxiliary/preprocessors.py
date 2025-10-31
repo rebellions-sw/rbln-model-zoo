@@ -81,12 +81,16 @@ class Preprocessors:
                 # for these locations.
                 # Everything else will be treated as background and have control weight 0
                 # at those locations.
-                if control_input.get("control_weight_prompt", None) is not None and hint_key in [
-                    "seg"
-                ]:
+                if control_input.get(
+                    "control_weight_prompt", None
+                ) is not None and hint_key in ["seg"]:
                     prompt = control_input["control_weight_prompt"]
-                    out_tensor = os.path.join(output_folder, f"{hint_key}_control_weight.pt")
-                    out_video = os.path.join(output_folder, f"{hint_key}_control_weight.mp4")
+                    out_tensor = os.path.join(
+                        output_folder, f"{hint_key}_control_weight.pt"
+                    )
+                    out_video = os.path.join(
+                        output_folder, f"{hint_key}_control_weight.mp4"
+                    )
                     if os.path.exists(out_tensor) and os.path.exists(out_video):
                         log.info(
                             f"{out_tensor} & {out_video} already exist. "
@@ -133,7 +137,9 @@ class Preprocessors:
                     regional_prompt["region_definitions_path"], str
                 ):
                     if is_valid_video(regional_prompt["region_definitions_path"]):
-                        video_to_tensor(regional_prompt["region_definitions_path"], out_tensor)
+                        video_to_tensor(
+                            regional_prompt["region_definitions_path"], out_tensor
+                        )
                         regional_prompt["region_definitions_path"] = out_tensor
                     else:
                         raise ValueError(
@@ -223,7 +229,9 @@ class Preprocessors:
 
     def depth(self, in_video, out_video):
         if self.depth_model is None:
-            self.depth_model = DepthAnythingModel(self.export, self.model_save_dir, self.device)
+            self.depth_model = DepthAnythingModel(
+                self.export, self.model_save_dir, self.device
+            )
         self.depth_model(in_video, out_video)
 
     def segmentation(
@@ -237,7 +245,9 @@ class Preprocessors:
         legacy_mask=False,
     ):
         if self.seg_model is None:
-            self.seg_model = VideoSegmentationModel(self.export, self.model_save_dir, self.device)
+            self.seg_model = VideoSegmentationModel(
+                self.export, self.model_save_dir, self.device
+            )
         self.seg_model(
             input_video=in_video,
             output_video=out_video,

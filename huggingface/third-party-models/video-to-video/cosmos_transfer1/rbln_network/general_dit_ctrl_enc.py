@@ -27,7 +27,9 @@ from .utils import apply_sincos_to_pos_embed, run_model
 
 
 class RBLNGeneralDITEncoder:
-    def __init__(self, hint_encoders, control_input_keys, in_channels, use_cross_attn_mask):
+    def __init__(
+        self, hint_encoders, control_input_keys, in_channels, use_cross_attn_mask
+    ):
         self.hint_encoders = hint_encoders
         self.control_input_keys = control_input_keys
         self.in_channels = in_channels
@@ -102,7 +104,12 @@ class RBLNGeneralDITEncoder:
             # We need to add the extra channel for video condition mask
             padding_channels = self.in_channels - x.shape[1]
             x = torch.cat(
-                [x, torch.zeros((B, padding_channels, T, H, W), dtype=x.dtype, device=x.device)],
+                [
+                    x,
+                    torch.zeros(
+                        (B, padding_channels, T, H, W), dtype=x.dtype, device=x.device
+                    ),
+                ],
                 dim=1,
             )
         else:
@@ -213,7 +220,9 @@ class RBLNRuntimeControlNet:
     @property
     def runtime(self):
         if self._runtime is None:
-            raise ValueError("Runtime is not created. Please set `create_runtimes=True` first.")
+            raise ValueError(
+                "Runtime is not created. Please set `create_runtimes=True` first."
+            )
         return self._runtime
 
     def create_runtime(self):
@@ -222,7 +231,9 @@ class RBLNRuntimeControlNet:
                 device = None
             else:
                 device = self.rbln_config.get("device", None)
-            self._runtime = self.compiled_model.create_runtime(tensor_type="pt", device=device)
+            self._runtime = self.compiled_model.create_runtime(
+                tensor_type="pt", device=device
+            )
         else:
             print("Runtime is created already.")
 
@@ -240,7 +251,11 @@ class RBLNRuntimeControlNet:
             padding_shape = list(hint.shape)
             padding_shape[1] = self.net.hint_channels - hint.size(1)
             hint = torch.cat(
-                [hint, torch.zeros(*padding_shape, dtype=hint.dtype, device=hint.device)], dim=1
+                [
+                    hint,
+                    torch.zeros(*padding_shape, dtype=hint.dtype, device=hint.device),
+                ],
+                dim=1,
             )
         assert isinstance(data_type, DataType), (
             f"Expected DataType, got {type(data_type)}. We need discuss this flag later."
@@ -282,7 +297,9 @@ class RBLNRuntimeControlNet:
             padding_mask = padding_mask.unsqueeze(2).expand(
                 x_B_C_T_H_W.size(0), -1, x_B_C_T_H_W.size(2), -1, -1
             )
-            x_B_C_T_H_W = torch.cat([x_B_C_T_H_W, padding_mask], dim=1)  # [B, C+1, T, H, W]
+            x_B_C_T_H_W = torch.cat(
+                [x_B_C_T_H_W, padding_mask], dim=1
+            )  # [B, C+1, T, H, W]
 
         x_B_T_H_W_D = self.net.x_embedder(x_B_C_T_H_W)
 
@@ -301,7 +318,9 @@ class RBLNRuntimeControlNet:
                 x_B_T_H_W_D, fps=fps
             )  # [B, T, H, W, D]
         else:
-            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(x_B_T_H_W_D)  # [B, T, H, W, D]
+            x_B_T_H_W_D = x_B_T_H_W_D + self.net.pos_embedder(
+                x_B_T_H_W_D
+            )  # [B, T, H, W, D]
 
         return x_B_T_H_W_D, None, extra_pos_emb
 

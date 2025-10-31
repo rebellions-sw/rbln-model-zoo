@@ -26,7 +26,9 @@ def main():
     args = parsing_argument()
     model_id = "stabilityai/stable-diffusion-xl-base-1.0"
 
-    controlnet = ControlNetModel.from_pretrained("diffusers/controlnet-depth-sdxl-1.0-small")
+    controlnet = ControlNetModel.from_pretrained(
+        "diffusers/controlnet-depth-sdxl-1.0-small"
+    )
     vae = AutoencoderKL.from_pretrained("madebyollin/sdxl-vae-fp16-fix")
 
     # Compile and export

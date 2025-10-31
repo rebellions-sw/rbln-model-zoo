@@ -32,7 +32,9 @@ class DEVICE_MAP:
             },
             "siglip_encoder": {"device": "safety_checker/siglip_encoder"},
             "video_safety_model": {"device": "safety_checker/video_safety_model"},
-            "face_blur_filter": {"device": "safety_checker/face_blur_filter/retinaface.rbln"},
+            "face_blur_filter": {
+                "device": "safety_checker/face_blur_filter/retinaface.rbln"
+            },
         },
         "prompt_upsampler": {
             "vision_tower": {
@@ -85,11 +87,16 @@ class RBLNDeviceAllocator:
     """Optimal device allocation algorithm for RBLN models"""
 
     def __init__(
-        self, device_memory_limit: float = 15.7, safety_margin: float = 0.5, max_devices: int = 16
+        self,
+        device_memory_limit: float = 15.7,
+        safety_margin: float = 0.5,
+        max_devices: int = 16,
     ):
         self.device_memory_limit = device_memory_limit
         self.safety_margin = safety_margin  # Safety margin in GiB
-        self.effective_memory_limit = device_memory_limit - safety_margin  # Actual usable memory
+        self.effective_memory_limit = (
+            device_memory_limit - safety_margin
+        )  # Actual usable memory
         self.max_devices = max_devices  # Maximum number of devices available
         self.models: List[ModelInfo] = []
         self.allocation_result: Dict[str, List[int]] = {}
@@ -131,7 +138,10 @@ class RBLNDeviceAllocator:
         if not subfolders:
             raise ValueError("subfolders list cannot be empty")
 
-        preprocessor_map = {"depth": ["depth_anything"], "seg": ["sam2", "grounding_dino"]}
+        preprocessor_map = {
+            "depth": ["depth_anything"],
+            "seg": ["sam2", "grounding_dino"],
+        }
 
         # Required preprocessor models
         required_models = []
@@ -143,7 +153,9 @@ class RBLNDeviceAllocator:
         # Scan subfolders
         for subfolder in subfolders:
             subfolder_path = os.path.join(rbln_dir, subfolder)
-            rbln_files = glob.glob(os.path.join(subfolder_path, "**/*.rbln"), recursive=True)
+            rbln_files = glob.glob(
+                os.path.join(subfolder_path, "**/*.rbln"), recursive=True
+            )
 
             if not rbln_files:
                 log.warning(f"No *.rbln files found in {subfolder}")
@@ -154,7 +166,9 @@ class RBLNDeviceAllocator:
                     if any(hint_model in rbln_file for hint_model in required_models):
                         self.add_model_from_file(rbln_file, rbln_dir)
                 elif subfolder == "ctrlnet":
-                    if any(hint_key + ".rbln" in rbln_file for hint_key in control_inputs):
+                    if any(
+                        hint_key + ".rbln" in rbln_file for hint_key in control_inputs
+                    ):
                         self.add_model_from_file(rbln_file, rbln_dir)
                 else:
                     self.add_model_from_file(rbln_file, rbln_dir)
@@ -173,7 +187,11 @@ class RBLNDeviceAllocator:
             group_key = None
 
             # Check if it makes group with a specific model manually
-            if len(path_parts) >= 2 and path_parts[0] == "preprocessor" and path_parts[1] == "sam2":
+            if (
+                len(path_parts) >= 2
+                and path_parts[0] == "preprocessor"
+                and path_parts[1] == "sam2"
+            ):
                 group_key = f"{path_parts[0]}/{path_parts[1]}"
 
             elif (
@@ -228,14 +246,17 @@ class RBLNDeviceAllocator:
             for group_name, grouped_models in groups_to_create.items():
                 # Check device requirements consistency across group
                 all_same_device_count = (
-                    len(set(model.num_devices_required for model in grouped_models)) == 1
+                    len(set(model.num_devices_required for model in grouped_models))
+                    == 1
                 )
 
                 # Multi-device group with consistent device count: sum per-device memory
                 if all_same_device_count:
                     group_alloc = [0] * grouped_models[0].num_devices_required
                     for model in grouped_models:
-                        group_alloc = [x + y for x, y in zip(group_alloc, model.alloc_per_node)]
+                        group_alloc = [
+                            x + y for x, y in zip(group_alloc, model.alloc_per_node)
+                        ]
                 else:
                     # Mixed device counts - skip for now as it's complex
                     log.debug(
@@ -269,7 +290,10 @@ class RBLNDeviceAllocator:
         if any(model.num_devices_required > 1 for model in models):
             return False
 
-        return sum(model.alloc_per_node[0] for model in models) <= self.effective_memory_limit
+        return (
+            sum(model.alloc_per_node[0] for model in models)
+            <= self.effective_memory_limit
+        )
 
     def find_valid_device_range(
         self, model: "ModelInfo", max_device_index: int = None, start_from: int = 0
@@ -295,7 +319,9 @@ class RBLNDeviceAllocator:
             f"No suitable device range found within {self.max_devices} available devices."
         )
 
-    def can_allocate_to_range(self, model: "ModelInfo", device_range: List[int]) -> bool:
+    def can_allocate_to_range(
+        self, model: "ModelInfo", device_range: List[int]
+    ) -> bool:
         """Check if model can be allocated to the specified device range"""
         # Validate device range is within bounds
         if any(device_idx >= self.max_devices for device_idx in device_range):
@@ -325,14 +351,17 @@ class RBLNDeviceAllocator:
         if models_to_allocate is None:
             # Get multi-device models that are not already allocated in groups
             models_to_allocate = [
-                m for m in self.models if m.num_devices_required > 1 and m.name not in result
+                m
+                for m in self.models
+                if m.num_devices_required > 1 and m.name not in result
             ]
 
         # Sort by maximum memory per device (descending), then by number of devices (ascending)
         # This ensures high-memory models get allocated first, allowing lower-memory models
         # to share device ranges
         models_to_allocate.sort(
-            key=lambda x: (x.max_memory_per_device, -x.num_devices_required), reverse=True
+            key=lambda x: (x.max_memory_per_device, -x.num_devices_required),
+            reverse=True,
         )
 
         for model in models_to_allocate:
@@ -349,7 +378,9 @@ class RBLNDeviceAllocator:
 
             # Create device list and allocation
             device_list = list(range(start_idx, start_idx + required_devices))
-            success = self._allocate_model_to_devices(model, device_list, result, manual=False)
+            success = self._allocate_model_to_devices(
+                model, device_list, result, manual=False
+            )
 
             if success:
                 log.debug(
@@ -366,7 +397,9 @@ class RBLNDeviceAllocator:
         if models_to_allocate is None:
             # Get single device models that are not already allocated in groups
             models_to_allocate = [
-                m for m in self.models if m.num_devices_required == 1 and m.name not in result
+                m
+                for m in self.models
+                if m.num_devices_required == 1 and m.name not in result
             ]
 
         models_to_allocate.sort(key=lambda x: x.alloc_per_node[0], reverse=True)
@@ -384,7 +417,9 @@ class RBLNDeviceAllocator:
                         model.alloc_per_node[0]
                         <= self.effective_memory_limit - current_device_memory
                     ):
-                        success = self._allocate_model_to_devices(model, [i], result, manual=False)
+                        success = self._allocate_model_to_devices(
+                            model, [i], result, manual=False
+                        )
                         if success:
                             remaining_models.remove(model)
                             allocation_type = (
@@ -474,10 +509,14 @@ class RBLNDeviceAllocator:
                 continue
 
             # Allocate to specific devices
-            success = self._allocate_model_to_devices(model, device_ids, result, manual=True)
+            success = self._allocate_model_to_devices(
+                model, device_ids, result, manual=True
+            )
 
             if success:
-                log.debug(f"Manual allocation successful: {model.name} -> devices {device_ids}")
+                log.debug(
+                    f"Manual allocation successful: {model.name} -> devices {device_ids}"
+                )
             else:
                 log.warning(
                     f"Manual allocation failed: Unable to allocate {model.name} to devices {device_ids}"
@@ -533,7 +572,9 @@ class RBLNDeviceAllocator:
 
         return True
 
-    def _update_device_memory_usage(self, model: ModelInfo, device_ids: List[int]) -> List[str]:
+    def _update_device_memory_usage(
+        self, model: ModelInfo, device_ids: List[int]
+    ) -> List[str]:
         """Update device memory usage for a model allocation and return memory info strings"""
         memory_info = []
 
@@ -554,7 +595,9 @@ class RBLNDeviceAllocator:
 
         return memory_info
 
-    def _find_ctrlnet_device_range(self, model: "ModelInfo", result: Dict[str, List[int]]) -> int:
+    def _find_ctrlnet_device_range(
+        self, model: "ModelInfo", result: Dict[str, List[int]]
+    ) -> int:
         """Find non-overlapping device range for ControlNet models"""
         required_devices = model.num_devices_required
 
@@ -567,7 +610,9 @@ class RBLNDeviceAllocator:
         log.debug(f"ControlNet devices already used: {sorted(ctrlnet_used_devices)}")
 
         # Calculate maximum possible starting positions within device limits
-        for start_idx in range(0, self.max_devices - required_devices + 1, required_devices):
+        for start_idx in range(
+            0, self.max_devices - required_devices + 1, required_devices
+        ):
             # Generate device range for this starting position
             device_range = list(range(start_idx, start_idx + required_devices))
 
@@ -575,7 +620,9 @@ class RBLNDeviceAllocator:
             if (
                 not set(device_range).intersection(ctrlnet_used_devices)
             ) and self.can_allocate_to_range(model, device_range):
-                log.debug(f"Found non-overlapping range for {model.name}: devices {device_range}")
+                log.debug(
+                    f"Found non-overlapping range for {model.name}: devices {device_range}"
+                )
                 return start_idx
 
         # If no non-overlapping range found, raise error directly
@@ -605,7 +652,9 @@ class RBLNDeviceAllocator:
         # Calculate column width and table width early
         col_width = 25
         devices_per_row = 4
-        table_width = 20 + (col_width * devices_per_row)  # 20 for metric column + device columns
+        table_width = 20 + (
+            col_width * devices_per_row
+        )  # 20 for metric column + device columns
 
         print(f"\n{'=' * table_width}")
         print(f"{'RBLN AUTO DEVICE ALLOCATOR SUMMARY':^{table_width}}")
@@ -613,7 +662,9 @@ class RBLNDeviceAllocator:
         print(f"Total devices used: {total_devices}")
         print(f"Total models allocated: {len(self.allocation_result)}")
         print(f"Device memory limit: {self.device_memory_limit} GiB")
-        print(f"Effective memory limit (with safety margin): {self.effective_memory_limit} GiB")
+        print(
+            f"Effective memory limit (with safety margin): {self.effective_memory_limit} GiB"
+        )
         print(f"{'=' * table_width}")
         print("allocated memory per model")
         for model in self.models:
@@ -685,7 +736,9 @@ class RBLNDeviceAllocator:
                 return name[: max_len - 2] + ".."
 
             # Find max number of models in any device for this chunk
-            max_models_in_chunk = max(len(device_usage.get(device, [])) for device in device_chunk)
+            max_models_in_chunk = max(
+                len(device_usage.get(device, [])) for device in device_chunk
+            )
 
             # Print each model line by line (starting with header row)
             for model_idx in range(max_models_in_chunk):
@@ -695,12 +748,16 @@ class RBLNDeviceAllocator:
                     model_line = f"{'':<20}"
 
                 for device in device_chunk:
-                    models = device_usage.get(device, [])  # Empty list for unused devices
+                    models = device_usage.get(
+                        device, []
+                    )  # Empty list for unused devices
 
                     if model_idx < len(models):
                         # Calculate available space for model name (leave some margin)
                         max_name_len = col_width - 4
-                        model_name = smart_truncate_model_name(models[model_idx], max_name_len)
+                        model_name = smart_truncate_model_name(
+                            models[model_idx], max_name_len
+                        )
                         model_str = f"'{model_name}'"
                     else:
                         model_str = ""
@@ -749,7 +806,9 @@ class RBLNDeviceAllocator:
         print()
 
 
-def get_rbln_device(rbln_dir, control_inputs, subfolders=None, print_summary=True, max_devices=16):
+def get_rbln_device(
+    rbln_dir, control_inputs, subfolders=None, print_summary=True, max_devices=16
+):
     allocator = RBLNDeviceAllocator(
         device_memory_limit=15.7, safety_margin=0.2, max_devices=max_devices
     )
@@ -805,7 +864,9 @@ def get_rbln_device(rbln_dir, control_inputs, subfolders=None, print_summary=Tru
     if print_summary:
         allocator.print_allocation_summary()
 
-    rbln_device_config = parse_config(DEVICE_MAP.RBLN_DEVICE, allocation_result, subfolders)
+    rbln_device_config = parse_config(
+        DEVICE_MAP.RBLN_DEVICE, allocation_result, subfolders
+    )
 
     return rbln_device_config
 
@@ -866,7 +927,9 @@ def parse_config(device_config, allocation_result, subfolders):
             for model_path, device in allocation_result.items():
                 if "ctrlnet" in model_path:
                     path_parts = model_path.split("/")
-                    device_config[subfolder].update({path_parts[1][:-5]: {"device": device}})
+                    device_config[subfolder].update(
+                        {path_parts[1][:-5]: {"device": device}}
+                    )
         else:
             device_config[subfolder].update(
                 {

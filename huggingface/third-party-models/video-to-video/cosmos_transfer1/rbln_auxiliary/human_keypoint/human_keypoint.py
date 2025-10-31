@@ -43,7 +43,9 @@ class HumanKeypointModel:
         Output: mp4 keypoint video, of the same spatial and temporal dimensions as the input video.
         """
 
-        log.info(f"Processing video: {input_video} to generate keypoint video: {output_video}")
+        log.info(
+            f"Processing video: {input_video} to generate keypoint video: {output_video}"
+        )
         assert os.path.exists(input_video)
 
         cap = cv2.VideoCapture(input_video)
@@ -56,7 +58,9 @@ class HumanKeypointModel:
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         skeleton_writer = cv2.VideoWriter(output_video, fourcc, fps, frame_size)
 
-        log.info(f"frame width: {frame_width}, frame height: {frame_height}, fps: {fps}")
+        log.info(
+            f"frame width: {frame_width}, frame height: {frame_height}, fps: {fps}"
+        )
         log.info("start pose estimation for frames..")
 
         # Process each frame
@@ -98,7 +102,9 @@ class HumanKeypointModel:
         radius: int = 2,
         line_width: int = 4,
     ):
-        skeleton_topology = openpose134_skeleton if openpose_format else coco_wholebody_133_skeleton
+        skeleton_topology = (
+            openpose134_skeleton if openpose_format else coco_wholebody_133_skeleton
+        )
         assert len(keypoints.shape) == 2
         keypoint_info, skeleton_info = (
             skeleton_topology["keypoint_info"],
@@ -113,7 +119,9 @@ class HumanKeypointModel:
             kpt = keypoints[i]
 
             if vis_kpt[i]:
-                img = cv2.circle(img, (int(kpt[0]), int(kpt[1])), int(radius), kpt_color, -1)
+                img = cv2.circle(
+                    img, (int(kpt[0]), int(kpt[1])), int(radius), kpt_color, -1
+                )
 
         for i, ske_info in skeleton_info.items():
             link = ske_info["link"]

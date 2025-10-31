@@ -42,7 +42,9 @@ class RBLNCosmosT5TextEncoder(torch.nn.Module):
         super().__init__()
 
         if export:
-            self.tokenizer = T5TokenizerFast.from_pretrained(checkpoint_id, cache_dir=cache_dir)
+            self.tokenizer = T5TokenizerFast.from_pretrained(
+                checkpoint_id, cache_dir=cache_dir
+            )
             self.text_encoder = RBLNT5EncoderModel.from_pretrained(
                 checkpoint_id,
                 cache_dir=cache_dir,
@@ -50,7 +52,9 @@ class RBLNCosmosT5TextEncoder(torch.nn.Module):
                 rbln_config=rbln_config,
             )
         else:
-            self.tokenizer = T5TokenizerFast.from_pretrained(checkpoint_id, subfolder="tokenizer")
+            self.tokenizer = T5TokenizerFast.from_pretrained(
+                checkpoint_id, subfolder="tokenizer"
+            )
             self.text_encoder = RBLNT5EncoderModel.from_pretrained(
                 checkpoint_id,
                 subfolder="text_encoder",

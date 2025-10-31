@@ -1,13 +1,16 @@
 import os
 
-from optimum.rbln import RBLNCosmosVideoToWorldPipeline, RBLNLlavaForConditionalGeneration
+from optimum.rbln import (
+    RBLNAutoModelForVision2Seq,
+    RBLNCosmosVideoToWorldPipeline,
+)
 
 
 def main():
     # step 1. Compile Cosmos Upsampler
     upsampler_model_id = "mistral-community/pixtral-12b"
 
-    upsampler = RBLNLlavaForConditionalGeneration.from_pretrained(
+    upsampler = RBLNAutoModelForVision2Seq.from_pretrained(
         upsampler_model_id,
         export=True,
         rbln_config={

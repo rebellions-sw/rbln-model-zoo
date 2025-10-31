@@ -36,7 +36,9 @@ def main():
     cfg = get_config(sys.path[0] + CONFIG[model_name])
 
     os.makedirs("./data/action", exist_ok=True)
-    vid_url = "https://download.openmmlab.com/mmaction/pyskl/data/nturgbd/ntu60_hrnet.pkl"
+    vid_url = (
+        "https://download.openmmlab.com/mmaction/pyskl/data/nturgbd/ntu60_hrnet.pkl"
+    )
     urllib.request.urlretrieve(vid_url, "./data/action/ntu60_hrnet.pkl")
 
     testloader_params = {

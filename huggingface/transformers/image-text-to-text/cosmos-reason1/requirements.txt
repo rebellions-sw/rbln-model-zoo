@@ -1,0 +1,2 @@
+optimum-rbln
+qwen-vl-utils[decord]==0.0.11

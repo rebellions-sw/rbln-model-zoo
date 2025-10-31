@@ -215,14 +215,18 @@ def main():
     predictor.set_image_postprocess(image_batch, feats)
 
     if len(image_batch) == 1:
-        masks_batch, scores_batch, logits_batch = predictor.predict(pts_batch[0], labels_batch[0])
+        masks_batch, scores_batch, logits_batch = predictor.predict(
+            pts_batch[0], labels_batch[0]
+        )
     else:
         masks_batch, scores_batch, logits_batch = predictor.predict_batch(
             pts_batch, labels_batch, box_batch=None, multimask_output=True
         )
 
     # Save segmented images
-    save_segmented_image(image_batch, pts_batch, masks_batch, labels_batch, scores_batch)
+    save_segmented_image(
+        image_batch, pts_batch, masks_batch, labels_batch, scores_batch
+    )
 
 
 if __name__ == "__main__":

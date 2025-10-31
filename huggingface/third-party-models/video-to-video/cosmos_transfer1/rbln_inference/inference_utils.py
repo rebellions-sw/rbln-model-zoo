@@ -38,8 +38,12 @@ from cosmos_transfer1.checkpoints import (
     UPSCALER_CONTROLNET_7B_CHECKPOINT_PATH,
     VIS2WORLD_CONTROLNET_7B_CHECKPOINT_PATH,
 )
-from cosmos_transfer1.diffusion.config.transfer.augmentors import BilateralOnlyBlurAugmentorConfig
-from cosmos_transfer1.diffusion.datasets.augmentors.control_input import get_augmentor_for_eval
+from cosmos_transfer1.diffusion.config.transfer.augmentors import (
+    BilateralOnlyBlurAugmentorConfig,
+)
+from cosmos_transfer1.diffusion.datasets.augmentors.control_input import (
+    get_augmentor_for_eval,
+)
 from cosmos_transfer1.diffusion.model.model_t2w import DiffusionT2WModel
 from cosmos_transfer1.diffusion.model.model_v2w import DiffusionV2WModel
 from cosmos_transfer1.diffusion.training.models.extend_model import ExtendDiffusionModel
@@ -101,7 +105,9 @@ class _IncompatibleKeys(
     pass
 
 
-def non_strict_load_model(model: torch.nn.Module, checkpoint_state_dict: dict) -> _IncompatibleKeys:
+def non_strict_load_model(
+    model: torch.nn.Module, checkpoint_state_dict: dict
+) -> _IncompatibleKeys:
     """Load a model checkpoint with non-strict matching, handling shape mismatches.
 
     Args:
@@ -153,7 +159,9 @@ def non_strict_load_model(model: torch.nn.Module, checkpoint_state_dict: dict) -
                 if has_observer_base_classes:
                     # Handle the special case of quantization per channel observers,
                     # where buffer shape mismatches are expected.
-                    def _get_module_for_key(model: torch.nn.Module, key: str) -> torch.nn.Module:
+                    def _get_module_for_key(
+                        model: torch.nn.Module, key: str
+                    ) -> torch.nn.Module:
                         # foo.bar.param_or_buffer_name -> [foo, bar]
                         key_parts = key.split(".")[:-1]
                         cur_module = model
@@ -178,7 +186,9 @@ def non_strict_load_model(model: torch.nn.Module, checkpoint_state_dict: dict) -
     # Remove keys with "_extra_state" suffix, which are non-parameter items
     # introduced by TransformerEngine for FP8 handling
     missing_keys = [k for k in incompatible.missing_keys if "_extra_state" not in k]
-    unexpected_keys = [k for k in incompatible.unexpected_keys if "_extra_state" not in k]
+    unexpected_keys = [
+        k for k in incompatible.unexpected_keys if "_extra_state" not in k
+    ]
     return _IncompatibleKeys(
         missing_keys=missing_keys,
         unexpected_keys=unexpected_keys,
@@ -204,8 +214,18 @@ def load_model_by_config(
     model_class=DiffusionT2WModel,
     base_checkpoint_dir="",
 ):
-    config_module = get_config_module(config_file)
-    config = importlib.import_module(config_module).make_config()
+    try:
+        config_module = get_config_module(config_file)
+        config = importlib.import_module(config_module).make_config()
+    except:
+        # fallback to config which can be imported if cannot found the config file.
+        log.warning(
+            f"Failed to load config from path: {config_file}. use default config."
+        )
+        from cosmos_transfer1.diffusion.config.transfer.config import make_config
+
+        config = make_config()
+
     config = override(config, ["--", f"experiment={config_job_name}"])
     if base_checkpoint_dir != "" and hasattr(config.model, "base_load_from"):
         if hasattr(config.model.base_load_from, "load_path"):
@@ -302,7 +322,13 @@ def prepare_data_batch(
 
 
 def get_video_batch(
-    model, prompt_embedding, negative_prompt_embedding, height, width, fps, num_video_frames
+    model,
+    prompt_embedding,
+    negative_prompt_embedding,
+    height,
+    width,
+    fps,
+    num_video_frames,
 ):
     """Prepare complete input batch for video generation including latent dimensions.
 
@@ -344,7 +370,9 @@ def resize_video(video_np, h, w, interpolation=cv2.INTER_AREA):
     resized_video = np.zeros((t, h, w, 3), dtype=np.uint8)
     for i in range(t):
         resized_video[i] = cv2.resize(video_np[i], (w, h), interpolation=interpolation)
-    return resized_video.transpose((3, 0, 1, 2))[None]  # Convert back to B x C x T x H x W
+    return resized_video.transpose((3, 0, 1, 2))[
+        None
+    ]  # Convert back to B x C x T x H x W
 
 
 def detect_aspect_ratio(img_size: tuple[int]):
@@ -359,7 +387,10 @@ def detect_aspect_ratio(img_size: tuple[int]):
 
 
 def get_upscale_size(
-    orig_size: tuple[int], aspect_ratio: str, upscale_factor: int = 3, patch_overlap: int = 256
+    orig_size: tuple[int],
+    aspect_ratio: str,
+    upscale_factor: int = 3,
+    patch_overlap: int = 256,
 ):
     patch_w, patch_h = orig_size
     if aspect_ratio == "16,9" or aspect_ratio == "4,3":
@@ -383,7 +414,9 @@ def read_and_resize_input(input_control_path, num_total_frames, interpolation):
         max_frames=num_total_frames,
         also_return_fps=True,
     )  # BCTHW
-    aspect_ratio = detect_aspect_ratio((control_input.shape[-1], control_input.shape[-2]))
+    aspect_ratio = detect_aspect_ratio(
+        (control_input.shape[-1], control_input.shape[-2])
+    )
     w, h = VIDEO_RES_SIZE_INFO[aspect_ratio]
     control_input = resize_video(
         control_input, h, w, interpolation=interpolation
@@ -393,7 +426,13 @@ def read_and_resize_input(input_control_path, num_total_frames, interpolation):
 
 
 def get_video_batch_for_multiview_model(
-    model, prompt_embedding, height, width, fps, num_video_frames, frame_repeat_negative_condition
+    model,
+    prompt_embedding,
+    height,
+    width,
+    fps,
+    num_video_frames,
+    frame_repeat_negative_condition,
 ):
     """Prepare complete input batch for video generation including latent dimensions.
 
@@ -412,7 +451,9 @@ def get_video_batch_for_multiview_model(
             - state_shape (list): Shape of latent state [C,T,H,W] accounting for VAE compression
     """
     n_views = len(prompt_embedding)
-    prompt_embedding = einops.rearrange(prompt_embedding, "n t d -> (n t) d").unsqueeze(0)
+    prompt_embedding = einops.rearrange(prompt_embedding, "n t d -> (n t) d").unsqueeze(
+        0
+    )
     raw_video_batch = prepare_data_batch(
         height=height,
         width=width,
@@ -427,7 +468,8 @@ def get_video_batch_for_multiview_model(
         raw_video_batch["frame_repeat"] = frame_repeat.unsqueeze(0)
     state_shape = [
         model.tokenizer.channel,
-        model.tokenizer.get_latent_num_frames(int(num_video_frames / n_views)) * n_views,
+        model.tokenizer.get_latent_num_frames(int(num_video_frames / n_views))
+        * n_views,
         height // model.tokenizer.spatial_compression_factor,
         width // model.tokenizer.spatial_compression_factor,
     ]
@@ -474,7 +516,13 @@ def get_ctrl_batch_mv(
             control_input = control_input[None]
         control_input = control_input / 255 * 2 - 1
         control_weights = load_spatial_temporal_weights(
-            control_weights, B=1, T=num_total_frames, H=target_h, W=target_w, patch_h=H, patch_w=W
+            control_weights,
+            B=1,
+            T=num_total_frames,
+            H=target_h,
+            W=target_w,
+            patch_h=H,
+            patch_w=W,
         )
         data_batch["control_weight"] = control_weights
 
@@ -495,7 +543,9 @@ def get_ctrl_batch_mv(
         mapped_indices = [0, 1, 2, 4, 5]
         view_indices_conditioning = []
         for v_index in mapped_indices:
-            view_indices_conditioning.append(torch.ones(num_video_frames, device="cpu") * v_index)
+            view_indices_conditioning.append(
+                torch.ones(num_video_frames, device="cpu") * v_index
+            )
         view_indices_conditioning = torch.cat(view_indices_conditioning, dim=0)
         data_batch["view_indices"] = view_indices_conditioning.unsqueeze(0).contiguous()
 
@@ -535,7 +585,9 @@ def get_batched_ctrl_batch(
 
     def prepare_single_data_batch(b):
         data_batch = {
-            "video": torch.zeros((1, 3, num_video_frames, height, width), dtype=torch.uint8),
+            "video": torch.zeros(
+                (1, 3, num_video_frames, height, width), dtype=torch.uint8
+            ),
             "t5_text_mask": torch.ones(1, 512),
             "image_size": torch.tensor([[height, width, height, width]]),
             "fps": torch.tensor([fps]),
@@ -575,7 +627,9 @@ def get_batched_ctrl_batch(
                 # Concatenate along batch dimension (dim=0) for other tensors
                 batched_data_batch[k] = torch.cat([d[k] for d in single_batches], dim=0)
         else:
-            batched_data_batch[k] = single_batches[0][k]  # assume they're the same for now
+            batched_data_batch[k] = single_batches[0][
+                k
+            ]  # assume they're the same for now
 
     state_shape = [
         model.tokenizer.channel,
@@ -616,7 +670,9 @@ def get_ctrl_batch(
     num_total_frames = NUM_MAX_FRAMES
     if input_video_path:
         input_frames, fps, aspect_ratio = read_and_resize_input(
-            input_video_path, num_total_frames=num_total_frames, interpolation=cv2.INTER_AREA
+            input_video_path,
+            num_total_frames=num_total_frames,
+            interpolation=cv2.INTER_AREA,
         )
         _, num_total_frames, H, W = input_frames.shape
         control_input_dict["video"] = input_frames.numpy()  # CTHW
@@ -633,16 +689,23 @@ def get_ctrl_batch(
             log.info(f"reading control input {in_file} for hint {hint_key}")
             control_input_dict[f"control_input_{hint_key}"], fps, aspect_ratio = (
                 read_and_resize_input(
-                    in_file, num_total_frames=num_total_frames, interpolation=interpolation
+                    in_file,
+                    num_total_frames=num_total_frames,
+                    interpolation=interpolation,
                 )
             )  # CTHW
             num_total_frames = min(
-                num_total_frames, control_input_dict[f"control_input_{hint_key}"].shape[1]
+                num_total_frames,
+                control_input_dict[f"control_input_{hint_key}"].shape[1],
             )
-            target_h, target_w = H, W = control_input_dict[f"control_input_{hint_key}"].shape[2:]
+            target_h, target_w = H, W = control_input_dict[
+                f"control_input_{hint_key}"
+            ].shape[2:]
         if hint_key == "upscale":
             orig_size = (W, H)
-            target_w, target_h = get_upscale_size(orig_size, aspect_ratio, upscale_factor=3)
+            target_w, target_h = get_upscale_size(
+                orig_size, aspect_ratio, upscale_factor=3
+            )
             input_resized = resize_video(
                 input_frames[None].numpy(),
                 target_h,
@@ -652,16 +715,22 @@ def get_ctrl_batch(
             control_input_dict["control_input_upscale"] = split_video_into_patches(
                 torch.from_numpy(input_resized), H, W
             )
-            data_batch["input_video"] = control_input_dict["control_input_upscale"] / 255 * 2 - 1
+            data_batch["input_video"] = (
+                control_input_dict["control_input_upscale"] / 255 * 2 - 1
+            )
         control_weights.append(control_info["control_weight"])
 
     # Trim all control videos and input video to be the same length.
-    log.info(f"Making all control and input videos to be length of {num_total_frames} frames.")
+    log.info(
+        f"Making all control and input videos to be length of {num_total_frames} frames."
+    )
     if len(control_inputs) > 1:
         for hint_key in control_inputs.keys():
             cur_key = f"control_input_{hint_key}"
             if cur_key in control_input_dict:
-                control_input_dict[cur_key] = control_input_dict[cur_key][:, :num_total_frames]
+                control_input_dict[cur_key] = control_input_dict[cur_key][
+                    :, :num_total_frames
+                ]
     if input_video_path:
         control_input_dict["video"] = control_input_dict["video"][:, :num_total_frames]
         data_batch["input_video"] = data_batch["input_video"][:, :, :num_total_frames]
@@ -681,7 +750,13 @@ def get_ctrl_batch(
             control_input = control_input[None]
         control_input = control_input / 255 * 2 - 1
         control_weights = load_spatial_temporal_weights(
-            control_weights, B=1, T=num_video_frames, H=target_h, W=target_w, patch_h=H, patch_w=W
+            control_weights,
+            B=1,
+            T=num_video_frames,
+            H=target_h,
+            W=target_w,
+            patch_h=H,
+            patch_w=W,
         )
         data_batch["control_weight"] = control_weights
 
@@ -701,15 +776,20 @@ def get_ctrl_batch(
 
 
 def generate_control_input(
-    input_file_path, save_folder, hint_key, blur_strength, canny_threshold, num_total_frames=10
+    input_file_path,
+    save_folder,
+    hint_key,
+    blur_strength,
+    canny_threshold,
+    num_total_frames=10,
 ):
     log.info(
         f"Generating control input for {hint_key} with blur strength {blur_strength} "
         f"and canny threshold {canny_threshold}"
     )
-    video_input = read_video_or_image_into_frames_BCTHW(input_file_path, normalize=False)[
-        0, :, :num_total_frames
-    ]
+    video_input = read_video_or_image_into_frames_BCTHW(
+        input_file_path, normalize=False
+    )[0, :, :num_total_frames]
     control_input = get_augmentor_for_eval(
         input_key="video",
         output_key=hint_key,
@@ -757,9 +837,9 @@ def generate_world_from_control(
     Returns:
         np.array: Generated video frames in shape [T,H,W,C], range [0,255]
     """
-    assert not model.config.conditioner.video_cond_bool.sample_tokens_start_from_p_or_i, (
-        "not supported"
-    )
+    assert (
+        not model.config.conditioner.video_cond_bool.sample_tokens_start_from_p_or_i
+    ), "not supported"
 
     if augment_sigma is None:
         augment_sigma = DEFAULT_AUGMENT_SIGMA
@@ -824,7 +904,11 @@ def read_video_or_image_into_frames_BCTHW(
 
     loaded_data = load_from_fileobj(input_path, format=input_path_format)
     frames, meta_data = loaded_data
-    if input_path.endswith(".png") or input_path.endswith(".jpg") or input_path.endswith(".jpeg"):
+    if (
+        input_path.endswith(".png")
+        or input_path.endswith(".jpg")
+        or input_path.endswith(".jpeg")
+    ):
         frames = np.array(frames[0])  # HWC, [0,255]
         if frames.shape[-1] > 3:  # RGBA, set the transparent to white
             # Separate the RGB and Alpha channels
@@ -836,7 +920,8 @@ def read_video_or_image_into_frames_BCTHW(
 
             # Blend the RGB channels with the white background based on the alpha channel
             frames = (
-                rgb_channels * alpha_channel[..., None] + white_bg * (1 - alpha_channel[..., None])
+                rgb_channels * alpha_channel[..., None]
+                + white_bg * (1 - alpha_channel[..., None])
             ).astype(np.uint8)
         frames = [frames]
         fps = 0
@@ -860,7 +945,9 @@ def read_video_or_image_into_frames_BCTHW(
     input_tensor = einops.rearrange(input_tensor, "(b t) c h w -> b c t h w", b=1)
     if normalize:
         input_tensor = input_tensor
-    log.debug(f"Load shape {input_tensor.shape} value {input_tensor.min()}, {input_tensor.max()}")
+    log.debug(
+        f"Load shape {input_tensor.shape} value {input_tensor.min()}, {input_tensor.max()}"
+    )
     if also_return_fps:
         return input_tensor, fps
     return input_tensor
@@ -940,7 +1027,10 @@ def create_condition_latent_from_input_frames(
     )
 
     # Put the conditioal frames to the begining of the video, and pad the end with zero
-    if model.config.conditioner.video_cond_bool.condition_location == "first_and_last_1":
+    if (
+        model.config.conditioner.video_cond_bool.condition_location
+        == "first_and_last_1"
+    ):
         condition_frames_first = input_frames[:, :, :num_frames_condition]
         condition_frames_last = input_frames[:, :, -num_frames_condition:]
         padding_frames = condition_frames_first.new_zeros(
@@ -971,7 +1061,10 @@ def create_condition_latent_from_input_frames(
             encode_input_frames, "(B V) C T H W -> B C (V T) H W", V=model.n_views
         )
         latent = model.encode(encode_input_frames)
-    elif model.config.conditioner.video_cond_bool.condition_location == "first_and_last_1":
+    elif (
+        model.config.conditioner.video_cond_bool.condition_location
+        == "first_and_last_1"
+    ):
         latent1 = model.encode(encode_input_frames[:, :, :num_frames_encode])  # BCTHW
         latent2 = model.encode(encode_input_frames[:, :, num_frames_encode:])
         latent = torch.cat([latent1, latent2], dim=2)  # BCTHW
@@ -1053,7 +1146,10 @@ def get_condition_latent(
         H=H,
         W=W,
     )
-    if model.config.conditioner.video_cond_bool.condition_location == "first_and_last_1":
+    if (
+        model.config.conditioner.video_cond_bool.condition_location
+        == "first_and_last_1"
+    ):
         start_frame = frame_index * frame_stride
         end_frame = (frame_index + 1) * frame_stride
         curr_input_frames = torch.cat(
@@ -1096,7 +1192,9 @@ def check_input_frames(input_path: str, required_frames: int) -> bool:
     """
     if input_path.endswith((".jpg", ".jpeg", ".png")):
         if required_frames > 1:
-            log.error(f"Input ({input_path}) is an image but {required_frames} frames are required")
+            log.error(
+                f"Input ({input_path}) is an image but {required_frames} frames are required"
+            )
             return False
         return True  # Let the pipeline handle image loading
     # For video input
@@ -1146,7 +1244,9 @@ def load_spatial_temporal_weights(weight_paths, B, T, H, W, patch_h, patch_w):
                 if w.ndim == 2:  # Spatial only
                     w = w.unsqueeze(0).repeat(T, 1, 1)
                 elif w.ndim != 3:
-                    raise ValueError(f"Weight map must be 2D or 3D, got shape {w.shape}")
+                    raise ValueError(
+                        f"Weight map must be 2D or 3D, got shape {w.shape}"
+                    )
 
                 if w.shape != (T, H, W):
                     w = (
@@ -1216,7 +1316,9 @@ def split_video_into_patches(tensor, patch_h, patch_w):
     n_img_h = (h - 1) // patch_h + 1
     overlap_size_h = overlap_size_w = 0
     if n_img_w > 1:
-        overlap_size_w = (n_img_w * patch_w - w) // (n_img_w - 1)  # 512 for n=2, 320 for n=4
+        overlap_size_w = (n_img_w * patch_w - w) // (
+            n_img_w - 1
+        )  # 512 for n=2, 320 for n=4
         assert n_img_w * patch_w - overlap_size_w * (n_img_w - 1) == w
     if n_img_h > 1:
         overlap_size_h = (n_img_h * patch_h - h) // (n_img_h - 1)
@@ -1228,7 +1330,13 @@ def split_video_into_patches(tensor, patch_h, patch_w):
     for i in range(n_img_h):
         for j in range(n_img_w):
             patches += [
-                tensor[:, :, :, p_h * i : (p_h * i + patch_h), p_w * j : (p_w * j + patch_w)]
+                tensor[
+                    :,
+                    :,
+                    :,
+                    p_h * i : (p_h * i + patch_h),
+                    p_w * j : (p_w * j + patch_w),
+                ]
             ]
     return torch.cat(patches)
 
@@ -1244,12 +1352,16 @@ def merge_patches_into_video(imgs, overlap_size_h, overlap_size_w, n_img_h, n_im
     # Create a linear mask for blending.
     def create_linear_gradient_tensor(H, W, overlap_size_h, overlap_size_w):
         y, x = torch.meshgrid(
-            torch.minimum(torch.arange(H), H - torch.arange(H)) / (overlap_size_h + 1e-6),
-            torch.minimum(torch.arange(W), W - torch.arange(W)) / (overlap_size_w + 1e-6),
+            torch.minimum(torch.arange(H), H - torch.arange(H))
+            / (overlap_size_h + 1e-6),
+            torch.minimum(torch.arange(W), W - torch.arange(W))
+            / (overlap_size_w + 1e-6),
         )
         return torch.clamp(y, 0.01, 1) * torch.clamp(x, 0.01, 1)
 
-    mask_ij = create_linear_gradient_tensor(h, w, overlap_size_h, overlap_size_w).to(imgs)
+    mask_ij = create_linear_gradient_tensor(h, w, overlap_size_h, overlap_size_w).to(
+        imgs
+    )
 
     for i in range(n_img_h):
         for j in range(n_img_w):
@@ -1262,7 +1374,16 @@ def merge_patches_into_video(imgs, overlap_size_h, overlap_size_w, n_img_h, n_im
     return img_sum / (mask_sum[None, None, None, :, :] + 1e-6)
 
 
-valid_hint_keys = {"vis", "seg", "edge", "depth", "keypoint", "upscale", "hdmap", "lidar"}
+valid_hint_keys = {
+    "vis",
+    "seg",
+    "edge",
+    "depth",
+    "keypoint",
+    "upscale",
+    "hdmap",
+    "lidar",
+}
 
 
 def load_controlnet_specs(cfg) -> Dict[str, Any]:
@@ -1277,7 +1398,9 @@ def load_controlnet_specs(cfg) -> Dict[str, Any]:
             controlnet_specs[hint_key] = config
         else:
             if isinstance(config, dict):
-                raise ValueError(f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}")
+                raise ValueError(
+                    f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}"
+                )
             else:
                 args[hint_key] = config
                 continue
@@ -1302,7 +1425,9 @@ def validate_controlnet_specs(cfg, controlnet_specs) -> Dict[str, Any]:
 
     for hint_key, config in controlnet_specs.items():
         if hint_key not in valid_hint_keys:
-            raise ValueError(f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}")
+            raise ValueError(
+                f"Invalid hint_key: {hint_key}. Must be one of {valid_hint_keys}"
+            )
 
         if not input_video_path and sigma_max < 80:
             raise ValueError("Must have 'input_video' specified if sigma_max < 80")
@@ -1343,7 +1468,9 @@ def validate_controlnet_specs(cfg, controlnet_specs) -> Dict[str, Any]:
                     # Try converting to float
                     scalar_value = float(weight)
                     if scalar_value < 0:
-                        raise ValueError(f"Control weight for {hint_key} must be non-negative.")
+                        raise ValueError(
+                            f"Control weight for {hint_key} must be non-negative."
+                        )
                 except ValueError:
                     raise ValueError(
                         f"Control weight for {hint_key} must be a valid non-negative float "
@@ -1365,7 +1492,9 @@ def switch_config_for_inference(model: ExtendDiffusionModel):
         model (ExtendDiffusionModel): video generation model
     """
     # Store the current condition_location
-    current_condition_location = model.config.conditioner.video_cond_bool.condition_location
+    current_condition_location = (
+        model.config.conditioner.video_cond_bool.condition_location
+    )
     current_apply_corruption_to_condition_region = (
         model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region
     )
@@ -1379,10 +1508,10 @@ def switch_config_for_inference(model: ExtendDiffusionModel):
             model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region = "clean"
             log.info("Change apply_corruption_to_condition_region to clean")
         elif current_apply_corruption_to_condition_region == "noise_with_sigma":
-            model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region = (
-                "noise_with_sigma_fixed"
+            model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region = "noise_with_sigma_fixed"
+            log.info(
+                "Change apply_corruption_to_condition_region to noise_with_sigma_fixed"
             )
-            log.info("Change apply_corruption_to_condition_region to noise_with_sigma_fixed")
         # Yield control back to the calling context
         yield
     finally:
@@ -1391,10 +1520,10 @@ def switch_config_for_inference(model: ExtendDiffusionModel):
             f"Restore the original condition_location {current_condition_location}, "
             f"apply_corruption_to_condition_region {current_apply_corruption_to_condition_region}"
         )
-        model.config.conditioner.video_cond_bool.condition_location = current_condition_location
-        model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region = (
-            current_apply_corruption_to_condition_region
+        model.config.conditioner.video_cond_bool.condition_location = (
+            current_condition_location
         )
+        model.config.conditioner.video_cond_bool.apply_corruption_to_condition_region = current_apply_corruption_to_condition_region
 
 
 def visualize_latent_tensor_bcthw(tensor, nrow=1, show_norm=False, save_fig_path=None):
@@ -1411,7 +1540,9 @@ def visualize_latent_tensor_bcthw(tensor, nrow=1, show_norm=False, save_fig_path
         f"mean={tensor.mean()}, std={tensor.std()}"
     )
     tensor = tensor.float().cpu().detach()
-    tensor = einops.rearrange(tensor, "b c (t n) h w -> (b t h) (n w) c", n=nrow)  # .numpy()
+    tensor = einops.rearrange(
+        tensor, "b c (t n) h w -> (b t h) (n w) c", n=nrow
+    )  # .numpy()
     # display the grid
     tensor_mean = tensor.mean(-1)
     tensor_norm = tensor.norm(dim=-1)
@@ -1438,7 +1569,9 @@ def visualize_tensor_bcthw(tensor: torch.Tensor, nrow=4, save_fig_path=None):
         save_fig_path (str): path to save the visualization
     """
     log.info(f"display {tensor.shape}, {tensor.max()}, {tensor.min()}")
-    assert tensor.max() < 200, f"tensor max {tensor.max()} > 200, the data range is likely wrong"
+    assert tensor.max() < 200, (
+        f"tensor max {tensor.max()} > 200, the data range is likely wrong"
+    )
     tensor = tensor.float().cpu().detach()
     tensor = einops.rearrange(tensor, "b c t h w -> (b t) c h w")
     # use torchvision to save the tensor as a grid of images
@@ -1516,7 +1649,9 @@ def generate_video_from_batch_with_loop(
     if data_batch_list is None:
         data_batch_list = [data_batch for _ in range(num_of_loops)]
     if visualize:
-        assert save_fig_path is not None, "save_fig_path should be set when visualize is True"
+        assert save_fig_path is not None, (
+            "save_fig_path should be set when visualize is True"
+        )
 
     # Generate video with loop
     condition_latent_list = []
@@ -1598,7 +1733,9 @@ def generate_video_from_batch_with_loop(
             visualize_latent_tensor_bcthw(
                 sample[:, :, 4:8].float(),
                 nrow=4,
-                save_fig_path=os.path.join(save_fig_path, f"loop_{i:02d}_sample_latent_last_4.png"),
+                save_fig_path=os.path.join(
+                    save_fig_path, f"loop_{i:02d}_sample_latent_last_4.png"
+                ),
             )  # BCTHW
 
             diff_between_sample_and_condition = (sample - condition_latent)[
@@ -1630,7 +1767,10 @@ def generate_video_from_batch_with_loop(
             # Interpolator works on pixel_chunk_duration==1.
             # the root cause is the mean, std will be incorrect
             # if decode a size different from pixel_chunk_duration.
-            if model.config.conditioner.video_cond_bool.condition_location == "first_and_last_1":
+            if (
+                model.config.conditioner.video_cond_bool.condition_location
+                == "first_and_last_1"
+            ):
                 grid_BCTHW_list = []
                 chunk_size = model.tokenizer.video_vae.pixel_chunk_duration
                 for idx in range(sample.shape[2], chunk_size):
@@ -1638,9 +1778,13 @@ def generate_video_from_batch_with_loop(
                         1.0 + model.decode(sample[:, :, idx : idx + chunk_size, ...])
                     ).clamp(0, 2) / 2  # [B, 3, 1, H, W], [0, 1]
                     grid_BCTHW_list.append(grid_BCTHW)
-                grid_BCTHW = torch.cat(grid_BCTHW_list, dim=2)  # [B, 3, T, H, W], [0, 1]
+                grid_BCTHW = torch.cat(
+                    grid_BCTHW_list, dim=2
+                )  # [B, 3, T, H, W], [0, 1]
             else:
-                grid_BCTHW = (1.0 + model.decode(sample)).clamp(0, 2) / 2  # [B, 3, T, H, W], [0, 1]
+                grid_BCTHW = (1.0 + model.decode(sample)).clamp(
+                    0, 2
+                ) / 2  # [B, 3, T, H, W], [0, 1]
 
             if visualize:
                 log.info(f"Visualize grid {i}")
@@ -1665,7 +1809,9 @@ def generate_video_from_batch_with_loop(
                 downsample_factor=model.tokenizer.temporal_compression_factor,
             )
             if i == 0:
-                new_grid_np_THWC = grid_np_THWC  # First output, dont cut the conditional frames
+                new_grid_np_THWC = (
+                    grid_np_THWC  # First output, dont cut the conditional frames
+                )
             else:
                 # Remove the conditional frames from the output,
                 # since it's overlapped with previous loop
@@ -1702,7 +1848,11 @@ def generate_video_from_batch_with_loop(
             0, 2
         ) / 2  # [B, 3, T, H, W], [0, 1]
         video_THWC = (
-            (grid_BCTHW[0].permute(1, 2, 3, 0) * 255).to(torch.uint8).cpu().numpy().astype(np.uint8)
+            (grid_BCTHW[0].permute(1, 2, 3, 0) * 255)
+            .to(torch.uint8)
+            .cpu()
+            .numpy()
+            .astype(np.uint8)
         )  # THW3, range [0, 255]
     else:
         video_THWC = np.concatenate(grid_list, axis=0)  # THW3, range [0, 255]

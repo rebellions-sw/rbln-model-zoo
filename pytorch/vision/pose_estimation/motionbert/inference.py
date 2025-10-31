@@ -101,7 +101,9 @@ def main():
     results_all = np.concatenate(results_all)
 
     # rendering video using result
-    render_and_save(results_all, f"./3dpose_{model_name}.mp4", keep_imgs=False, fps=fps_in)
+    render_and_save(
+        results_all, f"./3dpose_{model_name}.mp4", keep_imgs=False, fps=fps_in
+    )
 
 
 if __name__ == "__main__":

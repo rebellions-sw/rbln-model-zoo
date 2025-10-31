@@ -28,15 +28,21 @@ def preprocess(image):
 
 def postprocess(outputs, input_image, origin_image):
     pred = non_max_suppression(torch.from_numpy(outputs), 0.4, 0.5)[0]
-    pred[:, :4] = scale_coords(input_image.shape[2:], pred[:, :4], origin_image.shape).round()
+    pred[:, :4] = scale_coords(
+        input_image.shape[2:], pred[:, :4], origin_image.shape
+    ).round()
     names_path = os.path.abspath(os.path.dirname(__file__)) + "/yolov4/data/coco.names"
     with open(names_path) as f:
         names = f.read().split("\n")
         names_list = list(filter(None, names))
-    colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names_list))]
+    colors = [
+        [random.randint(0, 255) for _ in range(3)] for _ in range(len(names_list))
+    ]
     for *xyxy, conf, cls in pred:
         label = "%s %.2f" % (names_list[int(cls)], conf)
-        plot_one_box(xyxy, origin_image, label=label, color=colors[int(cls)], line_thickness=3)
+        plot_one_box(
+            xyxy, origin_image, label=label, color=colors[int(cls)], line_thickness=3
+        )
 
 
 def parsing_argument():

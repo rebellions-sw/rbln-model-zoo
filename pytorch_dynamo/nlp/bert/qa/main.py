@@ -43,7 +43,11 @@ def main():
     tokenizer = BertTokenizer.from_pretrained(model_name)
     question, text = "What is Rebellions?", "Rebellions is the best NPU company."
     inputs = tokenizer(
-        question, text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN
+        question,
+        text,
+        return_tensors="pt",
+        padding="max_length",
+        max_length=MAX_SEQ_LEN,
     )
 
     # (Optional) First call of forward invokes the compilation
@@ -55,7 +59,9 @@ def main():
     # Decoding final logits to text
     answer_start_index = outputs.start_logits.argmax()
     answer_end_index = outputs.end_logits.argmax()
-    predict_answer_tokens = inputs.input_ids[0, answer_start_index : answer_end_index + 1]
+    predict_answer_tokens = inputs.input_ids[
+        0, answer_start_index : answer_end_index + 1
+    ]
     print(f"Question: {question}")
     print(f"Answer: {tokenizer.decode(predict_answer_tokens)}")
 

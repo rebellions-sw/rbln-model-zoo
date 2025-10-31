@@ -1,7 +1,10 @@
 import argparse
 import os
 
-from cosmos_upsampler import RBLNMistralNeMoForTextUpsampler, RBLNMistralNeMoForTextUpsamplerConfig
+from cosmos_upsampler import (
+    RBLNMistralNeMoForTextUpsampler,
+    RBLNMistralNeMoForTextUpsamplerConfig,
+)
 from diffusers.utils import export_to_video
 from optimum.rbln import RBLNAutoConfig, RBLNAutoModel, RBLNCosmosTextToWorldPipeline
 from transformers import AutoTokenizer
@@ -22,11 +25,18 @@ def parsing_argument():
 
 def text_upsampling(text_upsampler, prompt, tokenizer, max_gen_len=512):
     dialogs = [
-        [{"role": "user", "content": f"Upsample the short caption to a long caption: {prompt}"}]
+        [
+            {
+                "role": "user",
+                "content": f"Upsample the short caption to a long caption: {prompt}",
+            }
+        ]
     ]
 
     prompt_tokens = [
-        tokenizer.apply_chat_template(dialog, add_generation_prompt=True, tokenize=False)
+        tokenizer.apply_chat_template(
+            dialog, add_generation_prompt=True, tokenize=False
+        )
         for dialog in dialogs
     ]
     inputs = tokenizer(prompt_tokens, return_tensors="pt", padding=True)
@@ -38,7 +48,9 @@ def text_upsampling(text_upsampler, prompt, tokenizer, max_gen_len=512):
         max_length=min(1024, input_len + max_gen_len),
     )
     extended_prompt = tokenizer.decode(
-        output_sequence[0][input_len:], skip_special_tokens=True, clean_up_tokenization_spaces=True
+        output_sequence[0][input_len:],
+        skip_special_tokens=True,
+        clean_up_tokenization_spaces=True,
     ).replace('"', "")
 
     return extended_prompt

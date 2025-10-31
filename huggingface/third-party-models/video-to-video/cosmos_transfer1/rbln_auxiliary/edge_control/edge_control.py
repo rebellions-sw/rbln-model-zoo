@@ -44,9 +44,15 @@ class EdgeControlModel:
         frames = self._load_frame(input_video)
 
         if self.use_random:
-            t_lower = np.random.randint(20, 100)  # Get a random lower thre within [0, 255]
-            t_diff = np.random.randint(50, 150)  # Get a random diff between lower and upper
-            t_upper = min(255, t_lower + t_diff)  # The upper thre is lower added by the diff
+            t_lower = np.random.randint(
+                20, 100
+            )  # Get a random lower thre within [0, 255]
+            t_diff = np.random.randint(
+                50, 150
+            )  # Get a random diff between lower and upper
+            t_upper = min(
+                255, t_lower + t_diff
+            )  # The upper thre is lower added by the diff
         else:
             if self.preset_strength == "none" or self.preset_strength == "very_low":
                 t_lower, t_upper = 20, 50
@@ -63,7 +69,9 @@ class EdgeControlModel:
         frames = np.array(frames)
 
         # Compute the canny edge map by the two thresholds.
-        edge_maps = [cv2.Canny(img, t_lower, t_upper) for img in frames.transpose((1, 2, 3, 0))]
+        edge_maps = [
+            cv2.Canny(img, t_lower, t_upper) for img in frames.transpose((1, 2, 3, 0))
+        ]
         edge_maps = np.stack(edge_maps)[None]
         edge_maps = torch.from_numpy(edge_maps).expand(3, -1, -1, -1)
 

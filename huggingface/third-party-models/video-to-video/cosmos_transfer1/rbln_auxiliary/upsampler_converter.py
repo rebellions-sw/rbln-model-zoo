@@ -135,7 +135,11 @@ def convert_tekken_tokenizer(tokenizer_file: str):
 def permute_for_rope(value, n_heads, config):
     dim1 = value.shape[0]
     dim2 = config.hidden_size
-    return value.view(n_heads, dim1 // n_heads // 2, 2, dim2).transpose(1, 2).reshape(dim1, dim2)
+    return (
+        value.view(n_heads, dim1 // n_heads // 2, 2, dim2)
+        .transpose(1, 2)
+        .reshape(dim1, dim2)
+    )
 
 
 # https://github.com/huggingface/transformers/blob/242bb2cafccec9f90479f5f688bca9d240b1031f/src/transformers/models/pixtral/convert_pixtral_weights_to_hf.py#L107
@@ -237,7 +241,9 @@ def convert_mistral_model(input_dir, output_dir):
         [file for file in os.listdir(input_dir) if file.endswith(".safetensors")]
     )
     if len(safetensors_files) == 1:
-        full_original_state_dict = safe_load_file(f"{input_dir}/consolidated.safetensors")
+        full_original_state_dict = safe_load_file(
+            f"{input_dir}/consolidated.safetensors"
+        )
     else:
         for file in safetensors_files:
             loaded_dict = safe_load_file(f"{input_dir}/{file}")

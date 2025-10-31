@@ -79,7 +79,9 @@ def main():
     colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
     colors = (colors % 255).numpy().astype("uint8")
 
-    save_img = Image.fromarray(out[0].argmax(0).byte().numpy()).resize(img.size, resample=0)
+    save_img = Image.fromarray(out[0].argmax(0).byte().numpy()).resize(
+        img.size, resample=0
+    )
     save_img.putpalette(colors)
     save_img.save("REBEL.png")
 

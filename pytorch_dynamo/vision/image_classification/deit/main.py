@@ -51,7 +51,9 @@ def main():
     input_size = 384 if "384" in model_name else 224
 
     # Instantiate TorchVision model
-    model = torch.hub.load("facebookresearch/deit:main", model_map[model_name], pretrained=True)
+    model = torch.hub.load(
+        "facebookresearch/deit:main", model_map[model_name], pretrained=True
+    )
     model.eval()
 
     # Prepare input image
@@ -64,7 +66,9 @@ def main():
     # Preprocessing Image
     preprocess = transforms.Compose(
         [
-            transforms.Resize(resize_size, interpolation=transforms.InterpolationMode.BICUBIC),
+            transforms.Resize(
+                resize_size, interpolation=transforms.InterpolationMode.BICUBIC
+            ),
             transforms.CenterCrop(input_size),
             transforms.Normalize(_CHANNEL_MEANS, _CHANNEL_STDS),
         ]

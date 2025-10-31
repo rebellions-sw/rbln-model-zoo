@@ -20,7 +20,9 @@ class YOLOv10Wrapper(torch.nn.Module):
         for m in self.model.model[:-1]:
             if m.f != -1:  # if not from previous layer
                 x = (
-                    y[m.f] if isinstance(m.f, int) else [x if j == -1 else y[j] for j in m.f]
+                    y[m.f]
+                    if isinstance(m.f, int)
+                    else [x if j == -1 else y[j] for j in m.f]
                 )  # from earlier layers
             x = m(x)  # run
             y.append(x if m.i in self.model.save else None)  # save output
@@ -28,14 +30,18 @@ class YOLOv10Wrapper(torch.nn.Module):
         fm = self.model.model[-1]  # v10Detect
         if fm.f != -1:  # if not from previous layer
             x = (
-                y[fm.f] if isinstance(fm.f, int) else [x if j == -1 else y[j] for j in fm.f]
+                y[fm.f]
+                if isinstance(fm.f, int)
+                else [x if j == -1 else y[j] for j in fm.f]
             )  # from earlier layers
 
         # inference v10Detect.forward_end2end without v10Detect.postprocess
         # https://github.com/ultralytics/ultralytics/blob/6dcc4a0610bf445212253fb51b24e29429a2bcc3/ultralytics/nn/modules/head.py#L63
         x_detach = [xi.detach() for xi in x]
         one2one = [
-            torch.cat((fm.one2one_cv2[i](x_detach[i]), fm.one2one_cv3[i](x_detach[i])), 1)
+            torch.cat(
+                (fm.one2one_cv2[i](x_detach[i]), fm.one2one_cv3[i](x_detach[i])), 1
+            )
             for i in range(fm.nl)
         ]
         for i in range(fm.nl):
@@ -49,7 +55,14 @@ def parsing_argument():
     parser.add_argument(
         "--model_name",
         default="yolov10s",
-        choices=["yolov10s", "yolov10n", "yolov10m", "yolov10b", "yolov10l", "yolov10x"],
+        choices=[
+            "yolov10s",
+            "yolov10n",
+            "yolov10m",
+            "yolov10b",
+            "yolov10l",
+            "yolov10x",
+        ],
         help="available model variations",
     )
     return parser.parse_args()

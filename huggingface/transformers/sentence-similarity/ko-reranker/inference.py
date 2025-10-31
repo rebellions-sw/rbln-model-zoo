@@ -45,7 +45,11 @@ def main():
 
     # Prepare inputs
     inputs = tokenizer(
-        pairs, max_length=512, truncation=True, padding="max_length", return_tensors="pt"
+        pairs,
+        max_length=512,
+        truncation=True,
+        padding="max_length",
+        return_tensors="pt",
     )
 
     # Run the model

@@ -72,7 +72,9 @@ class VideoSegmentationModel:
         self.sam2_predictor.to_export()
 
         # Initialize GroundingDINO for text-based detection
-        self.processor = AutoProcessor.from_pretrained("IDEA-Research/grounding-dino-tiny")
+        self.processor = AutoProcessor.from_pretrained(
+            "IDEA-Research/grounding-dino-tiny"
+        )
 
         if export:
             self.grounding_model = RBLNGroundingDinoForObjectDetection.from_pretrained(
@@ -86,7 +88,12 @@ class VideoSegmentationModel:
                             "token_type_ids",
                             "position_ids",
                         ],
-                        "model_input_shapes": [(1, 256), (1, 256, 256), (1, 256), (1, 256)],
+                        "model_input_shapes": [
+                            (1, 256),
+                            (1, 256, 256),
+                            (1, 256),
+                            (1, 256),
+                        ],
                         "create_runtimes": False,
                     },
                     "backbone": {"create_runtimes": False},
@@ -113,7 +120,9 @@ class VideoSegmentationModel:
         """Get bounding boxes (and labels) from a text prompt using GroundingDINO."""
         image = Image.open(image_path).convert("RGB")
 
-        inputs = self.processor(images=image, text=text_prompt, return_tensors="pt").to(self.device)
+        inputs = self.processor(images=image, text=text_prompt, return_tensors="pt").to(
+            self.device
+        )
 
         with torch.no_grad():
             outputs = self.grounding_model(**inputs)
@@ -131,7 +140,9 @@ class VideoSegmentationModel:
         scores = results[0]["scores"].cpu().numpy()
         labels = results[0].get("labels", None)
         if len(boxes) == 0:
-            print(f"No boxes detected for prompt: '{text_prompt}'. Trying with lower thresholds...")
+            print(
+                f"No boxes detected for prompt: '{text_prompt}'. Trying with lower thresholds..."
+            )
             results = self.processor.post_process_grounded_object_detection(
                 outputs,
                 inputs.input_ids,
@@ -159,7 +170,14 @@ class VideoSegmentationModel:
         return {"boxes": boxes, "labels": labels, "scores": scores}
 
     def visualize_frame(
-        self, frame_idx, obj_ids, masks, video_dir, frame_names, visualization_data, save_dir=None
+        self,
+        frame_idx,
+        obj_ids,
+        masks,
+        video_dir,
+        frame_names,
+        visualization_data,
+        save_dir=None,
     ):
         """
         Process a single frame: load the image, apply the segmentation mask to black out the
@@ -221,7 +239,9 @@ class VideoSegmentationModel:
 
         # Get frame names (expecting frames named as numbers with .jpg/.jpeg extension).
         frame_names = [
-            p for p in os.listdir(video_dir) if os.path.splitext(p)[-1].lower() in [".jpg", ".jpeg"]
+            p
+            for p in os.listdir(video_dir)
+            if os.path.splitext(p)[-1].lower() in [".jpg", ".jpeg"]
         ]
         frame_names.sort(key=lambda p: int(os.path.splitext(p)[0]))
 
@@ -247,19 +267,26 @@ class VideoSegmentationModel:
                 if mode == "points":
                     points = input_data.get("points")
                     labels = input_data.get("labels")
-                    frame_idx, obj_ids, masks = self.sam2_predictor.add_new_points_or_box(
-                        inference_state=state,
-                        frame_idx=ann_frame_idx,
-                        obj_id=ann_obj_id,
-                        points=points,
-                        labels=labels,
+                    frame_idx, obj_ids, masks = (
+                        self.sam2_predictor.add_new_points_or_box(
+                            inference_state=state,
+                            frame_idx=ann_frame_idx,
+                            obj_id=ann_obj_id,
+                            points=points,
+                            labels=labels,
+                        )
                     )
                     visualization_data["points"] = points
                     visualization_data["labels"] = labels
                 elif mode == "box":
                     box = input_data.get("box")
-                    frame_idx, obj_ids, masks = self.sam2_predictor.add_new_points_or_box(
-                        inference_state=state, frame_idx=ann_frame_idx, obj_id=ann_obj_id, box=box
+                    frame_idx, obj_ids, masks = (
+                        self.sam2_predictor.add_new_points_or_box(
+                            inference_state=state,
+                            frame_idx=ann_frame_idx,
+                            obj_id=ann_obj_id,
+                            box=box,
+                        )
                     )
                     visualization_data["box"] = box
                 elif mode == "prompt":
@@ -272,18 +299,22 @@ class VideoSegmentationModel:
                         legacy_mask = kwargs.get("legacy_mask", False)
                         if legacy_mask:
                             # Use only the highest confidence box for legacy mask
-                            frame_idx, obj_ids, masks = self.sam2_predictor.add_new_points_or_box(
-                                inference_state=state,
-                                frame_idx=ann_frame_idx,
-                                obj_id=ann_obj_id,
-                                box=boxes[0],
+                            frame_idx, obj_ids, masks = (
+                                self.sam2_predictor.add_new_points_or_box(
+                                    inference_state=state,
+                                    frame_idx=ann_frame_idx,
+                                    obj_id=ann_obj_id,
+                                    box=boxes[0],
+                                )
                             )
                             # Update boxes and labels after processing
                             boxes = boxes[:1]
                             if labels_out is not None:
                                 labels_out = labels_out[:1]
                         else:
-                            for object_id, (box, label) in enumerate(zip(boxes, labels_out)):
+                            for object_id, (box, label) in enumerate(
+                                zip(boxes, labels_out)
+                            ):
                                 frame_idx, obj_ids, masks = (
                                     self.sam2_predictor.add_new_points_or_box(
                                         inference_state=state,
@@ -294,7 +325,9 @@ class VideoSegmentationModel:
                                 )
                         visualization_data["boxes"] = boxes
                         self.grounding_labels = (
-                            [str(lbl) for lbl in labels_out] if labels_out is not None else [text]
+                            [str(lbl) for lbl in labels_out]
+                            if labels_out is not None
+                            else [text]
                         )
                     else:
                         print("No boxes detected. Exiting.")
@@ -429,7 +462,10 @@ class VideoSegmentationModel:
         # Prepare input data based on the selected mode.
         if points is not None:
             mode = "points"
-            input_data = {"points": self.parse_points(points), "labels": self.parse_labels(labels)}
+            input_data = {
+                "points": self.parse_points(points),
+                "labels": self.parse_labels(labels),
+            }
         elif box is not None:
             mode = "box"
             input_data = {"box": self.parse_box(box)}
@@ -457,5 +493,9 @@ class VideoSegmentationModel:
                     write_video(frames, output_video, fps)
                 if output_tensor:
                     generate_tensor_from_images(
-                        temp_output_dir, output_tensor, fps, "mask", weight_scaler=weight_scaler
+                        temp_output_dir,
+                        output_tensor,
+                        fps,
+                        "mask",
+                        weight_scaler=weight_scaler,
                     )

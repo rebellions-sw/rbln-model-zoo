@@ -52,7 +52,9 @@ class Timesteps(nn.Module):
 
 
 class TimestepEmbedding(nn.Module):
-    def __init__(self, in_features: int, out_features: int, use_adaln_lora: bool = False):
+    def __init__(
+        self, in_features: int, out_features: int, use_adaln_lora: bool = False
+    ):
         super().__init__()
         self.linear_1 = nn.Linear(in_features, out_features, bias=not use_adaln_lora)
         self.activation = nn.SiLU()
@@ -104,7 +106,9 @@ class FourierFeatures(nn.Module):
         self.register_buffer(
             "freqs", 2 * np.pi * bandwidth * torch.randn(num_channels), persistent=True
         )
-        self.register_buffer("phases", 2 * np.pi * torch.rand(num_channels), persistent=True)
+        self.register_buffer(
+            "phases", 2 * np.pi * torch.rand(num_channels), persistent=True
+        )
         self.gain = np.sqrt(2) if normalize else 1
 
     def forward(self, x, gain: float = 1.0):
@@ -120,7 +124,11 @@ class FourierFeatures(nn.Module):
             torch.Tensor: The transformed tensor, with Fourier features applied.
         """
         in_dtype = x.dtype
-        x = x.to(torch.float32).ger(self.freqs.to(torch.float32)).add(self.phases.to(torch.float32))
+        x = (
+            x.to(torch.float32)
+            .ger(self.freqs.to(torch.float32))
+            .add(self.phases.to(torch.float32))
+        )
         x = x.cos().mul(self.gain * gain).to(in_dtype)
         return x
 
@@ -162,7 +170,10 @@ class PatchEmbed(nn.Module):
                 n=spatial_patch_size,
             ),
             nn.Linear(
-                in_channels * spatial_patch_size * spatial_patch_size * temporal_patch_size,
+                in_channels
+                * spatial_patch_size
+                * spatial_patch_size
+                * temporal_patch_size,
                 out_channels,
                 bias=bias,
             ),
@@ -210,7 +221,10 @@ class FinalLayer(nn.Module):
         self.norm_final = nn.LayerNorm(hidden_size, elementwise_affine=False, eps=1e-6)
         self.linear = nn.Linear(
             hidden_size,
-            spatial_patch_size * spatial_patch_size * temporal_patch_size * out_channels,
+            spatial_patch_size
+            * spatial_patch_size
+            * temporal_patch_size
+            * out_channels,
             bias=False,
         )
         self.hidden_size = hidden_size
@@ -220,11 +234,14 @@ class FinalLayer(nn.Module):
             self.adaLN_modulation = nn.Sequential(
                 nn.SiLU(),
                 nn.Linear(hidden_size, adaln_lora_dim, bias=False),
-                nn.Linear(adaln_lora_dim, self.n_adaln_chunks * hidden_size, bias=False),
+                nn.Linear(
+                    adaln_lora_dim, self.n_adaln_chunks * hidden_size, bias=False
+                ),
             )
         else:
             self.adaLN_modulation = nn.Sequential(
-                nn.SiLU(), nn.Linear(hidden_size, self.n_adaln_chunks * hidden_size, bias=False)
+                nn.SiLU(),
+                nn.Linear(hidden_size, self.n_adaln_chunks * hidden_size, bias=False),
             )
 
     def forward(
@@ -236,7 +253,8 @@ class FinalLayer(nn.Module):
         if self.use_adaln_lora:
             assert adaln_lora_B_3D is not None
             shift_B_D, scale_B_D = (
-                self.adaLN_modulation(emb_B_D) + adaln_lora_B_3D[:, : 2 * self.hidden_size]
+                self.adaLN_modulation(emb_B_D)
+                + adaln_lora_B_3D[:, : 2 * self.hidden_size]
             ).chunk(2, dim=1)
         else:
             shift_B_D, scale_B_D = self.adaLN_modulation(emb_B_D).chunk(2, dim=1)
@@ -345,10 +363,14 @@ class VideoAttn(nn.Module):
         T, H, W, B, D = x_T_H_W_B_D.shape
         x_THW_B_D = rearrange(x_T_H_W_B_D, "t h w b d -> (t h w) b d")
         if regional_contexts is not None:
-            regional_contexts = rearrange(regional_contexts, "r (v m) b d -> r m (v b) d", v=1)
+            regional_contexts = rearrange(
+                regional_contexts, "r (v m) b d -> r m (v b) d", v=1
+            )
         if region_masks is not None:
             r, t, h, w, b = region_masks.shape
-            region_masks = rearrange(region_masks, "r (v t) h w b -> r t h w (v b)", v=1)
+            region_masks = rearrange(
+                region_masks, "r (v t) h w b -> r t h w (v b)", v=1
+            )
         x_THW_B_D = self.attn(
             x_THW_B_D,
             context_M_B_D,
@@ -360,7 +382,9 @@ class VideoAttn(nn.Module):
         )
         x_T_H_W_B_D = rearrange(x_THW_B_D, "(t h w) b d -> t h w b d", h=H, w=W)
         if context is not None and self.n_views > 1:
-            x_T_H_W_B_D = rearrange(x_T_H_W_B_D, "t h w (v b) d -> (v t) h w b d", v=self.n_views)
+            x_T_H_W_B_D = rearrange(
+                x_T_H_W_B_D, "t h w (v b) d -> (v t) h w b d", v=self.n_views
+            )
         return x_T_H_W_B_D
 
 
@@ -512,7 +536,9 @@ class DITBuildingBlock(nn.Module):
                 base_ratio=base_ratio,
             )
         elif self.block_type in ["cross_attn", "ca"]:
-            normalized_x = adaln_norm_state(self.norm_state, x, scale_1_1_1_B_D, shift_1_1_1_B_D)
+            normalized_x = adaln_norm_state(
+                self.norm_state, x, scale_1_1_1_B_D, shift_1_1_1_B_D
+            )
             x = x + gate_1_1_1_B_D * self.block(
                 normalized_x,
                 context=crossattn_emb,

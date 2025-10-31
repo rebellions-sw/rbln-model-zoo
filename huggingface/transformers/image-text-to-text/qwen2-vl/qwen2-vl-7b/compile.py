@@ -1,11 +1,11 @@
 import os
 
-from optimum.rbln import RBLNQwen2VLForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 
 
 def main():
     model_id = "Qwen/Qwen2-VL-7B-Instruct"
-    model = RBLNQwen2VLForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_id,
         export=True,
         rbln_config={

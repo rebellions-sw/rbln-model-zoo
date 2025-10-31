@@ -30,9 +30,7 @@ def main():
     model_name = args.model_name
 
     # Prepare input video clip
-    video_url = (
-        "https://github.com/pytorch/vision/raw/main/test/assets/videos/v_SoccerJuggling_g23_c01.avi"
-    )
+    video_url = "https://github.com/pytorch/vision/raw/main/test/assets/videos/v_SoccerJuggling_g23_c01.avi"
     video_path = "./v_SoccerJuggling_g23_c01.avi"
     with urllib.request.urlopen(video_url) as response, open(video_path, "wb") as f:
         f.write(response.read())

@@ -25,7 +25,9 @@ def main():
     # Prepare input text sequence for masked language modeling
     tokenizer = BertTokenizer.from_pretrained(model_name)
     text = "the color of rose is [MASK]."
-    inputs = tokenizer(text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN)
+    inputs = tokenizer(
+        text, return_tensors="pt", padding="max_length", max_length=MAX_SEQ_LEN
+    )
 
     # Load compiled model to RBLN runtime module
     module = rebel.Runtime(f"bert-{args.model_name}.rbln", tensor_type="pt")
@@ -34,7 +36,9 @@ def main():
     logits = module(**inputs)
 
     # Decoding final logit to text
-    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(as_tuple=True)[0]
+    mask_token_index = (inputs.input_ids == tokenizer.mask_token_id)[0].nonzero(
+        as_tuple=True
+    )[0]
     predicted_token_id = logits[0, mask_token_index].argmax(axis=-1)
     print(tokenizer.decode(predicted_token_id))
 

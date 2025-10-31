@@ -76,7 +76,9 @@ class RBLNGeneralDIT:
                 device = None
             else:
                 device = self.rbln_config.get("device", None)
-            self._runtime = self.compiled_model.create_runtime(tensor_type="pt", device=device)
+            self._runtime = self.compiled_model.create_runtime(
+                tensor_type="pt", device=device
+            )
         else:
             log.info("Runtime is created already.")
 
@@ -92,12 +94,14 @@ class RBLNGeneralDIT:
         Prepares an embedded sequence tensor by applying positional embeddings and
         handling padding masks.
         """
-        x_B_T_H_W_D, rope_emb_L_1_1_D, extra_pos_emb = self.base_model.prepare_embedded_sequence(
-            x_B_C_T_H_W,
-            fps=fps,
-            padding_mask=padding_mask,
-            latent_condition=latent_condition,
-            latent_condition_sigma=latent_condition_sigma,
+        x_B_T_H_W_D, rope_emb_L_1_1_D, extra_pos_emb = (
+            self.base_model.prepare_embedded_sequence(
+                x_B_C_T_H_W,
+                fps=fps,
+                padding_mask=padding_mask,
+                latent_condition=latent_condition,
+                latent_condition_sigma=latent_condition_sigma,
+            )
         )
         if "rope" in self.base_model.pos_emb_cls.lower():
             rope_emb_L_1_1_D = apply_sincos_to_pos_embed(rope_emb_L_1_1_D)
@@ -271,7 +275,9 @@ class RBLNGeneralDIT:
             regional_contexts = inputs["regional_contexts"]
         if region_masks is not None:
             region_masks = inputs["region_masks"]
-        extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D = inputs["extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D"]
+        extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D = inputs[
+            "extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D"
+        ]
         if extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D is not None:
             assert x.shape == extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D.shape, (
                 f"{x.shape} != {extra_pos_emb_B_T_H_W_D_or_T_H_W_B_D.shape} {original_shape}"

@@ -73,7 +73,9 @@ def postprocessing(
     weight_sum = sum(weights_for_different_modes)
     dense_scores = dense_score(q_vecs[0], p_vecs[0])
     sparse_scores = sparse_score(q_vecs[1], p_vecs[1])
-    colbert_scores = colbert_score(q_vecs[2], p_vecs[2], q_mask=query_input.attention_mask)
+    colbert_scores = colbert_score(
+        q_vecs[2], p_vecs[2], q_mask=query_input.attention_mask
+    )
 
     inx = torch.arange(batch_size)
     dense_scores, sparse_scores, colbert_scores = (

@@ -1,6 +1,6 @@
 import os
 
-from optimum.rbln import RBLNQwen2_5_VLForConditionalGeneration
+from optimum.rbln import RBLNAutoModelForVision2Seq
 from qwen_vl_utils import process_vision_info
 from transformers import AutoProcessor
 
@@ -11,7 +11,7 @@ def main():
 
     # Load compiled model
     processor = AutoProcessor.from_pretrained(model_dir)
-    model = RBLNQwen2_5_VLForConditionalGeneration.from_pretrained(
+    model = RBLNAutoModelForVision2Seq.from_pretrained(
         model_dir,
         export=False,
         rbln_config={
@@ -38,7 +38,9 @@ def main():
     ]
 
     # In Qwen 2.5 VL, frame rate information is also input into the model to align with absolute time.
-    text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    text = processor.apply_chat_template(
+        messages, tokenize=False, add_generation_prompt=True
+    )
     image_inputs, video_inputs, video_kwargs = process_vision_info(
         messages, return_video_kwargs=True
     )

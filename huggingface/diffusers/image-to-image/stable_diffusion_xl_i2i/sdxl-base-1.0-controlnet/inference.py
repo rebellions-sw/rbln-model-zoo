@@ -63,7 +63,9 @@ def main():
         model_id=os.path.basename(model_id),
         export=False,
     )
-    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(model_id="dpt-hybrid-midas", export=False)
+    dpt = RBLNAutoModelForDepthEstimation.from_pretrained(
+        model_id="dpt-hybrid-midas", export=False
+    )
     depth_image = get_depth_map(image, dpt)
 
     # Generate image

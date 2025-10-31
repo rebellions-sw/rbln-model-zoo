@@ -12,7 +12,8 @@ import yaml
 
 sys.path.append(os.path.join(sys.path[0], "yolov7"))
 from yolov7.utils.datasets import letterbox
-from yolov7.utils.general import non_max_suppression as nms, scale_coords
+from yolov7.utils.general import non_max_suppression as nms
+from yolov7.utils.general import scale_coords
 from yolov7.utils.plots import plot_one_box
 
 
@@ -28,7 +29,9 @@ def preprocess(image):
 
 def postprocess(outputs, input_image, origin_image):
     pred = nms(torch.from_numpy(outputs[0]), 0.25, 0.45, None, False)[0]
-    pred[:, :4] = scale_coords(input_image.shape[2:], pred[:, :4], origin_image.shape).round()
+    pred[:, :4] = scale_coords(
+        input_image.shape[2:], pred[:, :4], origin_image.shape
+    ).round()
     yaml_path = os.path.abspath(os.path.dirname(__file__)) + "/yolov7/data/coco.yaml"
     with open(yaml_path) as f:
         data = yaml.safe_load(f)

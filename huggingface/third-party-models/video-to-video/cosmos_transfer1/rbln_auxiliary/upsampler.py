@@ -85,7 +85,9 @@ class RBLNPixtralPromptUpsampler:
         self.upsampler_model = RBLNLlavaForConditionalGeneration.from_pretrained(
             converted_model_path, export=True, rbln_config=rbln_config
         )
-        tokenizer = convert_tekken_tokenizer(os.path.join(converted_model_path, "tekken.json"))
+        tokenizer = convert_tekken_tokenizer(
+            os.path.join(converted_model_path, "tekken.json")
+        )
         image_processor = PixtralImageProcessor()
         self.processor = PixtralProcessor(
             tokenizer=tokenizer, image_processor=image_processor, image_token="[IMG]"
@@ -124,7 +126,9 @@ class RBLNPixtralPromptUpsampler:
             image_paths = extract_video_frames(video_path)
         images = [Image.open(frame_path) for frame_path in image_paths]
         text = "<s>[INST]" + prompt + "\n" + "[IMG]" * len(image_paths) + "[/INST]"
-        inputs = self.processor(text=text, images=images, return_tensors="pt", padding=True)
+        inputs = self.processor(
+            text=text, images=images, return_tensors="pt", padding=True
+        )
         output = self.upsampler_model.generate(
             **inputs,
             max_new_tokens=300,
@@ -135,5 +139,9 @@ class RBLNPixtralPromptUpsampler:
         return str(output).strip()
 
     def save_pretrained(self, save_directory):
-        self.upsampler_model.save_pretrained(os.path.join(save_directory, "upsampler_model"))
-        self.processor.save_pretrained(os.path.join(save_directory, "upsampler_tokenizer"))
+        self.upsampler_model.save_pretrained(
+            os.path.join(save_directory, "upsampler_model")
+        )
+        self.processor.save_pretrained(
+            os.path.join(save_directory, "upsampler_tokenizer")
+        )

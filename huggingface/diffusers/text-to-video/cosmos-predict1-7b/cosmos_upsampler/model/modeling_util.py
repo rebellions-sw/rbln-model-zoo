@@ -190,7 +190,9 @@ class RMSNorm(nn.Module):
         self.eps = eps
         self.weight = nn.Parameter(torch.ones(dim))
         self.rmsnorm_fn = (
-            torch.compile(self.compute_rmsnorm, fullgraph=True) if compile else self.compute_rmsnorm
+            torch.compile(self.compute_rmsnorm, fullgraph=True)
+            if compile
+            else self.compute_rmsnorm
         )
 
     @staticmethod

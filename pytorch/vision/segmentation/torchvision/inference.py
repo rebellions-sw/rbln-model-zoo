@@ -39,7 +39,9 @@ def main():
         preprocess = transforms.Compose(
             [
                 transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                transforms.Normalize(
+                    mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+                ),
             ]
         )
         input_data = preprocess(resize_image).unsqueeze(0)
@@ -50,7 +52,9 @@ def main():
     colors = torch.as_tensor([i for i in range(21)])[:, None] * palette
     colors = (colors % 255).numpy().astype("uint8")
 
-    save_img = Image.fromarray(out.argmax(0).byte().numpy()).resize(img.size, resample=0)
+    save_img = Image.fromarray(out.argmax(0).byte().numpy()).resize(
+        img.size, resample=0
+    )
     save_img.putpalette(colors)
     save_img.save("REBEL.png")
 

@@ -94,7 +94,9 @@ def optimize_module_by_path(base_module, path_str):
 def optimize_graph_from_constants(module: torch.jit.ScriptModule):
     graph = module.graph
     try:
-        repeat_node = next(node for node in graph.nodes() if node.kind() == "aten::repeat")
+        repeat_node = next(
+            node for node in graph.nodes() if node.kind() == "aten::repeat"
+        )
         repeats_list_value = list(repeat_node.inputs())[1]
         repeats_list_construct_node = repeats_list_value.node()
 
@@ -104,7 +106,10 @@ def optimize_graph_from_constants(module: torch.jit.ScriptModule):
         temporal_repeat_value = list(repeats_list_construct_node.inputs())[2]
         temporal_repeat_node = temporal_repeat_value.node()
 
-        if temporal_repeat_node.kind() == "prim::Constant" and temporal_repeat_node.i("value") == 0:
+        if (
+            temporal_repeat_node.kind() == "prim::Constant"
+            and temporal_repeat_node.i("value") == 0
+        ):
             pass
         else:
             return module

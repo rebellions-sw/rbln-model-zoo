@@ -10,7 +10,10 @@ from torchaudio.pipelines import CONVTASNET_BASE_LIBRI2MIX
 
 
 def sisdri_metric(
-    estimate: torch.Tensor, reference: torch.Tensor, mix: torch.Tensor, mask: torch.Tensor
+    estimate: torch.Tensor,
+    reference: torch.Tensor,
+    mix: torch.Tensor,
+    mask: torch.Tensor,
 ) -> torch.Tensor:
     with torch.no_grad():
         estimate = estimate - estimate.mean(axis=2, keepdim=True)
@@ -41,7 +44,9 @@ def postprocess(est, src, mix, mask):
 
 def main():
     # Prepare input dataset
-    dataset_url = "https://rbln-public.s3.ap-northeast-2.amazonaws.com/datasets/Libri2Mix.tar"
+    dataset_url = (
+        "https://rbln-public.s3.ap-northeast-2.amazonaws.com/datasets/Libri2Mix.tar"
+    )
     dataset_path = "./Libri2Mix.tar"
     with urllib.request.urlopen(dataset_url) as response, open(dataset_path, "wb") as f:
         f.write(response.read())
@@ -72,7 +77,9 @@ def main():
     input_mask = torch.concat(
         [clean_source[None, :] != 0 for clean_source in clean_sources], dim=1
     ).float()
-    clean_sources = torch.concat([clean_source[None, :] for clean_source in clean_sources], dim=1)
+    clean_sources = torch.concat(
+        [clean_source[None, :] for clean_source in clean_sources], dim=1
+    )
     results = postprocess(estimate_sources, clean_sources, mixture, input_mask)
 
     # Show results

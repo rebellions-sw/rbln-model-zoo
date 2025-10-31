@@ -109,7 +109,9 @@ def postprocessing(token_weights: list, input_data: list, tokenizer, batch_size)
     lexical_matching_scores = []
     for i in range(batch_size):
         lexical_matching_scores.append(
-            compute_lexical_matching_score(first_lexical_weights[i], second_lexical_weights[i])
+            compute_lexical_matching_score(
+                first_lexical_weights[i], second_lexical_weights[i]
+            )
         )
 
     return lexical_matching_scores

@@ -35,6 +35,12 @@ huggingface-cli login
 
 5. Download the Cosmos model weights from [Hugging Face](https://huggingface.co/collections/nvidia/cosmos-transfer1-67c9d328196453be6e568d3e):
 
+> [!note]
+> Before download, you should accept **NVIDIA Open Model License Agreement** for the model collection.
+> Please make sure that you accept the agreement for the models below.
+> - [nvidia/Cosmos-Guardrail1](https://huggingface.co/nvidia/Cosmos-Guardrail1)
+> - [nvidia/Cosmos-Tokenize1-CV8x8x8-720p](https://huggingface.co/nvidia/Cosmos-Tokenize1-CV8x8x8-720p)
+
 ```bash
 PYTHONPATH=$(pwd) python scripts/download_checkpoints.py --output_dir ../ckpt --model 7b
 ```

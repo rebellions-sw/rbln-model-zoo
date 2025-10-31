@@ -34,7 +34,9 @@ class RBLNRuntimeVAE(RBLNPytorchRuntime):
             be created automatically.
         """
         if self._runtime is None:
-            raise ValueError("Runtime is not created. Please set `create_runtimes=True` first.")
+            raise ValueError(
+                "Runtime is not created. Please set `create_runtimes=True` first."
+            )
         return self._runtime
 
     def create_runtime(self):
@@ -46,6 +48,8 @@ class RBLNRuntimeVAE(RBLNPytorchRuntime):
                 device = None
             else:
                 device = self.rbln_config.get("device", None)
-            self._runtime = self.compiled_model.create_runtime(tensor_type="pt", device=device)
+            self._runtime = self.compiled_model.create_runtime(
+                tensor_type="pt", device=device
+            )
         else:
             log.info("Runtime is created already.")

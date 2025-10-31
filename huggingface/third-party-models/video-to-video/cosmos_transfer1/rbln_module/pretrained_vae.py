@@ -117,7 +117,9 @@ class BasePretrainedImageVAE(BaseVAE):
             os.path.join(vae_dir, "image_mean_std.pt"), weights_only=False
         )
 
-        target_shape = [1, self.latent_ch, 1, 1] if self.is_image else [1, self.latent_ch, 1, 1, 1]
+        target_shape = (
+            [1, self.latent_ch, 1, 1] if self.is_image else [1, self.latent_ch, 1, 1, 1]
+        )
 
         self.register_buffer(
             "latent_mean",
@@ -205,7 +207,9 @@ class JITVAE(BasePretrainedImageVAE):
         """
         Load the encoder from the remote store.
         """
-        self.encoder = torch.jit.load(os.path.join(vae_dir, "encoder.jit"), map_location="cpu")
+        self.encoder = torch.jit.load(
+            os.path.join(vae_dir, "encoder.jit"), map_location="cpu"
+        )
 
         self.encoder.eval()
         for param in self.encoder.parameters():
@@ -216,7 +220,9 @@ class JITVAE(BasePretrainedImageVAE):
         """
         Load the decoder from the remote store.
         """
-        self.decoder = torch.jit.load(os.path.join(vae_dir, "decoder.jit"), map_location="cpu")
+        self.decoder = torch.jit.load(
+            os.path.join(vae_dir, "decoder.jit"), map_location="cpu"
+        )
 
         self.decoder.eval()
         for param in self.decoder.parameters():
@@ -364,8 +370,12 @@ class BasePretrainedVideoTokenizer(ABC):
             weights_only=False,
         )
 
-        latent_mean = latent_mean.view(self.latent_ch, -1)[:, : self.latent_chunk_duration]
-        latent_std = latent_std.view(self.latent_ch, -1)[:, : self.latent_chunk_duration]
+        latent_mean = latent_mean.view(self.latent_ch, -1)[
+            :, : self.latent_chunk_duration
+        ]
+        latent_std = latent_std.view(self.latent_ch, -1)[
+            :, : self.latent_chunk_duration
+        ]
 
         target_shape = [1, self.latent_ch, self.latent_chunk_duration, 1, 1]
 
@@ -389,14 +399,18 @@ class BasePretrainedVideoTokenizer(ABC):
         assert T % self.pixel_chunk_duration == 0, (
             f"Temporal dimension {T} is not divisible by chunk_length {self.pixel_chunk_duration}"
         )
-        return rearrange(state, "b c (n t) h w -> (b n) c t h w", t=self.pixel_chunk_duration)
+        return rearrange(
+            state, "b c (n t) h w -> (b n) c t h w", t=self.pixel_chunk_duration
+        )
 
     def transform_decode_state_shape(self, latent: torch.Tensor) -> torch.Tensor:
         B, _, T, _, _ = latent.shape
         assert T % self.latent_chunk_duration == 0, (
             f"Temporal dimension {T} is not divisible by chunk_length {self.latent_chunk_duration}"
         )
-        return rearrange(latent, "b c (n t) h w -> (b n) c t h w", t=self.latent_chunk_duration)
+        return rearrange(
+            latent, "b c (n t) h w -> (b n) c t h w", t=self.latent_chunk_duration
+        )
 
     @torch.no_grad()
     def encode(self, state: torch.Tensor) -> torch.Tensor:
@@ -460,7 +474,9 @@ class BasePretrainedVideoTokenizer(ABC):
     @property
     def latent_chunk_duration(self) -> int:
         # return self._latent_chunk_duration
-        assert (self.pixel_chunk_duration - 1) % self.temporal_compression_factor == 0, (
+        assert (
+            self.pixel_chunk_duration - 1
+        ) % self.temporal_compression_factor == 0, (
             f"Pixel chunk duration {self.pixel_chunk_duration} is not divisible by "
             f"latent chunk duration {self.latent_chunk_duration}"
         )
@@ -477,7 +493,9 @@ class BasePretrainedVideoTokenizer(ABC):
             f"Temporal dimension {num_pixel_frames} is not divisible by chunk_length "
             f"{self.pixel_chunk_duration}"
         )
-        return num_pixel_frames // self.pixel_chunk_duration * self.latent_chunk_duration
+        return (
+            num_pixel_frames // self.pixel_chunk_duration * self.latent_chunk_duration
+        )
 
     def get_pixel_num_frames(self, num_latent_frames: int) -> int:
         if num_latent_frames == 1:
@@ -486,7 +504,9 @@ class BasePretrainedVideoTokenizer(ABC):
             f"Temporal dimension {num_latent_frames} is not divisible by chunk_length "
             f"{self.latent_chunk_duration}"
         )
-        return num_latent_frames // self.latent_chunk_duration * self.pixel_chunk_duration
+        return (
+            num_latent_frames // self.latent_chunk_duration * self.pixel_chunk_duration
+        )
 
 
 class VideoJITTokenizer(BasePretrainedVideoTokenizer, JITVAE, VideoTokenizerInterface):
@@ -617,7 +637,9 @@ class JointImageVideoSharedJITTokenizer(JointImageVideoTokenizer):
     We have to use seperate mean and std for image and video due to non-causal nature of the model.
     """
 
-    def __init__(self, image_vae: Module, video_vae: Module, name: str, latent_ch: int = 16):
+    def __init__(
+        self, image_vae: Module, video_vae: Module, name: str, latent_ch: int = 16
+    ):
         super().__init__(image_vae, video_vae, name, latent_ch, squeeze_for_image=False)
         assert isinstance(image_vae, JITVAE)
         assert isinstance(video_vae, VideoJITTokenizer), (

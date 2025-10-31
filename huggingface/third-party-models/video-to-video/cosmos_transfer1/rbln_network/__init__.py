@@ -11,7 +11,11 @@ from .general_dit_multi_view import RBLNMultiViewVideoExtendGeneralDIT
 from .general_dit_video_conditioned import (
     RBLNVideoExtendGeneralDIT,
 )
-from .wrapper import ControlNetWrapper, GeneralDITWrapperWithoutRegion, GeneralDITWrapperWithRegion
+from .wrapper import (
+    ControlNetWrapper,
+    GeneralDITWrapperWithoutRegion,
+    GeneralDITWrapperWithRegion,
+)
 
 __all__ = [
     "ControlNetWrapper",

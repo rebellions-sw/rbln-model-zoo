@@ -12,12 +12,20 @@ import torch
 sys.path.insert(0, os.path.join(sys.path[0], "YOLOX"))
 from yolox.data.data_augment import ValTransform
 from yolox.data.datasets import COCO_CLASSES
-from yolox.utils import postprocess as postprocessor, vis
+from yolox.utils import postprocess as postprocessor
+from yolox.utils import vis
 
 
-def preprocess(img: np.array, test_size: List = [640, 640]) -> Tuple[torch.tensor, dict]:
+def preprocess(
+    img: np.array, test_size: List = [640, 640]
+) -> Tuple[torch.tensor, dict]:
     ratio = min(test_size[0] / img.shape[0], test_size[1] / img.shape[1])
-    img_info = {"height": img.shape[0], "width": img.shape[1], "ratio": ratio, "raw_img": img}
+    img_info = {
+        "height": img.shape[0],
+        "width": img.shape[1],
+        "ratio": ratio,
+        "raw_img": img,
+    }
     preprocessor = ValTransform(legacy=False)
     img, _ = preprocessor(img, None, input_size=test_size)
     img = torch.from_numpy(img).unsqueeze(0).float().to("cpu")
@@ -25,7 +33,9 @@ def preprocess(img: np.array, test_size: List = [640, 640]) -> Tuple[torch.tenso
     return img, img_info
 
 
-def visualization(outputs: torch.tensor, img_info: dict, class_names: tuple, result_path: str):
+def visualization(
+    outputs: torch.tensor, img_info: dict, class_names: tuple, result_path: str
+):
     if outputs[0] is None:  # no detection result
         cv2.imwrite(result_path, img_info["raw_img"].copy())
     else:
@@ -35,7 +45,12 @@ def visualization(outputs: torch.tensor, img_info: dict, class_names: tuple, res
         cls = outputs[:, 6]
         scores = outputs[:, 4] * outputs[:, 5]
         vis_img = vis(
-            img_info["raw_img"].copy(), bboxes, scores, cls, conf=0.35, class_names=class_names
+            img_info["raw_img"].copy(),
+            bboxes,
+            scores,
+            cls,
+            conf=0.35,
+            class_names=class_names,
         )
         cv2.imwrite(result_path, vis_img)
 
@@ -101,7 +116,9 @@ def main():
         nms_thre=0.45,
         class_agnostic=True,
     )
-    visualization(rebel_post_output, img_info, COCO_CLASSES, result_path=f"tabby_{model_name}.jpg")
+    visualization(
+        rebel_post_output, img_info, COCO_CLASSES, result_path=f"tabby_{model_name}.jpg"
+    )
 
 
 if __name__ == "__main__":

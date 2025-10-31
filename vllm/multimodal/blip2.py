@@ -7,7 +7,9 @@ from vllm import LLM, SamplingParams
 
 
 def generate_prompts(model_id: str, num_input_prompt: int):
-    dataset = load_dataset("lmms-lab/llava-bench-in-the-wild", split="train").shuffle(seed=42)
+    dataset = load_dataset("lmms-lab/llava-bench-in-the-wild", split="train").shuffle(
+        seed=42
+    )
 
     prompts = []
     for i in range(num_input_prompt):
@@ -33,49 +35,13 @@ def parse_args():
         help="Compiled model directory path",
         default="Salesforce/blip2-opt-2.7b",
     )
-    parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length",
-        default=2048,
-    )
-    parser.add_argument(
-        "-b",
-        "--batch-size",
-        dest="batch_size",
-        type=int,
-        action="store",
-        help="Batch size",
-        default=1,
-    )
-    parser.add_argument(
-        "-n",
-        "--num-input_prompt",
-        dest="num_input_prompt",
-        type=int,
-        action="store",
-        help="The number of prompts",
-        default=1,
-    )
     args = parser.parse_args()
-    return args.model_id, args.max_seq_len, args.batch_size, args.num_input_prompt
+    return args.model_id
 
 
 def main():
-    # Make sure the engine configuration
-    # matches the parameters used during compilation.
-    model_id, max_seq_len, batch_size, num_input_prompt = parse_args()
-    llm = LLM(
-        model=model_id,
-        device="auto",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=max_seq_len,
-    )
+    model_id = parse_args()
+    llm = LLM(model=model_id)
     tokenizer = AutoTokenizer.from_pretrained(model_id)
 
     sampling_params = SamplingParams(

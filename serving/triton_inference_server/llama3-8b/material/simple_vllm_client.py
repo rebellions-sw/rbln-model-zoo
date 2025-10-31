@@ -59,7 +59,11 @@ async def try_request():
             "request_id": request_id,
         }
 
-    messages = [ChatMessage(role="user", content="What is the first letter of English alphabets?")]
+    messages = [
+        ChatMessage(
+            role="user", content="What is the first letter of English alphabets?"
+        )
+    ]
     request_id = "req-0"
 
     async def requests_gen():

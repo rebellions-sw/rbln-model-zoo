@@ -41,7 +41,8 @@ torch.serialization.add_safe_globals([BytesIO])
 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Control to world generation demo script", conflict_handler="resolve"
+        description="Control to world generation demo script",
+        conflict_handler="resolve",
     )
     parser.add_argument(
         "--is_av_sample",
@@ -73,7 +74,10 @@ def parse_arguments() -> argparse.Namespace:
         help="Optional input RGB video path",
     )
     parser.add_argument(
-        "--rbln_dir", type=str, required=True, help="Base directory containing compiled models"
+        "--rbln_dir",
+        type=str,
+        required=True,
+        help="Base directory containing compiled models",
     )
     parser.add_argument(
         "--sigma_max", type=float, default=80.0, help="sigma_max for partial denoising"
@@ -81,7 +85,9 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument("--batch_size", type=int, default=1, help="Batch size")
     parser.add_argument("--fps", type=int, default=24, help="FPS of the output video")
     parser.add_argument(
-        "--use_distilled", action="store_true", help="Use distilled ControlNet model variant"
+        "--use_distilled",
+        action="store_true",
+        help="Use distilled ControlNet model variant",
     )
     parser.add_argument(
         "--upsample_prompt",
@@ -94,7 +100,10 @@ def parse_arguments() -> argparse.Namespace:
         help="Compile model that uses regional prompts",
     )
     parser.add_argument(
-        "--num_regions", type=int, default=None, help="number of regions in regional prompts"
+        "--num_regions",
+        type=int,
+        default=None,
+        help="number of regions in regional prompts",
     )
     parser.add_argument(
         "--height",
@@ -108,7 +117,9 @@ def parse_arguments() -> argparse.Namespace:
         default=1280,
         help="(int) type, width of the image.",
     )
-    parser.add_argument("--use_perf", action="store_true", help="using performance mode")
+    parser.add_argument(
+        "--use_perf", action="store_true", help="using performance mode"
+    )
     cmd_args = parser.parse_args()
 
     # Load and parse JSON input
@@ -198,7 +209,9 @@ def main():
         )
     else:
         checkpoint = (
-            BASE_7B_CHECKPOINT_AV_SAMPLE_PATH if cfg.is_av_sample else BASE_7B_CHECKPOINT_PATH
+            BASE_7B_CHECKPOINT_AV_SAMPLE_PATH
+            if cfg.is_av_sample
+            else BASE_7B_CHECKPOINT_PATH
         )
         pipeline = RBLNDiffusionControl2WorldGenerationPipeline(
             checkpoint_dir=cfg.checkpoint_dir,

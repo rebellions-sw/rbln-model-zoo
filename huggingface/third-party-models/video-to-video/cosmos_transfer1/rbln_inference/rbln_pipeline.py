@@ -84,7 +84,9 @@ from cosmos_transfer1.utils import log
 from cosmos_transfer1.utils.config_helper import override
 from cosmos_transfer1.utils.lazy_config import instantiate as lazy_instantiate
 from cosmos_transfer1.utils.regional_prompting_utils import prepare_regional_prompts
-from optimum.rbln.diffusers.pipelines.cosmos.cosmos_guardrail import RBLNCosmosSafetyChecker
+from optimum.rbln.diffusers.pipelines.cosmos.cosmos_guardrail import (
+    RBLNCosmosSafetyChecker,
+)
 from rbln_auxiliary.t5_text_encoder import RBLNCosmosT5TextEncoder
 from rbln_auxiliary.upsampler import RBLNPixtralPromptUpsampler
 from rbln_network import (
@@ -100,11 +102,12 @@ from rbln_network import (
     RBLNVideoExtendGeneralDIT,
 )
 from tqdm import tqdm
-
 from utils.runtime_utils import RBLNRuntimeVAE
 
 MODEL_NAME_DICT = {
-    BASE_7B_CHECKPOINT_PATH: ("CTRL_7Bv1pt3_lvg_tp_121frames_control_input_edge_block3"),
+    BASE_7B_CHECKPOINT_PATH: (
+        "CTRL_7Bv1pt3_lvg_tp_121frames_control_input_edge_block3"
+    ),
     EDGE2WORLD_CONTROLNET_7B_CHECKPOINT_PATH: (
         "CTRL_7Bv1pt3_lvg_tp_121frames_control_input_edge_block3"
     ),
@@ -123,7 +126,9 @@ MODEL_NAME_DICT = {
     UPSCALER_CONTROLNET_7B_CHECKPOINT_PATH: (
         "CTRL_7Bv1pt3_lvg_tp_121frames_control_input_upscale_block3"
     ),
-    BASE_7B_CHECKPOINT_AV_SAMPLE_PATH: ("CTRL_7Bv1pt3_t2v_121frames_control_input_hdmap_block3"),
+    BASE_7B_CHECKPOINT_AV_SAMPLE_PATH: (
+        "CTRL_7Bv1pt3_t2v_121frames_control_input_hdmap_block3"
+    ),
     HDMAP2WORLD_CONTROLNET_7B_CHECKPOINT_PATH: (
         "CTRL_7Bv1pt3_t2v_121frames_control_input_hdmap_block3"
     ),
@@ -280,27 +285,43 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 )
 
             self._input_shape_checker()
-            self._init_text_encoder_model(rbln_config=rbln_config.get("text_encoder", None))
+            self._init_text_encoder_model(
+                rbln_config=rbln_config.get("text_encoder", None)
+            )
             self._init_model(rbln_config=rbln_config.get("transformer", None))
             self._init_network(rbln_config=rbln_config.get("ctrlnet", None))
-            self._init_tokenizer(config.model.tokenizer, rbln_config=rbln_config.get("vae", {}))
+            self._init_tokenizer(
+                config.model.tokenizer, rbln_config=rbln_config.get("vae", {})
+            )
 
             # Initialize prompt upsampler & guardrail models if needed
             if self.upsample_prompt:
-                self._init_prompt_upsampler(rbln_config=rbln_config.get("prompt_upsampler", None))
+                self._init_prompt_upsampler(
+                    rbln_config=rbln_config.get("prompt_upsampler", None)
+                )
             if not self.disable_guardrail:
-                self._init_guardrail_models(rbln_config=rbln_config.get("safety_checker", None))
+                self._init_guardrail_models(
+                    rbln_config=rbln_config.get("safety_checker", None)
+                )
         else:
-            self._load_text_encoder_model(rbln_config=rbln_config.get("text_encoder", None))
+            self._load_text_encoder_model(
+                rbln_config=rbln_config.get("text_encoder", None)
+            )
             self._load_model(rbln_config=rbln_config.get("transformer", None))
             self._load_network(rbln_config=rbln_config.get("ctrlnet", {}))
-            self._load_tokenizer(config.model.tokenizer, rbln_config=rbln_config.get("vae", {}))
+            self._load_tokenizer(
+                config.model.tokenizer, rbln_config=rbln_config.get("vae", {})
+            )
 
             # Load prompt upsampler & guardrail models if needed
             if self.upsample_prompt:
-                self._load_prompt_upsampler(rbln_config=rbln_config.get("prompt_upsampler", None))
+                self._load_prompt_upsampler(
+                    rbln_config=rbln_config.get("prompt_upsampler", None)
+                )
             if not self.disable_guardrail:
-                self._load_guardrail_models(rbln_config=rbln_config.get("safety_checker", None))
+                self._load_guardrail_models(
+                    rbln_config=rbln_config.get("safety_checker", None)
+                )
 
     def save_pretrained(self, save_directory: str):
         os.makedirs(save_directory, exist_ok=True)
@@ -369,7 +390,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             f"{list(constraint_shapes)}"
         )
 
-        log.info(f"Verified input height and width for compilation: ({self.height}, {self.width})")
+        log.info(
+            f"Verified input height and width for compilation: ({self.height}, {self.width})"
+        )
 
     def _init_prompt_upsampler(self, rbln_config=None):
         """
@@ -400,7 +423,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             self.upsampler_hint_key = "vis"
             self.hint_details = "vis" if "vis" in self.control_inputs else "edge"
         elif any(key in other_hint_keys for key in self.control_inputs):
-            selected_hint_keys = [key for key in self.control_inputs if key in other_hint_keys]
+            selected_hint_keys = [
+                key for key in self.control_inputs if key in other_hint_keys
+            ]
             self.upsampler_hint_key = selected_hint_keys[0]
         else:
             self.upsampler_hint_key = None
@@ -442,7 +467,10 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             "vis"
         ]:  # input video or control input, one of them is required
             # prompt upsampler for viscontrol(vis, edge)
-            if self.control_inputs[self.hint_details].get("input_control", None) is not None:
+            if (
+                self.control_inputs[self.hint_details].get("input_control", None)
+                is not None
+            ):
                 input_control_path = self.control_inputs[self.hint_details].get(
                     "input_control", None
                 )
@@ -537,16 +565,24 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
 
         hidden_size = model.model.base_model.net.model_channels
         attention_head_dim = hidden_size // model.model.base_model.net.num_heads
-        spatial_compression_factor = model.config.tokenizer.video_vae.spatial_compression_factor
-        temporal_compression_factor = model.config.tokenizer.video_vae.temporal_compression_factor
+        spatial_compression_factor = (
+            model.config.tokenizer.video_vae.spatial_compression_factor
+        )
+        temporal_compression_factor = (
+            model.config.tokenizer.video_vae.temporal_compression_factor
+        )
         patch_spatial = model.model.base_model.net.patch_spatial
         patch_temporal = model.model.base_model.net.patch_temporal
 
         latent_height = self.height // spatial_compression_factor
         latent_width = self.width // spatial_compression_factor
-        num_latent_frames = (self.num_video_frames - 1) // temporal_compression_factor + 1
+        num_latent_frames = (
+            self.num_video_frames - 1
+        ) // temporal_compression_factor + 1
 
-        n_views = 1 if not hasattr(model.model.net, "n_views") else model.model.net.n_views
+        n_views = (
+            1 if not hasattr(model.model.net, "n_views") else model.model.net.n_views
+        )
         hidden_dim = (
             (latent_height // patch_spatial)
             * (latent_width // patch_spatial)
@@ -587,10 +623,18 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         ]
 
         original_shape = torch.Size(
-            [self.batch_size, 17, num_latent_frames * n_views, latent_height, latent_width]
+            [
+                self.batch_size,
+                17,
+                num_latent_frames * n_views,
+                latent_height,
+                latent_width,
+            ]
         )
         if self.regional_prompts:
-            wrapped_model = GeneralDITWrapperWithRegion(model.model.base_model.net, original_shape)
+            wrapped_model = GeneralDITWrapperWithRegion(
+                model.model.base_model.net, original_shape
+            )
             input_info.extend(
                 [
                     (
@@ -642,16 +686,25 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         )
         if is_multiview:
             runtime = RBLNMultiViewVideoExtendGeneralDIT(
-                self.compiled_model, model.model.base_model.net, rbln_config, self.num_regions
+                self.compiled_model,
+                model.model.base_model.net,
+                rbln_config,
+                self.num_regions,
             )
         else:
             if self.is_av_sample:
                 runtime = RBLNGeneralDIT(
-                    self.compiled_model, model.model.base_model.net, rbln_config, self.num_regions
+                    self.compiled_model,
+                    model.model.base_model.net,
+                    rbln_config,
+                    self.num_regions,
                 )
             else:
                 runtime = RBLNVideoExtendGeneralDIT(
-                    self.compiled_model, model.model.base_model.net, rbln_config, self.num_regions
+                    self.compiled_model,
+                    model.model.base_model.net,
+                    rbln_config,
+                    self.num_regions,
                 )
         if self.create_runtimes:
             runtime.create_runtime()
@@ -687,20 +740,31 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             os.path.join(self.rbln_dir, "transformer.rbln")
         )
         num_regions = (
-            len(self.regional_prompts) if isinstance(self.regional_prompts, (tuple, list)) else None
+            len(self.regional_prompts)
+            if isinstance(self.regional_prompts, (tuple, list))
+            else None
         )
         if is_multiview:
             runtime = RBLNMultiViewVideoExtendGeneralDIT(
-                self.compiled_model, model.model.base_model.net, rbln_config, num_regions
+                self.compiled_model,
+                model.model.base_model.net,
+                rbln_config,
+                num_regions,
             )
         else:
             if self.is_av_sample:
                 runtime = RBLNGeneralDIT(
-                    self.compiled_model, model.model.base_model.net, rbln_config, num_regions
+                    self.compiled_model,
+                    model.model.base_model.net,
+                    rbln_config,
+                    num_regions,
                 )
             else:
                 runtime = RBLNVideoExtendGeneralDIT(
-                    self.compiled_model, model.model.base_model.net, rbln_config, num_regions
+                    self.compiled_model,
+                    model.model.base_model.net,
+                    rbln_config,
+                    num_regions,
                 )
         if self.create_runtimes:
             runtime.create_runtime()
@@ -736,7 +800,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 log.info(f"Loading ctrl model from ckpt_path: {spec['ckpt_path']}")
                 with skip_init_linear():
                     model.set_up_model()
-                net_state_dict = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+                net_state_dict = torch.load(
+                    ckpt_path, map_location="cpu", weights_only=False
+                )
                 non_strict_load_model(model.model, net_state_dict)
 
                 hidden_size = model.model.base_model.net.model_channels
@@ -752,7 +818,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
 
                 latent_height = self.height // spatial_compression_factor
                 latent_width = self.width // spatial_compression_factor
-                num_latent_frames = (self.num_video_frames - 1) // temporal_compression_factor + 1
+                num_latent_frames = (
+                    self.num_video_frames - 1
+                ) // temporal_compression_factor + 1
 
                 hidden_dim = (
                     (latent_height // patch_spatial)
@@ -797,8 +865,16 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                         ],
                         torch.float32,
                     ),
-                    ("crossattn_emb", [512 * n_views, self.batch_size, 1024], torch.float32),
-                    ("adaln_lora_B_3D", [self.batch_size, hidden_size * 3], torch.float32),
+                    (
+                        "crossattn_emb",
+                        [512 * n_views, self.batch_size, 1024],
+                        torch.float32,
+                    ),
+                    (
+                        "adaln_lora_B_3D",
+                        [self.batch_size, hidden_size * 3],
+                        torch.float32,
+                    ),
                     ("affline_emb_B_D", [self.batch_size, hidden_size], torch.float32),
                     ("control_weight", [1], torch.float32),
                 ]
@@ -828,16 +904,24 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 compiled_model = rebel.compile_from_torch(
                     wrapped_controlnet,
                     input_info,
-                    tensor_parallel_size=rbln_config.get(key, {}).get("tensor_parallel_size", None),
+                    tensor_parallel_size=rbln_config.get(key, {}).get(
+                        "tensor_parallel_size", None
+                    ),
                 )
                 compiled_controlnet[key] = compiled_model
                 if is_multiview:
                     controlnet_runtime = RBLNRuntimeControlNetMultiview(
-                        compiled_model, model.model.net, rbln_config.get(key, {}), self.num_regions
+                        compiled_model,
+                        model.model.net,
+                        rbln_config.get(key, {}),
+                        self.num_regions,
                     )
                 else:
                     controlnet_runtime = RBLNRuntimeControlNet(
-                        compiled_model, model.model.net, rbln_config.get(key, {}), self.num_regions
+                        compiled_model,
+                        model.model.net,
+                        rbln_config.get(key, {}),
+                        self.num_regions,
                     )
                 if self.create_runtimes:
                     controlnet_runtime.create_runtime()
@@ -849,11 +933,17 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         self.compiled_controlnet = compiled_controlnet
         if is_multiview:
             self.model.model.net = RBLNGeneralDITMultiviewEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             )
         else:
             self.model.model.net = RBLNGeneralDITEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             )
 
     def _load_network(self, rbln_config=None, is_multiview=False):
@@ -864,7 +954,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         hint_encoders = {}
         compiled_controlnet = {}
         num_regions = (
-            len(self.regional_prompts) if isinstance(self.regional_prompts, (tuple, list)) else None
+            len(self.regional_prompts)
+            if isinstance(self.regional_prompts, (tuple, list))
+            else None
         )
         for key, spec in self.control_inputs.items():
             if key in valid_hint_keys:
@@ -881,7 +973,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 log.info(f"Loading ctrl model from ckpt_path: {spec['ckpt_path']}")
                 with skip_init_linear():
                     model.set_up_model()
-                net_state_dict = torch.load(ckpt_path, map_location="cpu", weights_only=False)
+                net_state_dict = torch.load(
+                    ckpt_path, map_location="cpu", weights_only=False
+                )
                 non_strict_load_model(model.model, net_state_dict)
 
                 compiled_controlnet[key] = rebel.RBLNCompiledModel(
@@ -912,11 +1006,17 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         self.compiled_controlnet = compiled_controlnet
         if is_multiview:
             self.model.model.net = RBLNGeneralDITMultiviewEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             )
         else:
             self.model.model.net = RBLNGeneralDITEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             )
 
     def _init_tokenizer(self, config, rbln_config):
@@ -941,7 +1041,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
 
         spatial_compression_factor = config.video_vae.spatial_compression_factor
         temporal_compression_factor = config.video_vae.temporal_compression_factor
-        num_latent_frames = (self.num_video_frames - 1) // temporal_compression_factor + 1
+        num_latent_frames = (
+            self.num_video_frames - 1
+        ) // temporal_compression_factor + 1
 
         latent_height = self.height // spatial_compression_factor
         latent_width = self.width // spatial_compression_factor
@@ -962,7 +1064,13 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             input_info=[
                 (
                     "x",
-                    [1, config.latent_ch, num_latent_frames, latent_height, latent_width],
+                    [
+                        1,
+                        config.latent_ch,
+                        num_latent_frames,
+                        latent_height,
+                        latent_width,
+                    ],
                     torch.float32,
                 )
             ],
@@ -1009,8 +1117,12 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         self.height = _metadata["inputs"][0]["shape"][3]
         self.width = _metadata["inputs"][0]["shape"][4]
 
-        vae_encoder_mod = rebel.RBLNCompiledModel(os.path.join(rbln_tokenizer_path, "encoder.rbln"))
-        vae_decoder_mod = rebel.RBLNCompiledModel(os.path.join(rbln_tokenizer_path, "decoder.rbln"))
+        vae_encoder_mod = rebel.RBLNCompiledModel(
+            os.path.join(rbln_tokenizer_path, "encoder.rbln")
+        )
+        vae_decoder_mod = rebel.RBLNCompiledModel(
+            os.path.join(rbln_tokenizer_path, "decoder.rbln")
+        )
 
         vae_encoder_runtime = RBLNRuntimeVAE(vae_encoder_mod, encoder_rbln_config)
         vae_decoder_runtime = RBLNRuntimeVAE(vae_decoder_mod, decoder_rbln_config)
@@ -1039,7 +1151,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         if self.disable_guardrail:
             return True
 
-        return guardrail_presets.run_text_guardrail(prompt, self.guardrail.text_guardrail)
+        return guardrail_presets.run_text_guardrail(
+            prompt, self.guardrail.text_guardrail
+        )
 
     def _run_guardrail_on_video(self, video: np.ndarray) -> np.ndarray | None:
         """Check if video meets safety requirements.
@@ -1055,7 +1169,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         if self.disable_guardrail:
             return video
 
-        return guardrail_presets.run_video_guardrail(video, self.guardrail.video_guardrail)
+        return guardrail_presets.run_video_guardrail(
+            video, self.guardrail.video_guardrail
+        )
 
     def _run_text_embedding_on_prompt(
         self, prompts: list[str], **kwargs: Any
@@ -1086,7 +1202,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
 
         return embeddings, masks
 
-    def _run_tokenizer_decoding(self, sample: torch.Tensor, use_batch: bool = True) -> np.ndarray:
+    def _run_tokenizer_decoding(
+        self, sample: torch.Tensor, use_batch: bool = True
+    ) -> np.ndarray:
         """Decode latent samples to video frames using the tokenizer decoder.
 
         Args:
@@ -1111,7 +1229,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             patch_h, patch_w = samples.shape[-2:]
             orig_size = (patch_w, patch_h)
             aspect_ratio = detect_aspect_ratio(orig_size)
-            stitch_w, stitch_h = get_upscale_size(orig_size, aspect_ratio, upscale_factor=3)
+            stitch_w, stitch_h = get_upscale_size(
+                orig_size, aspect_ratio, upscale_factor=3
+            )
             n_img_w = (stitch_w - 1) // patch_w + 1
             n_img_h = (stitch_h - 1) // patch_h + 1
             overlap_size_w = overlap_size_h = 0
@@ -1146,19 +1266,25 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             negative_prompt_embeddings = torch.cat(negative_prompt_embeddings)
 
         B = len(video_paths)
-        assert prompt_embeddings.shape[0] == B, "Batch size mismatch for prompt embeddings"
+        assert prompt_embeddings.shape[0] == B, (
+            "Batch size mismatch for prompt embeddings"
+        )
         if negative_prompt_embeddings is not None:
             assert negative_prompt_embeddings.shape[0] == B, (
                 "Batch size mismatch for negative prompt embeddings"
             )
-        assert len(control_inputs_list) == B, "Batch size mismatch for control_inputs_list"
+        assert len(control_inputs_list) == B, (
+            "Batch size mismatch for control_inputs_list"
+        )
 
         log.info("Starting data augmentation")
 
         # Process regional prompts if provided
         log.info(f"regional_prompts passed to _run_model: {self.regional_prompts}")
         log.info(f"region_definitions passed to _run_model: {self.region_definitions}")
-        regional_embeddings, _ = self._run_text_embedding_on_prompt(self.regional_prompts)
+        regional_embeddings, _ = self._run_text_embedding_on_prompt(
+            self.regional_prompts
+        )
         regional_contexts = None
         region_masks = None
         if self.regional_prompts and self.region_definitions:
@@ -1176,7 +1302,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 compression_factor=self.model.tokenizer.spatial_compression_factor,
             )
 
-        is_upscale_case = any("upscale" in control_inputs for control_inputs in control_inputs_list)
+        is_upscale_case = any(
+            "upscale" in control_inputs for control_inputs in control_inputs_list
+        )
         # Get video batch and state shape
         data_batch, state_shape = get_batched_ctrl_batch(
             model=self.model,
@@ -1194,7 +1322,8 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
 
         if data_batch["input_video"] is None:
             ctrl_video = next(
-                (v for k, v in data_batch.items() if k.startswith("control_input")), None
+                (v for k, v in data_batch.items() if k.startswith("control_input")),
+                None,
             )
             height, width = ctrl_video.shape[3], ctrl_video.shape[4]
         else:
@@ -1248,7 +1377,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 control_weight = torch.cat([control_weight, pad_weight], dim=3)
         else:
             num_total_frames_with_padding = T
-        N_clip = (num_total_frames_with_padding - self.num_input_frames) // num_new_generated_frames
+        N_clip = (
+            num_total_frames_with_padding - self.num_input_frames
+        ) // num_new_generated_frames
 
         video = []
         prev_frames = None
@@ -1346,7 +1477,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 video.append(frames[:, :, self.num_input_frames :])
 
             prev_frames = torch.zeros_like(frames)
-            prev_frames[:, :, : self.num_input_frames] = frames[:, :, -self.num_input_frames :]
+            prev_frames[:, :, : self.num_input_frames] = frames[
+                :, :, -self.num_input_frames :
+            ]
 
         video = torch.cat(video, dim=2)[:, :, :T]
         video = video.permute(0, 2, 3, 4, 1).numpy()
@@ -1403,8 +1536,12 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         # Upsample prompts if enabled
         if self.prompt_upsampler:
             upsampled_prompts = []
-            for i, (single_prompt, single_video_path) in enumerate(zip(prompts, video_paths)):
-                log.info(f"Upsampling prompt {i + 1}/{batch_size}: {single_prompt[:50]}...")
+            for i, (single_prompt, single_video_path) in enumerate(
+                zip(prompts, video_paths)
+            ):
+                log.info(
+                    f"Upsampling prompt {i + 1}/{batch_size}: {single_prompt[:50]}..."
+                )
                 video_save_subfolder = os.path.join(save_folder, f"video_{i}")
                 os.makedirs(video_save_subfolder, exist_ok=True)
                 upsampled_prompt = self._process_prompt_upsampler(
@@ -1435,7 +1572,9 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
         all_prompt_embeddings = []
 
         # Process in smaller batches if needed to avoid OOM
-        embedding_batch_size = min(batch_size, 8)  # Process embeddings in smaller batches
+        embedding_batch_size = min(
+            batch_size, 8
+        )  # Process embeddings in smaller batches
         for i in range(0, len(safe_prompts), embedding_batch_size):
             batch_prompts = safe_prompts[i : i + embedding_batch_size]
             if negative_prompt:
@@ -1445,12 +1584,16 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
             else:
                 batch_prompts_with_neg = batch_prompts
             log.info("Starting T5 compute")
-            prompt_embeddings, _ = self._run_text_embedding_on_prompt(batch_prompts_with_neg)
+            prompt_embeddings, _ = self._run_text_embedding_on_prompt(
+                batch_prompts_with_neg
+            )
             log.info("Completed T5 compute")
             # Separate positive and negative embeddings
             if negative_prompt:
                 for j in range(0, len(prompt_embeddings), 2):
-                    all_prompt_embeddings.append((prompt_embeddings[j], prompt_embeddings[j + 1]))
+                    all_prompt_embeddings.append(
+                        (prompt_embeddings[j], prompt_embeddings[j + 1])
+                    )
             else:
                 for emb in prompt_embeddings:
                     all_prompt_embeddings.append((emb, None))
@@ -1501,7 +1644,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
             f"{list(constraint_shapes)}"
         )
 
-        log.info(f"Verified input height and width for compilation: ({self.height}, {self.width})")
+        log.info(
+            f"Verified input height and width for compilation: ({self.height}, {self.width})"
+        )
 
     def _init_model(self, rbln_config=None):
         super()._init_model(rbln_config=rbln_config, is_multiview=True)
@@ -1544,7 +1689,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
         grid_video = einops.rearrange(
             grid_video, "b c (h w) t h1 w1 -> b c t (h h1) (w w1)", h=2, w=3
         )
-        grid_video = (grid_video[0].permute(1, 2, 3, 0) * 255).to(torch.uint8).cpu().numpy()
+        grid_video = (
+            (grid_video[0].permute(1, 2, 3, 0) * 255).to(torch.uint8).cpu().numpy()
+        )
         video = (video[0].permute(1, 2, 3, 0) * 255).to(torch.uint8).cpu().numpy()
 
         return [grid_video, video]
@@ -1581,7 +1728,10 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
             also_return_fps=True,
         )
         view_condition_video = resize_video(
-            view_condition_video, self.height, self.width, interpolation=cv2.INTER_LINEAR
+            view_condition_video,
+            self.height,
+            self.width,
+            interpolation=cv2.INTER_LINEAR,
         )
         view_condition_video = torch.from_numpy(view_condition_video)
         total_T = view_condition_video.shape[2]
@@ -1609,15 +1759,21 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
                         try:
                             int(fname.split(".")[0])
                         except ValueError:
-                            log.warning(f"Could not parse video file name {fname} into view id")
+                            log.warning(
+                                f"Could not parse video file name {fname} into view id"
+                            )
                             continue
-                        initial_condition_video_n = read_video_or_image_into_frames_BCTHW(
-                            fname,
-                            normalize=False,
-                            max_frames=self.num_input_frames,
-                            also_return_fps=True,
+                        initial_condition_video_n = (
+                            read_video_or_image_into_frames_BCTHW(
+                                fname,
+                                normalize=False,
+                                max_frames=self.num_input_frames,
+                                also_return_fps=True,
+                            )
                         )
-                        initial_condition_videos.append(torch.from_numpy(initial_condition_video_n))
+                        initial_condition_videos.append(
+                            torch.from_numpy(initial_condition_video_n)
+                        )
                 initial_condition_video = torch.cat(initial_condition_videos, dim=2)
             else:
                 initial_condition_video, _ = read_video_or_image_into_frames_BCTHW(
@@ -1645,7 +1801,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
         control_input = data_batch[hint_key]
         control_weight = data_batch["control_weight"]
 
-        num_new_generated_frames = self.num_video_frames - self.num_input_frames  # 57 - 9 = 48
+        num_new_generated_frames = (
+            self.num_video_frames - self.num_input_frames
+        )  # 57 - 9 = 48
         B, C, T, H, W = control_input.shape
         T = T // self.model.n_views
         assert T == total_T
@@ -1659,7 +1817,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
                 N_clip = min(self.n_clip_max, N_clip)
         else:
             N_clip = 1
-            log.info("Model is not Long-video generation model, overwriting N_clip to 1")
+            log.info(
+                "Model is not Long-video generation model, overwriting N_clip to 1"
+            )
 
         video = []
         for i_clip in tqdm(range(N_clip)):
@@ -1673,7 +1833,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
                     input_frames = input_video[b : b + 1, :, start_frame:end_frame]
                     x0 = self.model.encode(input_frames).contiguous()
                     x_sigma_max.append(
-                        self.model.get_x_from_clean(x0, self.sigma_max, seed=(self.seed + i_clip))
+                        self.model.get_x_from_clean(
+                            x0, self.sigma_max, seed=(self.seed + i_clip)
+                        )
                     )
                 x_sigma_max = torch.cat(x_sigma_max)
             else:
@@ -1822,7 +1984,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
             latent_sample, "B C (V T) H W -> B V C T H W", V=self.model.n_views
         )
         log.info(f"model.sigma_data {self.model.sigma_data}")
-        if self.model.config.conditioner.video_cond_bool.condition_location.endswith("first_n"):
+        if self.model.config.conditioner.video_cond_bool.condition_location.endswith(
+            "first_n"
+        ):
             if skip_reencode:
                 assert prev_latents is not None
                 prev_latents = einops.rearrange(
@@ -1842,7 +2006,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
                     )
                     latent_sample[b : b + 1, :] = encoded_frames
 
-        if self.model.config.conditioner.video_cond_bool.condition_location.startswith("first_cam"):
+        if self.model.config.conditioner.video_cond_bool.condition_location.startswith(
+            "first_cam"
+        ):
             assert cond_video is not None
             cond_video = split_video_into_patches(cond_video, patch_h, patch_w)
             for b in range(cond_video.shape[0]):
@@ -1852,7 +2018,10 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
                 latent_sample[
                     b : b + 1,
                     0,
-                ] = self.model.tokenizer.encode(input_frames).contiguous() * self.model.sigma_data
+                ] = (
+                    self.model.tokenizer.encode(input_frames).contiguous()
+                    * self.model.sigma_data
+                )
 
         latent_sample = einops.rearrange(latent_sample, " B V C T H W -> B C (V T) H W")
         log.info(f"latent_sample, {latent_sample[:, 0, :, 0, 0]}")
@@ -1943,7 +2112,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
 
         log.info(f"Run with view condition video path: {view_condition_video}")
         if initial_condition_video:
-            log.info(f"Run with initial condition video path: {initial_condition_video}")
+            log.info(
+                f"Run with initial condition video path: {initial_condition_video}"
+            )
         mv_prompts = self.build_mv_prompt(prompts, self.model.n_views)
         log.info(f"Run with prompt: {mv_prompts}")
 
@@ -1981,7 +2152,9 @@ class RBLNDiffusionControl2WorldMultiviewGenerationPipeline(
         return video, mv_prompts
 
 
-class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGenerationPipeline):
+class RBLNDistilledControl2WorldGenerationPipeline(
+    RBLNDiffusionControl2WorldGenerationPipeline
+):
     """Pipeline for distilled ControlNet video2video inference."""
 
     def _init_model(self, rbln_config=None):
@@ -1998,7 +2171,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
         with skip_init_linear():
             model.set_up_model()
 
-        assert len(self.control_inputs) == 1, "Distilled model only supports single control input"
+        assert len(self.control_inputs) == 1, (
+            "Distilled model only supports single control input"
+        )
 
         for _, config in self.control_inputs.items():
             checkpoint_path = os.path.join(self.checkpoint_dir, config["ckpt_path"])
@@ -2021,21 +2196,29 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
 
         # Load base model weights
         if base_state_dict:
-            model.model.net.base_model.net.load_state_dict(base_state_dict, strict=False)
+            model.model.net.base_model.net.load_state_dict(
+                base_state_dict, strict=False
+            )
         # Load control weights
         if ctrl_state_dict:
             model.model.net.net_ctrl.load_state_dict(ctrl_state_dict, strict=False)
 
         hidden_size = model.model.net.base_model.net.model_channels
         attention_head_dim = hidden_size // model.model.net.base_model.net.num_heads
-        spatial_compression_factor = model.config.tokenizer.video_vae.spatial_compression_factor
-        temporal_compression_factor = model.config.tokenizer.video_vae.temporal_compression_factor
+        spatial_compression_factor = (
+            model.config.tokenizer.video_vae.spatial_compression_factor
+        )
+        temporal_compression_factor = (
+            model.config.tokenizer.video_vae.temporal_compression_factor
+        )
         patch_spatial = model.model.net.base_model.net.patch_spatial
         patch_temporal = model.model.net.base_model.net.patch_temporal
 
         latent_height = self.height // spatial_compression_factor
         latent_width = self.width // spatial_compression_factor
-        num_latent_frames = (self.num_video_frames - 1) // temporal_compression_factor + 1
+        num_latent_frames = (
+            self.num_video_frames - 1
+        ) // temporal_compression_factor + 1
 
         hidden_dim = (
             (latent_height // patch_spatial)
@@ -2105,7 +2288,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
             tensor_parallel_size=rbln_config.get("tensor_parallel_size", None),
         )
         base_model = model.model.net.base_model.net
-        runtime = RBLNVideoExtendGeneralDIT(self.compiled_model, base_model, rbln_config)
+        runtime = RBLNVideoExtendGeneralDIT(
+            self.compiled_model, base_model, rbln_config
+        )
         if self.create_runtimes:
             runtime.create_runtime()
 
@@ -2125,7 +2310,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
         with skip_init_linear():
             model.set_up_model()
 
-        assert len(self.control_inputs) == 1, "Distilled model only supports single control input"
+        assert len(self.control_inputs) == 1, (
+            "Distilled model only supports single control input"
+        )
 
         for _, config in self.control_inputs.items():
             checkpoint_path = os.path.join(self.checkpoint_dir, config["ckpt_path"])
@@ -2148,12 +2335,16 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
 
         # Load base model weights
         if base_state_dict:
-            model.model.net.base_model.net.load_state_dict(base_state_dict, strict=False)
+            model.model.net.base_model.net.load_state_dict(
+                base_state_dict, strict=False
+            )
         # Load control weights
         if ctrl_state_dict:
             model.model.net.net_ctrl.load_state_dict(ctrl_state_dict, strict=False)
 
-        compiled_model = rebel.RBLNCompiledModel(os.path.join(self.rbln_dir, "transformer.rbln"))
+        compiled_model = rebel.RBLNCompiledModel(
+            os.path.join(self.rbln_dir, "transformer.rbln")
+        )
         base_model = model.model.net.base_model.net
         runtime = RBLNVideoExtendGeneralDIT(compiled_model, base_model, rbln_config)
         if self.create_runtimes:
@@ -2168,11 +2359,15 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
         hint_encoders = {}
         compiled_controlnet = {}
 
-        assert len(self.control_inputs) == 1, "Distilled model only supports single control input"
+        assert len(self.control_inputs) == 1, (
+            "Distilled model only supports single control input"
+        )
         key = list(self.control_inputs)[0]
 
         hidden_size = self.model.model.net.base_model.net.base_model.model_channels
-        attention_head_dim = hidden_size // self.model.model.net.base_model.net.base_model.num_heads
+        attention_head_dim = (
+            hidden_size // self.model.model.net.base_model.net.base_model.num_heads
+        )
         spatial_compression_factor = (
             self.model.config.tokenizer.video_vae.spatial_compression_factor
         )
@@ -2184,7 +2379,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
 
         latent_height = self.height // spatial_compression_factor
         latent_width = self.width // spatial_compression_factor
-        num_latent_frames = (self.num_video_frames - 1) // temporal_compression_factor + 1
+        num_latent_frames = (
+            self.num_video_frames - 1
+        ) // temporal_compression_factor + 1
 
         hidden_dim = (
             (latent_height // patch_spatial)
@@ -2238,7 +2435,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
         compiled_model = rebel.compile_from_torch(
             wrapped_controlnet,
             input_info,
-            tensor_parallel_size=rbln_config.get(key, {}).get("tensor_parallel_size", None),
+            tensor_parallel_size=rbln_config.get(key, {}).get(
+                "tensor_parallel_size", None
+            ),
         )
 
         compiled_controlnet[key] = compiled_model
@@ -2260,7 +2459,10 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
             self.model.model.net,
             "net_ctrl",
             RBLNGeneralDITEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             ),
         )
 
@@ -2268,14 +2470,18 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
         hint_encoders = {}
         compiled_controlnet = {}
 
-        assert len(self.control_inputs) == 1, "Distilled model only supports single control input"
+        assert len(self.control_inputs) == 1, (
+            "Distilled model only supports single control input"
+        )
         key = list(self.control_inputs)[0]
 
         compiled_controlnet[key] = rebel.RBLNCompiledModel(
             os.path.join(self.rbln_dir, "ctrlnet", f"{key}.rbln")
         )
         controlnet_runtime = RBLNRuntimeControlNet(
-            compiled_controlnet[key], self.model.model.net.net_ctrl, rbln_config.get(key, {})
+            compiled_controlnet[key],
+            self.model.model.net.net_ctrl,
+            rbln_config.get(key, {}),
         )
         if self.create_runtimes:
             controlnet_runtime.create_runtime()
@@ -2293,7 +2499,10 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
             self.model.model.net,
             "net_ctrl",
             RBLNGeneralDITEncoder(
-                hint_encoders, self.control_inputs.keys(), in_channels, use_cross_attn_mask
+                hint_encoders,
+                self.control_inputs.keys(),
+                in_channels,
+                use_cross_attn_mask,
             ),
         )
 
@@ -2318,7 +2527,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
             assert len(negative_prompt_embeddings) == B, (
                 "Batch size mismatch for negative prompt embeddings"
             )
-        assert len(control_inputs_list) == B, "Batch size mismatch for control_inputs_list"
+        assert len(control_inputs_list) == B, (
+            "Batch size mismatch for control_inputs_list"
+        )
 
         log.info("Starting data augmentation")
 
@@ -2344,7 +2555,8 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
 
         if data_batch["input_video"] is None:
             ctrl_video = next(
-                (v for k, v in data_batch.items() if k.startswith("control_input")), None
+                (v for k, v in data_batch.items() if k.startswith("control_input")),
+                None,
             )
             height, width = ctrl_video.shape[3], ctrl_video.shape[4]
         else:
@@ -2394,7 +2606,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
                 control_weight = torch.cat([control_weight, pad_weight], dim=3)
         else:
             num_total_frames_with_padding = T
-        N_clip = (num_total_frames_with_padding - self.num_input_frames) // num_new_generated_frames
+        N_clip = (
+            num_total_frames_with_padding - self.num_input_frames
+        ) // num_new_generated_frames
 
         video = []
         prev_frames = None
@@ -2471,7 +2685,9 @@ class RBLNDistilledControl2WorldGenerationPipeline(RBLNDiffusionControl2WorldGen
                 video.append(frames[:, :, self.num_input_frames :])
 
             prev_frames = torch.zeros_like(frames)
-            prev_frames[:, :, : self.num_input_frames] = frames[:, :, -self.num_input_frames :]
+            prev_frames[:, :, : self.num_input_frames] = frames[
+                :, :, -self.num_input_frames :
+            ]
 
         video = torch.cat(video, dim=2)[:, :, :T]
         video = video.permute(0, 2, 3, 4, 1).numpy()

@@ -23,7 +23,12 @@ from huggingface_hub import snapshot_download
 from transformers import AutoTokenizer
 
 # Common architecture specifications
-BASE_CONFIG = {"n_kv_heads": 8, "norm_type": "rmsnorm", "norm_eps": 1e-5, "ffn_hidden_size": 14336}
+BASE_CONFIG = {
+    "n_kv_heads": 8,
+    "norm_type": "rmsnorm",
+    "norm_eps": 1e-5,
+    "ffn_hidden_size": 14336,
+}
 COSMOS_ARCHITECTURES = {
     "1b": {
         "n_layers": 16,
@@ -215,7 +220,9 @@ def get_model_arch_specs(
         if model_family == "cosmos":
             if model_size == "12b":
                 arch_specs.update(COSMOS_YARN_CONFIG)
-                Logger.debug(f"Using YaRN for RoPE extension with config: {COSMOS_YARN_CONFIG}")
+                Logger.debug(
+                    f"Using YaRN for RoPE extension with config: {COSMOS_YARN_CONFIG}"
+                )
             else:
                 pass
         elif model_family in ["llama", "llama3"]:
@@ -251,7 +258,9 @@ def get_model_arch_specs(
             }
             arch_specs.update(pretrained_specs)
         else:
-            raise ValueError(f"Model family {model_family} doesn't have a pretrained config.")
+            raise ValueError(
+                f"Model family {model_family} doesn't have a pretrained config."
+            )
 
     return arch_specs
 
@@ -307,7 +316,10 @@ def create_text_model_config(
 
 
 def create_prompt_upsampler(
-    model_id: str, batch_size: int = 1, max_seq_len: int = 1024, precision: int = "float32"
+    model_id: str,
+    batch_size: int = 1,
+    max_seq_len: int = 1024,
+    precision: int = "float32",
 ):
     checkpoint_dir = snapshot_download(repo_id=model_id)
     model_config = create_text_model_config(

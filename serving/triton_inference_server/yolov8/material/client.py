@@ -35,7 +35,8 @@ import tritonclient.http as httpclient
 import yaml
 from tritonclient.utils import np_to_triton_dtype
 from ultralytics.data.augment import LetterBox
-from ultralytics.yolo.utils.ops import non_max_suppression as nms, scale_boxes
+from ultralytics.yolo.utils.ops import non_max_suppression as nms
+from ultralytics.yolo.utils.ops import scale_boxes
 from ultralytics.yolo.utils.plotting import Annotator
 
 DEFAULT_URL = "localhost:8000"
@@ -86,7 +87,9 @@ def infer(
     with httpclient.InferenceServerClient(url=url, verbose=verbose) as client:
         inputs = []
         inputs.append(
-            httpclient.InferInput("INPUT__0", batch.shape, np_to_triton_dtype(batch.dtype))
+            httpclient.InferInput(
+                "INPUT__0", batch.shape, np_to_triton_dtype(batch.dtype)
+            )
         )
         inputs[0].set_data_from_numpy(batch)
         outputs = [
@@ -95,7 +98,9 @@ def infer(
         responses = []
         # inference
         for i in range(requests):
-            responses.append(client.infer(MODEL_NAME, inputs, request_id=str(i), outputs=outputs))
+            responses.append(
+                client.infer(MODEL_NAME, inputs, request_id=str(i), outputs=outputs)
+            )
         # check result
         for i, response in enumerate(responses):
             rebel_result = response.as_numpy("OUTPUT__0")

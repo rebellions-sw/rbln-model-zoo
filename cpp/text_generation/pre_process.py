@@ -8,7 +8,9 @@ batch_size = 1
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 tokenizer.pad_token = tokenizer.eos_token
 conversation = [[{"role": "user", "content": input_text}]] * batch_size
-text = tokenizer.apply_chat_template(conversation, add_generation_prompt=True, tokenize=False)
+text = tokenizer.apply_chat_template(
+    conversation, add_generation_prompt=True, tokenize=False
+)
 inputs = tokenizer(text, return_tensors="pt", padding=True)
 input_ids = inputs.input_ids.numpy()
 

@@ -146,7 +146,9 @@ class PIT(torch.nn.Module):
             batch_size, num_permute, dtype=estimate.dtype, device=estimate.device
         )
         for i, idx in enumerate(permutations(range(num_speakers))):
-            util = self.utility_func(estimate, reference[:, idx, :], mask=mask, epsilon=epsilon)
+            util = self.utility_func(
+                estimate, reference[:, idx, :], mask=mask, epsilon=epsilon
+            )
             util_mat[:, i] = util.mean(dim=1)  # take the average over speaker dimension
         return util_mat.max(dim=1).values
 

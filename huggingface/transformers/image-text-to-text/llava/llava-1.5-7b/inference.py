@@ -28,7 +28,7 @@ def main():
         },
     ]
     prompt = processor.apply_chat_template(conversation, add_generation_prompt=True)
-    inputs = processor(prompt, image, return_tensors="pt")
+    inputs = processor(images=image, text=prompt, return_tensors="pt")
 
     # autoregressively complete prompt
     output = model.generate(**inputs, max_new_tokens=100)

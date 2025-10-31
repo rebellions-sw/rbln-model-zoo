@@ -88,17 +88,24 @@ class RotaryPositionEmbedding1DV1(nn.Module):
         super().__init__()
         self.mscale = 1.0
         self.config = config
-        self.dim = config.head_dim if config.head_dim else self.config.dim // self.config.n_heads
+        self.dim = (
+            config.head_dim
+            if config.head_dim
+            else self.config.dim // self.config.n_heads
+        )
         self.max_position_embeddings = config.max_seq_len
         self.max_seq_len_cached = self.max_position_embeddings
 
         self.inv_freq = 1.0 / (
-            self.config.rope_theta ** (torch.arange(0, self.dim, 2, dtype=torch.float32) / self.dim)
+            self.config.rope_theta
+            ** (torch.arange(0, self.dim, 2, dtype=torch.float32) / self.dim)
         )
         self.seq = torch.arange(self.max_seq_len_cached, dtype=torch.float32)
 
         self.freqs = torch.einsum("i,j->ij", self.seq, self.inv_freq)
-        emb = torch.stack((self.freqs, self.freqs), dim=-1).reshape(*self.freqs.shape[:-1], -1)
+        emb = torch.stack((self.freqs, self.freqs), dim=-1).reshape(
+            *self.freqs.shape[:-1], -1
+        )
         self.register_buffer(
             "cos_cached", (emb.cos() * self.mscale)[None, :, None, :], persistent=False
         )
@@ -197,7 +204,11 @@ class Attention(nn.Module):
         Initializes the GQA module.
         """
         super().__init__()
-        assert attn_type in ["self", "cross", "full"], f"Invalid attention type: {attn_type}"
+        assert attn_type in [
+            "self",
+            "cross",
+            "full",
+        ], f"Invalid attention type: {attn_type}"
         self.config = config
         self.layer_id = layer_id
         self.attn_type = attn_type
@@ -205,18 +216,26 @@ class Attention(nn.Module):
 
         self.dim = config.dim
         self.context_dim = context_dim
-        self.n_kv_heads = config.n_heads if config.n_kv_heads is None else config.n_kv_heads
+        self.n_kv_heads = (
+            config.n_heads if config.n_kv_heads is None else config.n_kv_heads
+        )
         self.n_local_kv_heads = self.n_kv_heads
         self.n_local_heads = config.n_heads
         self.n_rep = self.n_local_heads // self.n_local_kv_heads
-        self.head_dim = config.dim // config.n_heads if config.head_dim is None else config.head_dim
+        self.head_dim = (
+            config.dim // config.n_heads if config.head_dim is None else config.head_dim
+        )
         self.causal_mask = config.causal_mask
         self.fuse_qkv = config.fuse_qkv
         self.precision = config.precision
 
         self.wq = nn.Linear(self.dim, self.n_local_heads * self.head_dim, bias=False)
-        self.wk = nn.Linear(context_dim, self.n_local_kv_heads * self.head_dim, bias=False)
-        self.wv = nn.Linear(context_dim, self.n_local_kv_heads * self.head_dim, bias=False)
+        self.wk = nn.Linear(
+            context_dim, self.n_local_kv_heads * self.head_dim, bias=False
+        )
+        self.wv = nn.Linear(
+            context_dim, self.n_local_kv_heads * self.head_dim, bias=False
+        )
         self.wo = nn.Linear(self.n_local_heads * self.head_dim, self.dim, bias=False)
 
         self.max_batch_size = config.max_batch_size
@@ -229,13 +248,22 @@ class Attention(nn.Module):
 
         # QK normalization layers
         if self.use_qk_normalization:
-            self.q_norm = create_norm(config.norm_type, dim=self.head_dim, eps=config.norm_eps)
-            self.k_norm = create_norm(config.norm_type, dim=self.head_dim, eps=config.norm_eps)
+            self.q_norm = create_norm(
+                config.norm_type, dim=self.head_dim, eps=config.norm_eps
+            )
+            self.k_norm = create_norm(
+                config.norm_type, dim=self.head_dim, eps=config.norm_eps
+            )
 
         self.to(dtype=getattr(torch, self.precision))
 
     def init_kv_cache(self, dtype=None):
-        cache_shape = (self.max_batch_size, self.n_local_kv_heads, self.max_seq_len, self.head_dim)
+        cache_shape = (
+            self.max_batch_size,
+            self.n_local_kv_heads,
+            self.max_seq_len,
+            self.head_dim,
+        )
         if dtype is None:
             dtype = getattr(torch, self.precision)
         if self.attn_type == "self":
@@ -374,7 +402,9 @@ class TransformerBlock(nn.Module):
             The output tensor after applying the transformer block.
         """
         # Apply attention and residual connection
-        h = x + self.attention(self.attention_norm(x), rope=rope, input_pos=input_pos, mask=mask)
+        h = x + self.attention(
+            self.attention_norm(x), rope=rope, input_pos=input_pos, mask=mask
+        )
 
         # Apply feed-forward network and residual connection
         out = h + self.feed_forward(self.ffn_norm(h))
@@ -414,7 +444,9 @@ class T2WTransformer(nn.Module):
 
         # Causal mask
         self.causal_mask = torch.tril(
-            torch.ones(self.config.max_seq_len, self.config.max_seq_len, dtype=torch.bool)
+            torch.ones(
+                self.config.max_seq_len, self.config.max_seq_len, dtype=torch.bool
+            )
         )
 
         # Output projection

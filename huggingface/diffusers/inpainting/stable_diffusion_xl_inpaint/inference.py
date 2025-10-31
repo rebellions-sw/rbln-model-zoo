@@ -40,7 +40,9 @@ def main():
     mask = load_image(mask_url)
 
     # Generate image
-    image = pipe(prompt, image=source, mask_image=mask, guidance_scale=guidance_scale).images[0]
+    image = pipe(
+        prompt, image=source, mask_image=mask, guidance_scale=guidance_scale
+    ).images[0]
 
     # Save image result
     image.save(f"{prompt}.png")

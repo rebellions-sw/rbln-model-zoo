@@ -36,7 +36,9 @@ def main():
     print("---- text ----")
     print(text)
     print("---- Result ----")
-    print(tokenizer.decode(output_sequence.squeeze().tolist(), skip_special_tokens=True))
+    print(
+        tokenizer.decode(output_sequence.squeeze().tolist(), skip_special_tokens=True)
+    )
 
 
 if __name__ == "__main__":

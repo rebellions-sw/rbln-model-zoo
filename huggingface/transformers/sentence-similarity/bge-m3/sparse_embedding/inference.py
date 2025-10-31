@@ -90,7 +90,9 @@ def load_last_linear(model_name, hidden_size):
             ignore_patterns=["flax_model.msgpack", "rust_model.ot", "tf_model.h5"],
         )
     sparse_linear = torch.nn.Linear(in_features=hidden_size, out_features=1)
-    sparse_state_dict = torch.load(os.path.join(model_name, "sparse_linear.pt"), map_location="cpu")
+    sparse_state_dict = torch.load(
+        os.path.join(model_name, "sparse_linear.pt"), map_location="cpu"
+    )
     sparse_linear.load_state_dict(sparse_state_dict)
     return sparse_linear
 
@@ -100,7 +102,9 @@ def sparse_embedding(sparse_linear, hidden_state):
     return torch.relu(sparse_linear(hidden_state))
 
 
-def postprocessing(sparse_linear, token_weights: list, input_data: list, tokenizer, batch_size):
+def postprocessing(
+    sparse_linear, token_weights: list, input_data: list, tokenizer, batch_size
+):
     q_output = sparse_embedding(sparse_linear, token_weights[0][0])
     m_output = sparse_embedding(sparse_linear, token_weights[1][0])
 
@@ -135,7 +139,9 @@ def postprocessing(sparse_linear, token_weights: list, input_data: list, tokeniz
     lexical_matching_scores = []
     for i in range(batch_size):
         lexical_matching_scores.append(
-            compute_lexical_matching_score(first_lexical_weights[i], second_lexical_weights[i])
+            compute_lexical_matching_score(
+                first_lexical_weights[i], second_lexical_weights[i]
+            )
         )
 
     return lexical_matching_scores
@@ -154,8 +160,12 @@ def main():
     # Prepare inputs
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     tokenizer.pad_token = tokenizer.eos_token
-    input_q = tokenizer(args.query, padding="max_length", return_tensors="pt", max_length=8192)
-    input_m = tokenizer(args.message, padding="max_length", return_tensors="pt", max_length=8192)
+    input_q = tokenizer(
+        args.query, padding="max_length", return_tensors="pt", max_length=8192
+    )
+    input_m = tokenizer(
+        args.message, padding="max_length", return_tensors="pt", max_length=8192
+    )
 
     # run model
     q_output = model(input_q.input_ids, input_q.attention_mask)

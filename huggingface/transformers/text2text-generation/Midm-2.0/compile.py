@@ -25,17 +25,17 @@ def parsing_argument():
 def main():
     args = parsing_argument()
 
-    model_name = f"K-intelligence/{args.model_id}"
+    model_id = f"K-intelligence/{args.model_id}"
 
     model = RBLNAutoModelForCausalLM.from_pretrained(
-        model_id=model_name,
+        model_id=model_id,
         export=True,
         rbln_batch_size=1,
         rbln_max_seq_len=32_768,
-        rbln_tensor_parallel_size=DEFAULT_TP_SIZE[os.path.basename(model_name)],
+        rbln_tensor_parallel_size=DEFAULT_TP_SIZE[os.path.basename(model_id)],
     )
 
-    model.save_pretrained(os.path.basename(model_name))
+    model.save_pretrained(os.path.basename(model_id))
 
 
 if __name__ == "__main__":

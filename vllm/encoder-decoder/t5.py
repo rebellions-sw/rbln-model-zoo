@@ -7,7 +7,6 @@ from vllm import LLM, SamplingParams
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    # You need to set the parameters following rbln_config.json in the compiled model
     parser.add_argument(
         "-m",
         "--model_id",
@@ -16,40 +15,15 @@ def parse_args():
         help="Compiled model directory path",
         default="google/flan-t5-base",
     )
-    parser.add_argument(
-        "-l",
-        "--max-sequence-length",
-        dest="max_seq_len",
-        type=int,
-        action="store",
-        help="Max sequence length",
-        default=512,
-    )
-    parser.add_argument(
-        "-b",
-        "--batch-size",
-        dest="batch_size",
-        type=int,
-        action="store",
-        help="Batch size",
-        default=1,
-    )
     args = parser.parse_args()
-    return args.model_id, args.max_seq_len, args.batch_size
+    return args.model_id
 
 
 def main():
-    # Make sure the engine configuration
-    # matches the parameters used during compilation.
-    model_id, max_seq_len, batch_size = parse_args()
-    llm = LLM(
-        model=model_id,
-        device="auto",
-        max_num_seqs=batch_size,
-        max_num_batched_tokens=max_seq_len,
-        max_model_len=max_seq_len,
-        block_size=max_seq_len,
-    )
+    # V1 does not support encoder-decoder models anymore.
+    # Make sure use `VLLM_USE_V1=0` in the environment variables.
+    model_id = parse_args()
+    llm = LLM(model=model_id)
 
     tokenizer = AutoTokenizer.from_pretrained(model_id)
 
@@ -66,7 +40,9 @@ def main():
 
     outputs = []
     for request_id, prompt in enumerate(prompts):
-        encoder_prompt_token_ids = tokenizer.encode(prompt, truncation=True, max_length=200)
+        encoder_prompt_token_ids = tokenizer.encode(
+            prompt, truncation=True, max_length=200
+        )
         input_prompt = {
             "encoder_prompt": {
                 "prompt_token_ids": encoder_prompt_token_ids,
