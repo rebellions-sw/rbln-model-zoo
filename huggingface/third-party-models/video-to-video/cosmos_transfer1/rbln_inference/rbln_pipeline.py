@@ -795,7 +795,7 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 n_views = 1 if not hasattr(model, "n_views") else model.n_views
 
                 model.tensor_kwargs = {"device": "cpu", "dtype": torch.float32}
-                ckpt_path = os.path.join(self.checkpoint_dir, spec["ckpt_path"])
+                ckpt_path = spec["ckpt_path"]
 
                 log.info(f"Loading ctrl model from ckpt_path: {spec['ckpt_path']}")
                 with skip_init_linear():
@@ -968,7 +968,7 @@ class RBLNDiffusionControl2WorldGenerationPipeline:
                 )
 
                 model.tensor_kwargs = {"device": "cpu", "dtype": torch.float32}
-                ckpt_path = os.path.join(self.checkpoint_dir, spec["ckpt_path"])
+                ckpt_path = spec["ckpt_path"]
 
                 log.info(f"Loading ctrl model from ckpt_path: {spec['ckpt_path']}")
                 with skip_init_linear():
@@ -2176,7 +2176,7 @@ class RBLNDistilledControl2WorldGenerationPipeline(
         )
 
         for _, config in self.control_inputs.items():
-            checkpoint_path = os.path.join(self.checkpoint_dir, config["ckpt_path"])
+            checkpoint_path = config["ckpt_path"]
 
         log.info(f"Loading base model and ctrl model from ckpt_path: {checkpoint_path}")
         checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
@@ -2315,7 +2315,7 @@ class RBLNDistilledControl2WorldGenerationPipeline(
         )
 
         for _, config in self.control_inputs.items():
-            checkpoint_path = os.path.join(self.checkpoint_dir, config["ckpt_path"])
+            checkpoint_path = config["ckpt_path"]
 
         log.info(f"Loading base model and ctrl model from ckpt_path: {checkpoint_path}")
         checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=False)
