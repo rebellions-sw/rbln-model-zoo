@@ -9,7 +9,7 @@
   * `docs.rbln.ai`: v0.9.3
 * **Added new examples**
   * `Image-to-video`: **Stable Video Diffusion**
-  * `rayserve` Toolkit
+  * `rayserve` serving framework
     * Decoder-only: llam3-8b, llama3.1-8b
     * Vision: yolov8, resnet50
 * **Dependency updates**
