@@ -13,7 +13,7 @@ echo "=================================================================="
 
 MATERIAL_PATH="../material"
 MODEL_CONFIG="config.properties"
-MODEL_HANDLER="resnet50_handler.py"
+MODEL_HANDLER="rbln_handler.py"
 
 directories=(
   "rbln_models"
@@ -56,7 +56,7 @@ MODEL_DIR="rbln_models"
 if [ ! -d ${MODEL_DIR}/${MODEL_NAME} ] || [ ! -f ${MODEL_DIR}/${MODEL_NAME}/${MODEL_FILE} ]; then
   mkdir -p ${MODEL_DIR}/${MODEL_NAME}
   pushd ${MATERIAL_PATH} && 
-    python ./get_model.py --model_name resnet50 && 
+    python ./compile.py --model_name resnet50 &&
     mv ${MODEL_FILE} ../output/${MODEL_DIR}/${MODEL_NAME}/${MODEL_FILE} && 
     popd
 
@@ -81,7 +81,7 @@ if [ ! -f ${ARCHIVE_RESULT_PATH} ]; then
     --model-name ${SERVING_MODEL_NAME} \
     --version 1.0 \
     --serialized-file ./rbln_models/${MODEL_NAME}/${MODEL_FILE} \
-    --handler ./model_handler/resnet50_handler.py \
+    --handler ./model_handler/rbln_handler.py \
     --export-path ./model_store/
 
   if [ ! -f ${ARCHIVE_RESULT_PATH} ]; then

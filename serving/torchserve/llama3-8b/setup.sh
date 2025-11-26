@@ -55,7 +55,7 @@ MODEL_DIR="rbln_model"
 
 if [ ! -d ${MODEL_DIR}/${LLAMA_3B_DIR} ]; then
   pushd ${MATERIAL_PATH} && 
-    python ./get_model.py && 
+    python ./compile.py &&
     mv ${LLAMA_3B_DIR} ../output/${MODEL_DIR}/ && 
     popd
 

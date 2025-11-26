@@ -53,7 +53,7 @@ echo "=================================================================="
 BE_DIR="python_backend"
 GIT_REPO="https://github.com/triton-inference-server/${BE_DIR}.git"
 if [ ! -d ${BE_DIR} ]; then
-  git clone ${GIT_REPO} -b r24.12
+  git clone ${GIT_REPO} -b r25.08
   if [ $? -ne 0 ]; then
     echo "Error while cloning git repository."
     popd
@@ -109,14 +109,15 @@ if [ ! -f ${REPO_DIR}/${CONFIG} ]; then
 fi
 
 echo "=================================================================="
-echo "= Step 5. Install required packages                         ="
+echo "= Step 5. Install required packages                              ="
 echo "=================================================================="
-pip3 install tritonclient==2.41.1 gevent geventhttpclient && \
-  pip3 install fire opencv-python nvidia-pytriton && \
-  pip3 install --extra-index-url https://download.pytorch.org/whl/cpu \
-    "matplotlib>=3.8.0" "scipy>=1.10.1" "torch<=2.5.1" "torchvision<=0.20.1" \
-    "opencv-python-headless==4.10.0.84" "pyyaml>=6.0.1" "requests==2.32.3" \
-    "ultralytics==8.0.145"
+pip3 install -r ../material/requirements.txt
+
+if [ $? -ne 0 ]; then
+  echo "Error while required packages installation."
+  popd
+  exit 1
+fi
 
 echo "Done."
 

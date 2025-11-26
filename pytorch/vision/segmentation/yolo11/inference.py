@@ -27,7 +27,8 @@ def parsing_argument():
 
 
 def download_image(url: str, save_path: Path) -> np.ndarray:
-    with urllib.request.urlopen(url) as resp, open(save_path, "wb") as f:
+    req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+    with urllib.request.urlopen(req, timeout=20) as resp, open(save_path, "wb") as f:
         f.write(resp.read())
     return cv2.imread(str(save_path))
 

@@ -66,4 +66,3 @@
 	url = https://github.com/illuin-tech/colpali
 [submodule "huggingface/transformers/visual-document-retrieval/colpali/colpali"]
 	path = huggingface/transformers/visual-document-retrieval/colpali/colpali
-	url = https://github.com/illuin-tech/colpali.git
