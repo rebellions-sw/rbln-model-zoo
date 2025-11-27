@@ -13,7 +13,7 @@ echo "=================================================================="
 
 MATERIAL_PATH="../material"
 MODEL_CONFIG="config.properties"
-MODEL_HANDLER="yolov8l_handler.py"
+MODEL_HANDLER="rbln_handler.py"
 
 directories=(
   "rbln_models/yolov8l"
@@ -47,7 +47,18 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "=================================================================="
-echo "= Step 2. YOLOv8 model compile                                ="
+echo "= Step 2. Install required packages                              ="
+echo "=================================================================="
+pip3 install -r ${MATERIAL_PATH}/requirements.txt
+
+if [ $? -ne 0 ]; then
+  echo "Error while required packages installation."
+  popd
+  exit 1
+fi
+
+echo "=================================================================="
+echo "= Step 3. YOLOv8 model compile                                ="
 echo "=================================================================="
 
 DIR="../material/yolov8"
@@ -98,7 +109,7 @@ if [ ! -f ${ARCHIVE_RESULT_PATH} ]; then
     --model-name ${SERVING_MODEL_NAME} \
     --version 1.0 \
     --serialized-file ./rbln_models/${MODEL}/${MODEL}.rbln \
-    --handler ./model_handler/${MODEL}_handler.py \
+    --handler ./model_handler/rbln_handler.py \
     --extra-files ./rbln_extra/coco128.yaml \
     --export-path ./model_store
 

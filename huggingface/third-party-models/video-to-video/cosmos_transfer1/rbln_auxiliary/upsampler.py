@@ -69,7 +69,7 @@ class RBLNPixtralPromptUpsampler:
 
         rbln_config = {
             "vision_tower": {
-                "batch_size": 2,
+                "batch_size": 1,
                 "output_hidden_states": True,
                 **vision_tower_config,
             },

@@ -35,9 +35,9 @@ import tritonclient.http as httpclient
 import yaml
 from tritonclient.utils import np_to_triton_dtype
 from ultralytics.data.augment import LetterBox
-from ultralytics.yolo.utils.ops import non_max_suppression as nms
-from ultralytics.yolo.utils.ops import scale_boxes
-from ultralytics.yolo.utils.plotting import Annotator
+from ultralytics.utils.ops import non_max_suppression as nms
+from ultralytics.utils.ops import scale_boxes
+from ultralytics.utils.plotting import Annotator
 
 DEFAULT_URL = "localhost:8000"
 DEFAULT_REQUESTS = 10

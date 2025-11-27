@@ -1,5 +1,22 @@
 # Change Log
 
+## November, 27th 2025 (v0.9.3)
+
+* Compatible version:
+  * `rebel-compiler`: v0.9.3
+  * `optimum-rbln`: v0.9.3
+  * `vllm-rbln`: v0.9.3
+  * `docs.rbln.ai`: v0.9.3
+* **Added new examples**
+  * `Image-to-video`: **Stable Video Diffusion**
+  * `rayserve` serving framework
+    * Decoder-only: llam3-8b, llama3.1-8b
+    * Vision: yolov8, resnet50
+* **Dependency updates**
+  * `N/A`
+* **Notes**
+  * Enhanced the user experience and convenience of cosmos-transfer1.
+
 ## October, 31th 2025 (v0.9.2)
 
 * Compatible version:

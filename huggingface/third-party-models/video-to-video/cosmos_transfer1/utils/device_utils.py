@@ -314,6 +314,7 @@ class RBLNDeviceAllocator:
                 return start_idx
 
         # If no existing range can accommodate, raise error
+        self.print_device_memory_usage()
         raise ValueError(
             f"Cannot allocate {model.name} requiring {required_devices} devices. "
             f"No suitable device range found within {self.max_devices} available devices."
@@ -387,6 +388,7 @@ class RBLNDeviceAllocator:
                     f"Multi-device allocation successful: {model.name} -> devices {device_list} (max_mem: {model.max_memory_per_device:.1f})"
                 )
             else:
+                self.print_device_memory_usage()
                 error_msg = f"Multi-device allocation failed: {model.name} -> devices {device_list}. Please use more devices."
                 raise ValueError(f"{error_msg}")
 
@@ -438,6 +440,7 @@ class RBLNDeviceAllocator:
 
             # If no space found in any device, stop allocation
             if not allocated_to_existing and remaining_models:
+                self.print_device_memory_usage()
                 model = remaining_models[0]
                 raise ValueError(
                     f"Cannot allocate {model.name} (requires {model.alloc_per_node[0]:.1f} GiB): "
@@ -533,6 +536,7 @@ class RBLNDeviceAllocator:
         # Validate device IDs are within bounds
         max_device = max(device_ids) if device_ids else -1
         if max_device >= self.max_devices:
+            self.print_device_memory_usage()
             error_msg = (
                 f"Device ID {max_device} exceeds maximum available devices ({self.max_devices}). "
                 f"Cannot allocate {model.name} to devices {device_ids}."
@@ -555,6 +559,7 @@ class RBLNDeviceAllocator:
                     f"{current_memory:.1f} + {required_memory:.1f} > {self.effective_memory_limit:.1f} GiB"
                 )
                 if manual:
+                    self.print_device_memory_usage()
                     log.error(error_msg)
                     raise ValueError(error_msg)
                 else:
@@ -626,6 +631,7 @@ class RBLNDeviceAllocator:
                 return start_idx
 
         # If no non-overlapping range found, raise error directly
+        self.print_device_memory_usage()
         raise ValueError(
             f"Cannot allocate ControlNet model {model.name} requiring {required_devices} devices. "
             f"No non-overlapping device range available within {self.max_devices} devices. "
@@ -636,6 +642,14 @@ class RBLNDeviceAllocator:
         """Set manual device allocation for a specific model"""
         self.manual_allocations[model_name] = device_ids
         log.debug(f"Manual allocation set: {model_name} -> devices {device_ids}")
+
+    def print_device_memory_usage(self):
+        """Print current device memory usage for debugging"""
+        print("Current device memory usage:")
+        for model in self.models:
+            print(
+                f" - {model.name}: {[f'{usage:.2f}' for usage in model.alloc_per_node]} GiB"
+            )
 
     def print_allocation_summary(self):
         """Print allocation summary in a beautiful table format"""
@@ -948,7 +962,7 @@ def get_device_from_result(result, filename):
     except:  # noqa: E722
         log.warning(
             f"Device location {filename} not found in allocation result. "
-            f"It will be allocated to device 0."
+            f"It will be allocated to device -1."
         )
-        allocated_device = 0
+        allocated_device = -1
     return allocated_device

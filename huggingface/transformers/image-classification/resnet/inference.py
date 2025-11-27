@@ -28,7 +28,7 @@ def main():
     inputs = image_processor([image], return_tensors="pt")
 
     # Run inference
-    logits = model(**inputs)[0]
+    logits = model(**inputs).logits
     labels = logits.argmax(-1)
 
     # Show results
