@@ -13,12 +13,6 @@ def main():
     model = RBLNColQwen2ForRetrieval.from_pretrained(
         model_id=os.path.basename(model_id),
         export=False,
-        rbln_config={
-            "visual": {
-                "device": 0,
-            },
-            "device": [0, 1, 2, 3],
-        },
     )
     processor = ColQwen2Processor.from_pretrained(model_id)
 

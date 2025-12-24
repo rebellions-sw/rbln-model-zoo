@@ -15,6 +15,7 @@ def main():
         rbln_tensor_parallel_size=1,
         rbln_attn_impl="flash_attn",
         rbln_kvcache_partition_len=8192,  # Length of KV cache partitions for flash attention
+        rbln_phases=["prefill"],
     )
 
     # Save compiled results to disk
