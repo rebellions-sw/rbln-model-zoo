@@ -53,6 +53,9 @@ def main():
         rbln_config={
             "vlm": {
                 "language_model": {
+                    # For the definition of prefill_chunk_size, please refer to the link below.
+                    # https://docs.rbln.ai/v0.9.4/software/optimum/model_api/transformers/text_model/common.html#optimum.rbln.transformers.models.decoderonly.configuration_decoderonly.RBLNDecoderOnlyModelForCausalLMConfig.__init__
+                    # default "max_position_embeddings"
                     "prefill_chunk_size": 8192,
                 },
             }
