@@ -1,5 +1,21 @@
 # Change Log
 
+## December, 26th 2025 (v0.9.4)
+
+* Compatible version:
+  * `rebel-compiler`: v0.9.4
+  * `optimum-rbln`: v0.9.4
+  * `vllm-rbln`: v0.9.4
+  * `docs.rbln.ai`: v0.9.4
+* **Added new examples**
+  * `Vision2Seq`: **PaliGemma (3B) and PaliGemma2 (3B)**
+  * `Text-generation`: **Gemma2-9B-IT**
+  * `Object-detection`: **YOLOv11**
+* **Dependency updates**
+  * `N/A`
+* **Notes**
+  * `N/A`
+
 ## November, 27th 2025 (v0.9.3)
 
 * Compatible version:

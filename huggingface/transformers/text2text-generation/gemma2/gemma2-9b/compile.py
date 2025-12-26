@@ -4,18 +4,15 @@ from optimum.rbln import RBLNAutoModelForCausalLM
 
 
 def main():
-    model_id = "Qwen/Qwen3-Reranker-4B"
+    model_id = "google/gemma-2-9b-it"
 
     # Compile and export
     model = RBLNAutoModelForCausalLM.from_pretrained(
         model_id=model_id,
         export=True,  # export a PyTorch model to RBLN model with optimum
-        rbln_batch_size=2,
-        rbln_max_seq_len=40_960,  # default "max_position_embeddings"
+        rbln_batch_size=1,
+        rbln_max_seq_len=8192,  # default "max_position_embeddings"
         rbln_tensor_parallel_size=4,
-        rbln_attn_impl="flash_attn",
-        rbln_kvcache_partition_len=8192,  # Length of KV cache partitions for flash attention
-        rbln_phases=["prefill"],
     )
 
     # Save compiled results to disk

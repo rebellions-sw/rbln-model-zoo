@@ -20,8 +20,7 @@ def parsing_argument():
         choices=["stable-video-diffusion-img2vid", "stable-video-diffusion-img2vid-xt"],
         help="Model ID of the Stable Video Diffusion model to compile",
     )
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main():

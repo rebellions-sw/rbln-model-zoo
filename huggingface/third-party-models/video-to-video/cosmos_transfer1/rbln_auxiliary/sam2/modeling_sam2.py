@@ -230,8 +230,17 @@ def build_sam2_video_predictor_hf(model_id, **kwargs):
             "++model._target_=sam2.sam2_video_predictor.SAM2VideoPredictor",
         ]
         if vos_optimized:
-            relative_path = os.path.relpath(__file__, os.getcwd())
-            file_name = relative_path.split(".")[0].replace("/", ".")
+            # Get the current module name from file path
+            current_file = os.path.abspath(__file__)
+            path_parts = current_file.split(os.sep)
+
+            # Try to find rbln_auxiliary in path, otherwise use last 3 components
+            try:
+                rbln_idx = path_parts.index('rbln_auxiliary')
+                file_name = '.'.join(path_parts[rbln_idx:-1]) + '.modeling_sam2'
+            except ValueError:
+                file_name = 'modeling_sam2'
+
             hydra_overrides = [
                 f"++model._target_={file_name}.RBLNSAM2VideoPredictor",
                 "++model.compile_image_encoder=False",
@@ -285,6 +294,10 @@ class RBLNSAM2VideoPredictor(SAM2VideoPredictorVOS):
     def _custom_compile_all_components(
         self, options: dict = {"cache_dir": ".cache", "device": 0}
     ):
+        import omegaconf
+
+        if isinstance(options, omegaconf.basecontainer.BaseContainer):
+            options = omegaconf.OmegaConf.to_container(options)
         cache_dir = options["cache_dir"]
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)

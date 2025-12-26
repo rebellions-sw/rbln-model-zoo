@@ -52,6 +52,7 @@ class MistralNeMoAttention(DecoderOnlyAttention):
     ):
         nn.Module.__init__(self)
         self._original_mod = self_attn
+        self.rbln_config = rbln_config
         self.layer_idx = self._original_mod.layer_id
         self.num_key_value_heads = self._original_mod.n_kv_heads
         self.num_heads = self._original_mod.config.n_heads
@@ -59,9 +60,6 @@ class MistralNeMoAttention(DecoderOnlyAttention):
         self.qk_norm = self._original_mod.use_qk_normalization
         self.scale = torch.tensor(self.get_attn_scale())
         self._phase = "prefill"
-        self.quantization = rbln_config.quantization
-        self.use_attention_mask = rbln_config.use_attention_mask
-        self.use_position_ids = rbln_config.use_position_ids
         self.is_sliding = is_sliding
         self.attn_impl = rbln_config.attn_impl
 

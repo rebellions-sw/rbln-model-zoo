@@ -9,15 +9,20 @@ def main():
     # Compile and export the model
     model = RBLNColQwen2ForRetrieval.from_pretrained(
         model_id,
-        export=True,
+        export=True,  # export a PyTorch model to RBLN model with optimum
         rbln_config={
-            "visual": {
-                "max_seq_lens": 6400,
-                "device": 0,
+            # The `device` parameter specifies the device allocation for each submodule during runtime.
+            # As ColQwen2_5ForRetrieval consists of multiple submodules, loading them all onto a single device may exceed its memory capacity, especially as the batch size increases.
+            # By distributing submodules across devices, memory usage can be optimized for efficient runtime performance.
+            "vlm": {
+                "visual": {
+                    # Max sequence length for Vision Transformer (ViT), representing the number of patches in an image.
+                    "max_seq_lens": 6400,
+                },
+                "tensor_parallel_size": 4,
+                # Max position embedding for the language model, must be a multiple of kvcache_partition_len.
+                "max_seq_len": 32_768,
             },
-            "tensor_parallel_size": 4,
-            "max_seq_len": 32_768,
-            "device": [0, 1, 2, 3],
         },
     )
 
